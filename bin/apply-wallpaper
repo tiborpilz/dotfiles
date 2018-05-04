@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# Takes image file, converts it to wallpaper resolution, generates blurred versions
+# and copies them to env WALLPAPERS location for further use.
+
+# If arg is a directory, choose image at random
+if [[ "$(file -b $1)" == "directory" ]]; then
+	image=$(ls -d1 $1/*.* | shuf -n1)
+else
+	image=$1
+fi
+
+# Check for wallpaper in environment, set otherwise
+if [[ -z "${WALLPAPERS}" ]]; then
+	export WALLPAPERS="/usr/local/share/wallpapers/"
+fi
+
+location=/usr/local/share/wallpapers/
+
+convert "$image" -resize 1920x1080^ -gravity center -extent 1920x1080 \
+	-write "$WALLPAPERS"wallpaper.jpg\
+	-blur 0x32 -write "$WALLPAPERS"wallpaper_light_blur.jpg\
+	-blur 0x64 "$WALLPAPERS"wallpaper_strong_blur.jpg
+
+# Generate pywal coloschemes without setting anything
+wal -c -e -s -t -n -q -i "$WALLPAPERS"wallpaper.jpg --backend haishoku
+
+# Copy wal results to various dotfile config locations
+walcache=~/.cache/wal/
+cp $walcache/colors.Xresources ~/.Xresources.d/colors
+cp $walcache/wal-dark.rasi ~/.config/rofi/theme.rasi
+
+# Apply theme systemwide
+wal -g -R

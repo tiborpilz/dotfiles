@@ -1,0 +1,12 @@
+[user]
+	email = tbrpilz@googlemail.com
+	name = Tibor Pilz
+[push]
+	default = simple
+[core]
+	excludesfile = ~/.gitignore_global
+	editor = vim
+[commit]
+	gpgsign = false
+[merge]
+	tool = vimdiff
