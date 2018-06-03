@@ -22,7 +22,6 @@ Plugin 'dylanaraps/wal.vim' " Custom color scheme from pywal
 " Status line
 Plugin 'vim-airline/vim-airline'
 
-
 " Syntax highlighting.
 Plugin 'honza/dockerfile.vim'
 Plugin 'tpope/vim-markdown'
@@ -34,6 +33,8 @@ Plugin 'ctrlpvim/ctrlp.vim'
 
 " Langugage specific
 Plugin 'maksimr/vim-jsbeautify' " JavaScript beautify
+Plugin 'lervag/vimtex' "Latex Support"
+
 
 " Project tools
 Plugin 'editorconfig/editorconfig-vim' " Editorconfig support

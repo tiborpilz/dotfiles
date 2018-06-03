@@ -1,16 +1,23 @@
-set nocompatible
+scriptencoding utf-8
+set encoding=utf-8
 
+set nocompatible
 set shiftwidth=2 tabstop=2 noexpandtab
 set wrap mouse=a
-set dir=~/.vim/tmp backupdir=~/.vim/tmp
+set dir=$HOME/.vim/tmp backupdir=$HOME/.vim/tmp
 set ignorecase smartcase shiftround smartindent
 set t_Co=256
 set autochdir
 set noerrorbells
-set vb t_vb=""
 
-" Plugins specific configs
-source ~/.vim/bundle.vim
+" Load plugins
+source $HOME/.vim/bundle.vim
+
+" Plugin configs
+
+" Look and feel
+" set fillchars+=vert:|
+set fillchars+=vert:\ 
 
 " Syntax Highlighting
 syntax enable
@@ -29,6 +36,9 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 map <Leader>n :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
+" Vimtex
+let g:vimtex_view_method = 'zathura'
+
 " Fix Python indentation.
 autocmd FileType python setlocal shiftwidth=2 tabstop=2
 
@@ -37,9 +47,6 @@ autocmd FileType python setlocal shiftwidth=2 tabstop=2
 
 " Don't remap '#' to avoid smartindent problem
 :inoremap # X<BS>#
-
-set number
-set noswapfile
 
 set laststatus=2
 
