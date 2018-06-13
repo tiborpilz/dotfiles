@@ -1,6 +1,9 @@
 # Profile defaults
 source $HOME/.profile
 
+# FZF config
+export FZF_DEFAULT_COMMANG='rg --files --no-ignore --hidden --follow --glob "!.git/*'
+
 # Use Antigen
 source $HOME/.antigen/antigen.zsh
 

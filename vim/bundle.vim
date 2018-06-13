@@ -30,6 +30,8 @@ Plugin 'joukevandermaas/vim-ember-hbs'
 
 " File management
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'junegunn/fzf.vim'
+
 
 " Langugage specific
 Plugin 'maksimr/vim-jsbeautify' " JavaScript beautify
