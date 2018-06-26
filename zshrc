@@ -30,11 +30,12 @@ antigen theme robbyrussell
 # Antigen done
 antigen apply
 
+
 # Command auto-correction.
 # ENABLE_CORRECTION="true"
 
 # Display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Disable marking untracked files under VCS as dirty.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"

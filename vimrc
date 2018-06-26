@@ -30,6 +30,9 @@ let base16colorspace=256
 " Leader
 let mapleader = ","
 
+" Find command using rg and fzf
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column ==line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "\!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+
 " NerdTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 " map <Leader>-n to nerdtree
