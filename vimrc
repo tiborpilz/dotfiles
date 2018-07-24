@@ -8,6 +8,7 @@ set dir=$HOME/.vim/tmp backupdir=$HOME/.vim/tmp
 set ignorecase smartcase shiftround smartindent
 set t_Co=256
 set noerrorbells
+set number
 
 " Load plugins
 source $HOME/.vim/bundle.vim
