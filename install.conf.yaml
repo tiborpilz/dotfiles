@@ -15,6 +15,7 @@
     ~/.config/sxhkd: sxhkd
     ~/.config/wal: wal
     ~/.config/compton.conf: compton.conf
+    ~/.config/ulauncher: ulauncher
     ~/.gitignore_global: gitignore_global
     ~/.inputrc: inputrc
     ~/.profile: profile

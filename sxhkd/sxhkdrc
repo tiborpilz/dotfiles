@@ -8,7 +8,7 @@ super + Return
 
 # program launcher
 super + @space
-  rofi -show drun -m -1
+	ulauncher-toggle
 
 # program switcher
 super + {grave,Tab}

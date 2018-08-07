@@ -26,6 +26,9 @@ done
 # key daemon
 sxhkd &
 
+# launcher daemon
+ulauncher &
+
 # bspc config
 bspc config border_width         0
 bspc config window_gap					 16
