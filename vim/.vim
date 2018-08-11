@@ -1,1 +1,0 @@
-/home/lvncelot/.dotfiles/./.vim
