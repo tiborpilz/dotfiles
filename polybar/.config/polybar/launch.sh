@@ -7,8 +7,8 @@ killall -q polybar
 while pgrep -x polybar >/dev/null; do sleep 1; done
 
 if [ "$HOSTNAME" = workyMcWorkstation ]; then
-    MONITOR=DVI-D-0 polybar secondary &
-    MONITOR=HDMI-0 polybar main &
+    #MONITOR=DVI-D-0 polybar secondary &
+    MONITOR=HDMI-0 polybar top &
 else
 	MONITOR=LVDS-1 polybar main &
 fi

@@ -3,9 +3,8 @@
 set -e
 
 BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 cd "${BASEDIR}"
-git submodule update --init --recursive "${DOTBOT_DIR}"
 
 stow -S $(ls -d */)
 
+vim +PluginInstall +qall
