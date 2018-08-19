@@ -3,7 +3,7 @@
 wallpaper='{wallpaper}'
 
 # Transparent (ARGB)
-background_transparent='#55{background}'
+background_transparent='#55{background.strip}'
 
 # Special
 background='{background}'
