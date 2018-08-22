@@ -4,7 +4,11 @@ source $HOME/.profile
 # FZF config
 export FZF_DEFAULT_COMMANG='rg --files --no-ignore --hidden --follow --glob "!.git/*'
 
-# Use Antigen
+# Use Antigen - Install if needed
+if [[ -n ${ls $HOME/.antigen} ]]; then
+	mkdir -p antigen && curl -L git.io/antigen > antigen/antigen.zsh
+fi
+
 source $HOME/.antigen/antigen.zsh
 
 # Oh-My-Zsh library
