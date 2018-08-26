@@ -14,20 +14,15 @@ bspc monitor primary --swap ^1
 MONITOR=$(xrandr --query | grep " connected primary" | cut -d " " -f 1)
 env MONITOR=$MONITOR
 bspc monitor $MONITOR -d I II III IV V VI VII
-MONITOR=$MONITOR polybar primary &
 
 for MONITOR in $(xrandr --query | grep " connected [^primary]" | cut -d " " -f 1)
 do
 	env MONITOR=$MONITOR
 	bspc monitor $MONITOR -d VIII IX X
-	MONITOR=$MONITOR polybar secondary &
 done
 
 # key daemon
 sxhkd &
-
-# launcher daemon
-ulauncher &
 
 # source colors
 . "${HOME}/.cache/wal/colors.sh"
