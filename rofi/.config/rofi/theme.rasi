@@ -1,11 +1,20 @@
 * {
     background: transparent;
+<<<<<<< Updated upstream
     foreground: #c7c7c7;
     active-background: #2b698f33;
     active-foreground: @foreground;
     normal-background: @background;
     normal-foreground: @foreground;
     urgent-background: #2a456a33;
+=======
+    foreground: #c7c8c8;
+    active-background: #48786f33;
+    active-foreground: @foreground;
+    normal-background: @background;
+    normal-foreground: @foreground;
+    urgent-background: #36636833;
+>>>>>>> Stashed changes
     urgent-foreground: @foreground;
 
     alternate-active-background: @background;
@@ -15,11 +24,19 @@
     alternate-urgent-background: @background;
     alternate-urgent-foreground: @foreground;
 
+<<<<<<< Updated upstream
     selected-active-background: #2a456a55;
     selected-active-foreground: @foreground;
     selected-normal-background: #2b698f55;
     selected-normal-foreground: @foreground;
     selected-urgent-background: #2e8aba;
+=======
+    selected-active-background: #36636855;
+    selected-active-foreground: @foreground;
+    selected-normal-background: #48786f55;
+    selected-normal-foreground: @foreground;
+    selected-urgent-background: #7e8776;
+>>>>>>> Stashed changes
     selected-urgent-foreground: @foreground;
 
     background-color: @background;
@@ -28,7 +45,11 @@
 }
 
 #window {
+<<<<<<< Updated upstream
     background-color: rgba(31,31,33, 0.5);
+=======
+    background-color: rgba(32,35,38, 0.5);
+>>>>>>> Stashed changes
 		border: 0;
     padding: 2.5ch;
 }
