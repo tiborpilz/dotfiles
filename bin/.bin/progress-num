@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-progress | sed -e '1d' -e '3d'
