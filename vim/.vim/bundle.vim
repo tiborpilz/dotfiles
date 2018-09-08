@@ -35,7 +35,8 @@ Plugin 'jremmen/vim-ripgrep'
 
 " Langugage specific
 Plugin 'maksimr/vim-jsbeautify' " JavaScript beautify
-Plugin 'lervag/vimtex' "Latex Support"
+Plugin 'lervag/vimtex' "Latex Support
+Plugin 'python-mode/python-mode' "Python Mode
 
 
 " Project tools

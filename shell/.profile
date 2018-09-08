@@ -13,4 +13,7 @@ PATH="$PATH:$HOME/.local/bin"
 # Anaconda
 PATH="$PATH:/opt/anaconda/bin"
 
+# ogs
+PATH="$PATH:/opt/ogs6/bin"
+
 export TERM=rxvt
