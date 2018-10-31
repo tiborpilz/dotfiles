@@ -20,5 +20,8 @@ PATH="$PATH:$HOME/.local/bin"
 # Disable beep
 setopt NO_BEEP
 # Fix iterm silliness
-export LC_ALL="en_US.UTF8"
-export LANG="en_US.UTF8"
+export LANGUAGE="en_US.UTF-8"
+export LANG="en_US.UTF-8"
+
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
