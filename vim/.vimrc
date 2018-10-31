@@ -43,7 +43,7 @@ let NERDTreeShowHidden=1
 let g:vimtex_view_method = 'zathura'
 
 " Fix Python indentation.
-autocmd FileType python setlocal shiftwidth=2 tabstop=2
+autocmd FileType python setlocal shiftwidth=4 tabstop=4
 
 " autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 " autocmd InsertLeave * if pumvisible() == 0|pclose|endif
