@@ -1,6 +1,3 @@
-# Profile defaults
-source $HOME/.profile
-
 # FZF config
 export FZF_DEFAULT_COMMANG='rg --files --no-ignore --hidden --follow --glob "!.git/*'
 
@@ -15,10 +12,9 @@ antigen bundle git
 antigen bundle bundler
 antigen bundle vi-mode
 antigen bundle history-substring-search
+antigen bundle virtualenv
 antigen bundle rake
 antigen bundle rbenv
-antigen bundle ruby
-antigen bundle tmuxinator
 antigen bundle thefuck
 antigen bundle yarn
 
@@ -38,11 +34,8 @@ antigen apply
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
+# Profile defaults
+source $HOME/.profile
+
 # Disable marking untracked files under VCS as dirty.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Aliases
-alias svim="sudo -E vim"
-
-# Disable beep
-setopt NO_BEEP
