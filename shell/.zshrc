@@ -10,21 +10,22 @@ source $HOME/.antigen/antigen.zsh
 # Oh-My-Zsh library
 antigen use oh-my-zsh
 
-# Various plugins
+# Various plugins from oh-my-zsh
 antigen bundle git
 antigen bundle bundler
 antigen bundle vi-mode
 antigen bundle history-substring-search
-antigen bundle virtualenv
 antigen bundle rake
 antigen bundle rbenv
 antigen bundle ruby
 antigen bundle tmuxinator
 antigen bundle thefuck
+antigen bundle yarn
 
+# Other plugins
 antigen bundle lukechilds/zsh-nvm
 
-# Other themes
+# Themes
 antigen theme robbyrussell
 
 # Antigen done

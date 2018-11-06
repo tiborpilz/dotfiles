@@ -58,3 +58,6 @@ let g:tex_flavor = "latex"
 
 " Airline font population
 let g:airline_powerline_fonts = 1
+
+" vimpyter bindings
+autocmd Filetype ipynb nmap <silent><Leader>b :VimpyterInsertPythonBlock<CR>
