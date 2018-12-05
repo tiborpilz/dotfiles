@@ -1,4 +1,0 @@
-URxvt.depth:					32
-
-URxvt*font:					xft:Fira\ Code\ Retina:size=10
-URxvt*scrollBar: 		false
