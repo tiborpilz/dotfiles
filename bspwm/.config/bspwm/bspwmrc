@@ -1,11 +1,4 @@
-#!/bin/sh
-
-# Remove existing polybar/sxhkd processes
-killall polybar
-killall sxhkd
-
-# Load color scheme from wal
-wal -R -q
+#!/usr/bin/env sh
 
 # Fix monitor order
 bspc monitor primary --swap ^1
@@ -20,12 +13,6 @@ do
 	env MONITOR=$MONITOR
 	bspc monitor $MONITOR -d VIII IX X
 done
-
-# key daemon
-sxhkd &
-
-# source colors
-. "${HOME}/.cache/wal/colors.sh"
 
 # bspc config
 bspc config active_border_color "$background_transparent"

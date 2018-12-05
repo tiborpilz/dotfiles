@@ -1,36 +1,21 @@
-! X colors.
-*background:  #131e20
-*foreground:  #b5bbbb
-*color0:  #000000
-*color1:  #cb1627
-*color2:  #8e9c9c
-*color3:  #cf7b79
-*color4:  #78394c
-*color5:  #cb1627
-*color6:  #a5b5b5
-*color7:  #858a8d
-*color8:  #50585a
-*color9:  #d9646a
-*color10:  #a36663
-*color11:  #d9646a
-*color12:  #858a8d
-*color13:  #b6b7b9
-*color14:  #a5b5b5
-*color15:  #ffffff
-
-
-! Black color that will not be affected by bold highlighting.
-*.color66: #1d1f1d
-*color66:  #1d1f1d
-
-! Xclock colors.
-XClock*foreground: #c6c7c6
-XClock*background: #1d1f1d
-XClock*majorColor:  rgba:c6/c7/c6/ff
-XClock*minorColor:  rgba:c6/c7/c6/ff
-XClock*hourColor:   rgba:c6/c7/c6/ff
-XClock*minuteColor: rgba:c6/c7/c6/ff
-XClock*secondColor: rgba:c6/c7/c6/ff
-
 ! Set depth to make transparency work.
 URxvt*depth: 32
+
+*background:  #2e332f
+*foreground:  #c5c9ca
+*color0:  #69645e
+*color1:  #bdae97
+*color2:  #aa8767
+*color3:  #c2976d
+*color4:  #bdae97
+*color5:  #aa8767
+*color6:  #bdae97
+*color7:  #c5c9ca
+*color8:  #959998
+*color9:  #f4e6cc
+*color10:  #d5bb9a
+*color11:  #e0c49d
+*color12:  #e5cdb5
+*color13:  #bdae97
+*color14:  #ede6ca
+*color15:  #ebedea

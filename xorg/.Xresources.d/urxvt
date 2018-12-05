@@ -1,6 +1,4 @@
 URxvt.depth:					32
-URxvt.geometry: 			90x30
-URxvt.internalBorder:	15
 
-URxvt*font:					xft:Sauce\ Code\ Pro\ Nerd\ Font:size=12
+URxvt*font:					xft:Fira\ Code\ Retina:size=10
 URxvt*scrollBar: 		false
