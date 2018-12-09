@@ -15,7 +15,7 @@ antigen bundle thefuck
 antigen bundle history-substring-search
 
 # Themes
-antigen theme agkozak/polyglot
+antigen theme minimal
 
 # Antigen done
 antigen apply
