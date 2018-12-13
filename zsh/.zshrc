@@ -1,3 +1,7 @@
+# Oh-My-Zsh overrides
+#ZSH_CUSTOM=$home/.zsh_custom
+#ZSH_THEME="lnclt"
+
 # Profile defaults
 source $HOME/.profile
 
@@ -11,19 +15,19 @@ antigen use oh-my-zsh
 antigen bundle git
 antigen bundle bundler
 antigen bundle vi-mode
-antigen bundle thefuck
 antigen bundle history-substring-search
 
-# Themes
 antigen theme minimal
-
 # Antigen done
 antigen apply
 
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-# Disable marking untracked files under VCS as dirty.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+source $HOME/.zsh_custom/themes/lnclt.zsh-theme
 
-eval $(thefuck --alias)
+# I'm not using the antigen/oh-my-zsh thefuck plugin because I don't want to
+# be nagged on systems where 'thefuck' isn't installed.
+if ( type thefuck &> /dev/null ); then
+	eval $(thefuck --alias)
+fi
