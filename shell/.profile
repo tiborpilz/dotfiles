@@ -1,3 +1,5 @@
+EDITOR="vim"
+
 # Aliases
 alias svim="sudo -E vim"
 
