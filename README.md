@@ -3,7 +3,7 @@ Arch / Bspwm / Zsh / Vim / ... more
 
 # Dotfiles
 
-This uses stow to symlink the relevant submodules
+This uses stow to symlink the relevant dotfiles/folders
 
 ## Usage
 
