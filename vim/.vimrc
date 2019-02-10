@@ -2,7 +2,7 @@ scriptencoding utf-8
 set encoding=utf-8
 
 set nocompatible
-set shiftwidth=2 tabstop=2 noexpandtab
+set shiftwidth=2 tabstop=2 expandtab
 set wrap mouse=a
 set dir=$HOME/.vim/tmp backupdir=$HOME/.vim/tmp
 set ignorecase smartcase shiftround smartindent
