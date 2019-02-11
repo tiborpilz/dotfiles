@@ -16,7 +16,6 @@ source $HOME/.vim/bundle.vim
 " Plugin configs
 
 " Look and feel
-" set fillchars+=vert:|
 set fillchars+=vert:\ 
 
 " Syntax Highlighting
@@ -45,8 +44,8 @@ let g:vimtex_view_method = 'zathura'
 " Fix Python indentation.
 autocmd FileType python setlocal shiftwidth=4 tabstop=4
 
-" autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-" autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " Don't remap '#' to avoid smartindent problem
 :inoremap # X<BS>#
@@ -57,7 +56,20 @@ set laststatus=2
 let g:tex_flavor = "latex"
 
 " Airline font population
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 
 " vimpyter bindings
 autocmd Filetype ipynb nmap <silent><Leader>b :VimpyterInsertPythonBlock<CR>
+
+" Async project cleanup
+autocmd BufWritePost *.js AsyncRun -power=checktime ./node_modules/.bin/es lint --fix %
+
+
+" emmet-vim config
+let g:user_emmet_leader_key='<Tab>'
+let g:user_emmet_settings = { 'javascript.jsx' : { 'extends' : 'jsx' } }
+
+" ale config
+let g:ale_sign_error = '●' " Less aggressive than the default '>>'
+let g:ale_sign_warning = '.'
+let g:ale_lint_on_enter = 0 " Less distracting when opening a new file

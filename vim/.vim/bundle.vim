@@ -34,16 +34,24 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'jremmen/vim-ripgrep'
 
 " Langugage specific
+"" Javascript/Frontend
 Plugin 'maksimr/vim-jsbeautify' " JavaScript beautify
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
+Plugin 'mattn/emmet-vim.git'
+Plugin 'wookiehangover/jshit.vim'
+
 Plugin 'lervag/vimtex' "Latex Support
 " Plugin 'python-mode/python-mode' "Python Mode
 
 Plugin 'szymonmaszke/vimpyter' " Jupyter integration
 Plugin 'ivanov/vim-ipython'
 
+Plugin 'w0rp/ale'
 
-" Project tools
+" Project tools/General VIM stuff
 Plugin 'editorconfig/editorconfig-vim' " Editorconfig support
+Plugin 'skywind3000/asyncrun.vim' " Better async running
 
 " Snippets.
 Plugin 'MarcWeber/vim-addon-mw-utils' " Dependency.
