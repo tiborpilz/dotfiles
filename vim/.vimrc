@@ -14,7 +14,6 @@ set number
 source $HOME/.vim/bundle.vim
 
 " Plugin configs
-
 " Look and feel
 set fillchars+=vert:\ 
 
@@ -62,7 +61,7 @@ let g:airline_powerline_fonts = 0
 autocmd Filetype ipynb nmap <silent><Leader>b :VimpyterInsertPythonBlock<CR>
 
 " Async project cleanup
-autocmd BufWritePost *.js AsyncRun -power=checktime ./node_modules/.bin/es lint --fix %
+" autocmd BufWritePost *.js AsyncRun -power=checktime ./node_modules/.bin/es lint --fix %
 
 
 " emmet-vim config

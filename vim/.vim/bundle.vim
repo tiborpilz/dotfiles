@@ -28,6 +28,9 @@ Plugin 'tpope/vim-markdown'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'joukevandermaas/vim-ember-hbs'
 
+" Linting etc.
+Plugin 'w0rp/ale'
+
 " File management
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'junegunn/fzf.vim'
@@ -38,16 +41,13 @@ Plugin 'jremmen/vim-ripgrep'
 Plugin 'maksimr/vim-jsbeautify' " JavaScript beautify
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
-Plugin 'mattn/emmet-vim.git'
-Plugin 'wookiehangover/jshit.vim'
 
 Plugin 'lervag/vimtex' "Latex Support
 " Plugin 'python-mode/python-mode' "Python Mode
 
-Plugin 'szymonmaszke/vimpyter' " Jupyter integration
+Plugin 'szymonmaszke/vimpyter'
 Plugin 'ivanov/vim-ipython'
 
-Plugin 'w0rp/ale'
 
 " Project tools/General VIM stuff
 Plugin 'editorconfig/editorconfig-vim' " Editorconfig support
@@ -72,5 +72,6 @@ Plugin 'tpope/vim-sensible' " Sensible vim defaults.
 Plugin 'embear/vim-localvimrc' " Load subdirectory specific vimrc files.
 Plugin 'scrooloose/nerdtree' " Textual filesystem navigation.
 Plugin 'jcf/vim-latex' " LaTeX suite.
+Plugin 'liuchengxu/vim-which-key'
 
 call vundle#end()
