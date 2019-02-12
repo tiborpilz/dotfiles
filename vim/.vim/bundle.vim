@@ -16,19 +16,20 @@ Plugin 'VundleVim/Vundle.vim' " Plugin manager.
 
 " Colorschemes.
 Plugin 'flazz/vim-colorschemes' " Large colorscheme collection.
-Plugin 'distinguished' " Dark color scheme for 256-color terminals.
+" Plugin 'distinguished' " Dark color scheme for 256-color terminals.
 Plugin 'dylanaraps/wal.vim' " Custom color scheme from pywal
+" Plugin 'chriskempson/base16-vim'
 
 " Status line
 Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
-" Syntax highlighting.
+" Syntax highlighting / linting / autocomplete
+Plugin 'tmux-plugins/vim-tmux'
 Plugin 'honza/dockerfile.vim'
 Plugin 'tpope/vim-markdown'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'joukevandermaas/vim-ember-hbs'
-
-" Linting etc.
 Plugin 'w0rp/ale'
 
 " File management
@@ -73,5 +74,6 @@ Plugin 'embear/vim-localvimrc' " Load subdirectory specific vimrc files.
 Plugin 'scrooloose/nerdtree' " Textual filesystem navigation.
 Plugin 'jcf/vim-latex' " LaTeX suite.
 Plugin 'liuchengxu/vim-which-key'
+Plugin 'tmux-plugins/vim-tmux-focus-events'
 
 call vundle#end()

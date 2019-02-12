@@ -20,4 +20,5 @@ else
 		PROMPT_CHAR=">"
 fi
 
-PROMPT='%2~ $(git_prompt_info)$PROMPT_CHAR%b '
+PROMPT='%2~ $(git_prompt_info)$PROMPT_CHAR %u%{$reset_color%}'
+

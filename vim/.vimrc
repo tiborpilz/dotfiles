@@ -6,12 +6,15 @@ set shiftwidth=2 tabstop=2 expandtab
 set wrap mouse=a
 set dir=$HOME/.vim/tmp backupdir=$HOME/.vim/tmp
 set ignorecase smartcase shiftround smartindent
-set t_Co=256
 set noerrorbells
 set number
+set autoread
 
 " Load plugins
 source $HOME/.vim/bundle.vim
+
+" Statusbar
+source $HOME/.vim/statusline.vim
 
 " Plugin configs
 " Look and feel
@@ -19,11 +22,9 @@ set fillchars+=vert:\
 
 " Syntax Highlighting
 syntax enable
-
+set t_Co=256
 " Color scheme
-set background=dark
-silent! colorscheme wal
-let base16colorspace=256
+colorscheme wal
 
 " Leader
 let mapleader = ","
@@ -55,7 +56,7 @@ set laststatus=2
 let g:tex_flavor = "latex"
 
 " Airline font population
-let g:airline_powerline_fonts = 0
+" let g:airline_powerline_fonts = 0
 
 " vimpyter bindings
 autocmd Filetype ipynb nmap <silent><Leader>b :VimpyterInsertPythonBlock<CR>

@@ -17,7 +17,6 @@ antigen bundle bundler
 antigen bundle vi-mode
 antigen bundle history-substring-search
 
-antigen theme minimal
 # Antigen done
 antigen apply
 
@@ -26,8 +25,15 @@ COMPLETION_WAITING_DOTS="true"
 
 source $HOME/.zsh_custom/themes/lnclt.zsh-theme
 
-# I'm not using the antigen/oh-my-zsh thefuck plugin because I don't want to
-# be nagged on systems where 'thefuck' isn't installed.
+# Autocorrect
 if ( type thefuck &> /dev/null ); then
 	eval $(thefuck --alias)
 fi
+
+autoload -Uz compinit
+compinit
+# Completion for kitty
+kitty + complete setup zsh | source /dev/stdin
+
+# create a global per-pane variable that holds the pane's PWD
+export PS1=$PS1'$( [ -n $TMUX ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
