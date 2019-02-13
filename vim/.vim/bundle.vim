@@ -12,17 +12,18 @@ call vundle#begin()
 " Plugin Manager
 Plugin 'VundleVim/Vundle.vim' " Plugin manager.
 
-""" Vim Appearance
+"Appearance
 
 " Colorschemes.
 Plugin 'flazz/vim-colorschemes' " Large colorscheme collection.
-" Plugin 'distinguished' " Dark color scheme for 256-color terminals.
 Plugin 'dylanaraps/wal.vim' " Custom color scheme from pywal
-" Plugin 'chriskempson/base16-vim'
 
 " Status line
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+
+" Icons
+Plugin 'ryanoasis/vim-devicons'
 
 " Syntax highlighting / linting / autocomplete
 Plugin 'tmux-plugins/vim-tmux'
