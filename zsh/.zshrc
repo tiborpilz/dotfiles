@@ -5,6 +5,8 @@
 # Profile defaults
 source $HOME/.profile
 
+# Add custom scripts to Path
+PATH=$PATH:$HOME/bin
 # Use Antigen
 source $HOME/.antigen/antigen.zsh
 

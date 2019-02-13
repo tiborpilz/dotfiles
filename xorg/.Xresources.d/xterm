@@ -4,4 +4,4 @@ XTerm.vt100.metaSendsEscape: true
 XTerm.vt100.backarrowKey: false
 XTerm.ttyModes: erase ^?
 XTerm.vt100.scrollBar: false
-XTerm.vt100.faceName: xft:SauceCodePro\ Nerd\ Font:size=12:antialias=true
+XTerm.vt100.faceName: xft:Fira Codet:size=12:antialias=true

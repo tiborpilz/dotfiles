@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SESSION=$(tmux display-message -p '#S')
+DIR="${1:-$PWD}"
+
+tmux attach -t $SESSION -c $DIR
