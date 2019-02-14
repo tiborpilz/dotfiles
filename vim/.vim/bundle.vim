@@ -32,6 +32,7 @@ Plugin 'tpope/vim-markdown'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'joukevandermaas/vim-ember-hbs'
 Plugin 'w0rp/ale'
+Plugin 'sbdchd/neoformat'
 
 " File management
 Plugin 'ctrlpvim/ctrlp.vim'
