@@ -1,25 +1,15 @@
-# Oh-My-Zsh overrides
-#ZSH_CUSTOM=$home/.zsh_custom
-#ZSH_THEME="lnclt"
-
-# Profile defaults
 source $HOME/.profile
 
 # Add custom scripts to Path
 PATH=$PATH:$HOME/bin
-# Use Antigen
+
+# Antigen Plugin Manager
 source $HOME/.antigen/antigen.zsh
-
-# Oh-My-Zsh library
 antigen use oh-my-zsh
-
-# Various plugins from oh-my-zsh
 antigen bundle git
 antigen bundle bundler
 antigen bundle vi-mode
 antigen bundle history-substring-search
-
-# Antigen done
 antigen apply
 
 # Display red dots whilst waiting for completion.
@@ -32,10 +22,5 @@ if ( type thefuck &> /dev/null ); then
 	eval $(thefuck --alias)
 fi
 
-#autoload -Uz compinit
-#compinit
-# Completion for kitty
-#kitty + complete setup zsh | source /dev/stdin
-
-# create a global per-pane variable that holds the pane's PWD
-#export PS1=$PS1'$( [ -n $TMUX ] && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) $PWD)'
+# Fix xon/xoff flow control
+stty -ixon

@@ -31,7 +31,6 @@ Plugin 'honza/dockerfile.vim'
 Plugin 'tpope/vim-markdown'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'joukevandermaas/vim-ember-hbs'
-Plugin 'w0rp/ale'
 Plugin 'sbdchd/neoformat'
 
 " File management
@@ -41,9 +40,12 @@ Plugin 'jremmen/vim-ripgrep'
 
 " Langugage specific
 "" Javascript/Frontend
-Plugin 'maksimr/vim-jsbeautify' " JavaScript beautify
 Plugin 'pangloss/vim-javascript'
-Plugin 'mxw/vim-jsx'
+Plugin 'maksimr/vim-jsbeautify' " JavaScript beautify
+
+Plugin 'leafgarland/typescript-vim'
+Plugin 'peitalin/vim-jsx-typescript'
+
 
 Plugin 'lervag/vimtex' "Latex Support
 " Plugin 'python-mode/python-mode' "Python Mode
@@ -77,5 +79,6 @@ Plugin 'scrooloose/nerdtree' " Textual filesystem navigation.
 Plugin 'jcf/vim-latex' " LaTeX suite.
 Plugin 'liuchengxu/vim-which-key'
 Plugin 'tmux-plugins/vim-tmux-focus-events'
+Plugin 'christoomey/vim-tmux-navigator'
 
 call vundle#end()

@@ -7,24 +7,14 @@ set wrap mouse=a
 set dir=$HOME/.vim/tmp backupdir=$HOME/.vim/tmp
 set ignorecase smartcase shiftround smartindent
 set noerrorbells
-set number
+set relativenumber
 set autoread
-
-" Load plugins
-source $HOME/.vim/bundle.vim
-
 " Statusbar
 source $HOME/.vim/statusline.vim
 
 " Plugin configs
 " Look and feel
 set fillchars+=vert:\ 
-
-" Syntax Highlighting
-syntax enable
-set t_Co=256
-" Color scheme
-colorscheme wal
 
 " Leader
 let mapleader = ","
@@ -41,9 +31,6 @@ let NERDTreeShowHidden=1
 " Vimtex
 let g:vimtex_view_method = 'zathura'
 
-" Fix Python indentation.
-autocmd FileType python setlocal shiftwidth=4 tabstop=4
-
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
@@ -56,20 +43,29 @@ set laststatus=2
 let g:tex_flavor = "latex"
 
 " Airline font population
-" let g:airline_powerline_fonts = 0
-
-" vimpyter bindings
-autocmd Filetype ipynb nmap <silent><Leader>b :VimpyterInsertPythonBlock<CR>
-
-" Async project cleanup
-" autocmd BufWritePost *.js AsyncRun -power=checktime ./node_modules/.bin/es lint --fix %
-
+let g:airline_powerline_fonts = 0
 
 " emmet-vim config
-let g:user_emmet_leader_key='<Tab>'
-let g:user_emmet_settings = { 'javascript.jsx' : { 'extends' : 'jsx' } }
+" let g:user_emmet_mode='i'
+" let g:user_emmet_leader_key='<Tab>'
+" let g:user_emmet_settings = { 'javascript.jsx' : { 'extends' : 'jsx' } }
 
 " ale config
 let g:ale_sign_error = '●' " Less aggressive than the default '>>'
 let g:ale_sign_warning = '.'
 let g:ale_lint_on_enter = 0 " Less distracting when opening a new file
+let g:ale_set_baloons = 1
+let g:ale_sign_column_always = 1
+let g:airline#extensions#ale#enabled = 1
+
+imap <C-Space <Plug>(ale_complete)
+" Load plugins
+source $HOME/.vim/bundle.vim
+
+" Syntax Highlighting
+syntax enable
+set t_Co=256
+" Color scheme
+colorscheme wal
+
+" silent! helptags ALL
