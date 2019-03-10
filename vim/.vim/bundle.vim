@@ -50,8 +50,7 @@ Plugin 'peitalin/vim-jsx-typescript'
 Plugin 'lervag/vimtex' "Latex Support
 " Plugin 'python-mode/python-mode' "Python Mode
 
-Plugin 'szymonmaszke/vimpyter'
-Plugin 'ivanov/vim-ipython'
+" Plugin 'szymonmaszke/vimpyter'
 
 
 " Project tools/General VIM stuff
