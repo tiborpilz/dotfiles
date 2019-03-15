@@ -1,0 +1,25 @@
+<!DOCTYPE patchbay>
+<patchbay name="default" version="0.5.6">
+ <output-sockets>
+  <socket name="Ableton Live 10 Suite 1" exclusive="off" client="Ableton Live 10 Suite" type="jack-audio">
+   <plug>out_1</plug>
+   <plug>out_2</plug>
+  </socket>
+  <socket name="PulseAudio JACK Sink 1" exclusive="off" client="PulseAudio JACK Sink" type="jack-audio">
+   <plug>front-left</plug>
+   <plug>front-right</plug>
+  </socket>
+ </output-sockets>
+ <input-sockets>
+  <socket name="system 1" exclusive="off" client="system" type="jack-audio">
+   <plug>playback_1</plug>
+   <plug>playback_2</plug>
+  </socket>
+ </input-sockets>
+ <slots/>
+ <cables>
+  <cable input="system 1" type="jack-audio" output="Ableton Live 10 Suite 1"/>
+  <cable input="system 1" type="jack-audio" output="PulseAudio JACK Sink 1"/>
+ </cables>
+</patchbay>
+

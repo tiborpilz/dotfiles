@@ -46,6 +46,8 @@ Plugin 'maksimr/vim-jsbeautify' " JavaScript beautify
 Plugin 'leafgarland/typescript-vim'
 Plugin 'peitalin/vim-jsx-typescript'
 
+Plugin 'supercollider/scvim'
+
 
 Plugin 'lervag/vimtex' "Latex Support
 " Plugin 'python-mode/python-mode' "Python Mode
