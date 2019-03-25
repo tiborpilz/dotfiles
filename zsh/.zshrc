@@ -7,11 +7,21 @@ PATH=$PATH:$HOME/go/bin
 
 # Antigen Plugin Manager
 source $HOME/.antigen/antigen.zsh
+
 antigen use oh-my-zsh
-antigen bundle git
 antigen bundle bundler
 antigen bundle vi-mode
 antigen bundle history-substring-search
+
+antigen bundle wfxr/forgit
+antigen bundle git
+
+# Colorful stuff
+antigen bundle zsh-users/zsh-syntax-highlighting
+
+# Autosuggestions
+antigen bundle zsh-users/zsh-autosuggestions
+
 antigen apply
 
 # Display red dots whilst waiting for completion.
@@ -27,7 +37,7 @@ fi
 # Fix xon/xoff flow control
 stty -ixon
 
-# Aliasesses/Functions
+# Functions
 python-init() {
 
   # Init python venv in current dir if no argument given
