@@ -3,6 +3,8 @@ source $HOME/.profile
 # Add custom scripts to Path
 PATH=$PATH:$HOME/bin
 
+PATH=$PATH:$HOME/go/bin
+
 # Antigen Plugin Manager
 source $HOME/.antigen/antigen.zsh
 antigen use oh-my-zsh

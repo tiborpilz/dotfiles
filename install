@@ -8,7 +8,7 @@ cd "${BASEDIR}"
 # Init submodules
 git submodule update --init --recursive
 
-# Stow all files
+# Stow all files in directories
 stow -S $(ls -d */)
 
 # Install vim plugins

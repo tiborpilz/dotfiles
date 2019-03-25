@@ -50,6 +50,11 @@ Plugin 'supercollider/scvim'
 
 
 Plugin 'lervag/vimtex' "Latex Support
+let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
 " Plugin 'python-mode/python-mode' "Python Mode
 
 " Plugin 'szymonmaszke/vimpyter'
@@ -64,6 +69,11 @@ Plugin 'MarcWeber/vim-addon-mw-utils' " Dependency.
 Plugin 'tomtom/tlib_vim' " Dependency.
 Plugin 'garbas/vim-snipmate' " Snipmate repo.
 Plugin 'honza/vim-snippets' " Default snippets.
+
+Plugin 'sirver/ultisnips'
+let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsJumpForwardTrigger = '<tab>'
+let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
 
 " Wrappers.
 Plugin 'tpope/vim-fugitive.git' " Git.
