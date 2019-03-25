@@ -19,9 +19,6 @@ antigen bundle git
 # Colorful stuff
 antigen bundle zsh-users/zsh-syntax-highlighting
 
-# Autosuggestions
-antigen bundle zsh-users/zsh-autosuggestions
-
 antigen apply
 
 # Display red dots whilst waiting for completion.
