@@ -29,9 +29,6 @@ Plugin 'ryanoasis/vim-devicons'
 Plugin 'tmux-plugins/vim-tmux'
 Plugin 'honza/dockerfile.vim'
 Plugin 'tpope/vim-markdown'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'joukevandermaas/vim-ember-hbs'
-Plugin 'sbdchd/neoformat'
 
 " File management
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -53,11 +50,9 @@ Plugin 'lervag/vimtex' "Latex Support
 let g:tex_flavor='latex'
 let g:vimtex_view_method='zathura'
 let g:vimtex_quickfix_mode=0
-set conceallevel=1
 let g:tex_conceal='abdmg'
 " Plugin 'python-mode/python-mode' "Python Mode
 
-" Plugin 'szymonmaszke/vimpyter'
 
 
 " Project tools/General VIM stuff

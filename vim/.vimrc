@@ -51,12 +51,12 @@ let g:airline_powerline_fonts = 0
 " let g:user_emmet_settings = { 'javascript.jsx' : { 'extends' : 'jsx' } }
 
 " ale config
-let g:ale_sign_error = '●' " Less aggressive than the default '>>'
-let g:ale_sign_warning = '.'
-let g:ale_lint_on_enter = 0 " Less distracting when opening a new file
-let g:ale_set_baloons = 1
-let g:ale_sign_column_always = 1
-let g:airline#extensions#ale#enabled = 1
+" let g:ale_sign_error = '●' " Less aggressive than the default '>>'
+" let g:ale_sign_warning = '.'
+" let g:ale_lint_on_enter = 0 " Less distracting when opening a new file
+" let g:ale_set_baloons = 1
+" let g:ale_sign_column_always = 1
+" let g:airline#extensions#ale#enabled = 1
 
 imap <C-Space <Plug>(ale_complete)
 " Load plugins
