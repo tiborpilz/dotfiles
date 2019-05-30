@@ -45,18 +45,24 @@ let g:tex_flavor = "latex"
 " Airline font population
 let g:airline_powerline_fonts = 0
 
+
+autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
 " emmet-vim config
 " let g:user_emmet_mode='i'
 " let g:user_emmet_leader_key='<Tab>'
 " let g:user_emmet_settings = { 'javascript.jsx' : { 'extends' : 'jsx' } }
 
 " ale config
-" let g:ale_sign_error = '●' " Less aggressive than the default '>>'
-" let g:ale_sign_warning = '.'
-" let g:ale_lint_on_enter = 0 " Less distracting when opening a new file
-" let g:ale_set_baloons = 1
-" let g:ale_sign_column_always = 1
-" let g:airline#extensions#ale#enabled = 1
+let g:ale_sign_error = '●' " Less aggressive than the default '>>'
+let g:ale_sign_warning = '.'
+let g:ale_lint_on_enter = 1
+let g:ale_set_baloons = 1
+let g:ale_sign_column_always = 1
+let g:airline#extensions#ale#enabled = 1
+let g:ale_fixers = { 'javascript': ['eslint'], 'typescript': ['eslint'] }
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 imap <C-Space <Plug>(ale_complete)
 " Load plugins

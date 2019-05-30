@@ -3,7 +3,7 @@
 *foreground:        #dcdccc
 *background:        #553c4048
 *.foreground:       #dcdccc
-*.background:       #553c4048
+*.background:       #FF3c4048
 emacs*foreground:   #dcdccc
 emacs*background:   #3c4048
 URxvt*foreground:   #dcdccc

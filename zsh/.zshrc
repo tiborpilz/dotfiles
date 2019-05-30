@@ -3,6 +3,8 @@ source $HOME/.profile
 # Add custom scripts to Path
 PATH=$PATH:$HOME/bin
 
+PATH=$PATH:$HOME/.npm-global/bin
+
 PATH=$PATH:$HOME/go/bin
 
 # Antigen Plugin Manager
@@ -60,3 +62,7 @@ python-init() {
   python -m ipykernel install --user --name "$project"
   pip install jupyter
 }
+export TAICHI_NUM_THREADS=8
+export TAICHI_REPO_DIR=/home/tibor/Code/taichi
+export PYTHONPATH=$TAICHI_REPO_DIR/python/:$PYTHONPATH
+export PATH=$TAICHI_REPO_DIR/bin/:$PATH

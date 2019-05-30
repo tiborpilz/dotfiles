@@ -29,6 +29,7 @@ Plugin 'ryanoasis/vim-devicons'
 Plugin 'tmux-plugins/vim-tmux'
 Plugin 'honza/dockerfile.vim'
 Plugin 'tpope/vim-markdown'
+Plugin 'w0rp/ale'
 
 " File management
 Plugin 'ctrlpvim/ctrlp.vim'
