@@ -18,6 +18,7 @@ antigen bundle history-substring-search
 antigen bundle wfxr/forgit
 antigen bundle git
 
+antigen bundle soimort/translate-shell
 # Colorful stuff
 antigen bundle zsh-users/zsh-syntax-highlighting
 
