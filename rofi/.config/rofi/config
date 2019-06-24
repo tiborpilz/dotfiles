@@ -1,7 +1,0 @@
-rofi.show-icons:	true
-rofi.modi:				window,run,ssh,drun
-rofi.theme:				~/.config/rofi/theme.rasi
-rofi.lines:				1
-
-! RUN Settings
-rofi.run-shell-command: exec_in_background {cmd}

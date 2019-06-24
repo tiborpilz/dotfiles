@@ -1,3 +1,0 @@
-#!/bin/bash
-
-cmd=$(echo "" | rofi -dmenu -p " > "); $HOME/bin/exec_in_background "${cmd}"

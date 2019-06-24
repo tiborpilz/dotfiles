@@ -1,4 +1,0 @@
-!Switch caps and escape
-clear Lock
-keycode 9 = Escape NoSymbol Escape
-keycode 66 = Escape NoSymbol Escape
