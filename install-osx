@@ -2,6 +2,6 @@
 
 set -e
 
-brew install tmux stow npm go
+brew install tmux stow npm go fzf
 
 

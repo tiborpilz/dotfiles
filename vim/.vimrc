@@ -1,6 +1,7 @@
 scriptencoding utf-8
 set encoding=utf-8
 
+" Basic Settings
 set nocompatible
 set shiftwidth=2 tabstop=2 expandtab
 set wrap mouse=a
@@ -9,6 +10,9 @@ set ignorecase smartcase shiftround smartindent
 set noerrorbells
 set relativenumber
 set autoread
+set modeline
+set modelines=5
+
 " Statusbar
 source $HOME/.vim/statusline.vim
 
@@ -19,12 +23,9 @@ set fillchars+=vert:\
 " Leader
 let mapleader = ","
 
-" Find command using rg and fzf
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column ==line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "\!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
-
 " NerdTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-" map <Leader>-n to nerdtree
+
 map <Leader>n :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
@@ -46,20 +47,11 @@ let g:tex_flavor = "latex"
 let g:airline_powerline_fonts = 0
 
 
-autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
+" autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
 " emmet-vim config
 " let g:user_emmet_mode='i'
 " let g:user_emmet_leader_key='<Tab>'
 " let g:user_emmet_settings = { 'javascript.jsx' : { 'extends' : 'jsx' } }
-
-" ale config
-let g:ale_sign_error = '●' " Less aggressive than the default '>>'
-let g:ale_sign_warning = '.'
-let g:ale_lint_on_enter = 1
-let g:ale_set_baloons = 1
-let g:ale_sign_column_always = 1
-let g:airline#extensions#ale#enabled = 1
-let g:ale_fixers = { 'javascript': ['eslint'], 'typescript': ['eslint'] }
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
@@ -71,7 +63,8 @@ source $HOME/.vim/bundle.vim
 " Syntax Highlighting
 syntax enable
 set t_Co=256
+
+map <leader>l :exec &conceallevel ? "set conceallevel=0" : "set conceallevel=1"<CR>
+
 " Color scheme
 colorscheme wal
-
-" silent! helptags ALL

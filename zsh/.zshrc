@@ -11,6 +11,10 @@ PATH=$PATH:$HOME/go/bin
 source $HOME/.antigen/antigen.zsh
 
 antigen use oh-my-zsh
+
+# Touchbar goodies
+antigen theme https://github.com/iam4x/zsh-iterm-touchbar
+
 antigen bundle bundler
 antigen bundle vi-mode
 antigen bundle history-substring-search
@@ -19,6 +23,7 @@ antigen bundle wfxr/forgit
 antigen bundle git
 
 antigen bundle soimort/translate-shell
+
 # Colorful stuff
 antigen bundle zsh-users/zsh-syntax-highlighting
 

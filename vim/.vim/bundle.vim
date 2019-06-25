@@ -1,6 +1,6 @@
-" Install Vundle if it is not already installed
+" Prelimenary setup
 if !isdirectory(expand("~/.vim/bundle/Vundle.vim"))
-    silent !git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  silent !git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 endif
 
 set nocompatible
@@ -9,83 +9,97 @@ set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
 
-" Plugin Manager
-Plugin 'VundleVim/Vundle.vim' " Plugin manager.
+" Vundle itself
+Plugin 'vundlevim/vundle.vim'
 
-"Appearance
+" colorschemes
+Plugin 'flazz/vim-colorschemes' " large colorscheme collection.
+Plugin 'dylanaraps/wal.vim' " custom color scheme from pywal
 
-" Colorschemes.
-Plugin 'flazz/vim-colorschemes' " Large colorscheme collection.
-Plugin 'dylanaraps/wal.vim' " Custom color scheme from pywal
-
-" Status line
+" status line
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
-" Icons
+" icons
 Plugin 'ryanoasis/vim-devicons'
 
-" Syntax highlighting / linting / autocomplete
-Plugin 'tmux-plugins/vim-tmux'
+" general syntax highlighting / linting / autocomplete
+Plugin 'tmux-Plugins/vim-tmux'
 Plugin 'honza/dockerfile.vim'
 Plugin 'tpope/vim-markdown'
+
+" linting using ale
 Plugin 'w0rp/ale'
 
-" File management
+let g:ale_sign_error = '●' " less aggressive than the default '>>'
+let g:ale_sign_warning = '.'
+let g:ale_lint_on_enter = 1
+let g:ale_set_baloons = 1
+let g:ale_sign_column_always = 1
+let g:airline#extensions#ale#enabled = 1
+let g:ale_fixers = { 'javascript': ['eslint'], 'typescript': ['eslint'] }
+
+" file management
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'junegunn/fzf.vim'
 Plugin 'jremmen/vim-ripgrep'
 
-" Langugage specific
-"" Javascript/Frontend
+" javascript/frontend general
 Plugin 'pangloss/vim-javascript'
-Plugin 'maksimr/vim-jsbeautify' " JavaScript beautify
+augroup javascript_folding
+  au!
+  au filetype javascript setlocal foldmethod=syntax
+augroup end
 
+let g:javascript_conceal_function             = "ƒ"
+let g:javascript_conceal_null                 = "ø"
+let g:javascript_conceal_this                 = "@"
+let g:javascript_conceal_return               = "⇚"
+let g:javascript_conceal_undefined            = "¿"
+let g:javascript_conceal_nan                  = "ℕ"
+let g:javascript_conceal_prototype            = "¶"
+let g:javascript_conceal_static               = "•"
+let g:javascript_conceal_super                = "ω"
+let g:javascript_conceal_arrow_function       = "⇒"
+
+Plugin 'mxw/vim-jsx'
+Plugin 'prettier/vim-prettier'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'peitalin/vim-jsx-typescript'
 
-Plugin 'supercollider/scvim'
-
-
-Plugin 'lervag/vimtex' "Latex Support
+" latex
+Plugin 'lervag/vimtex'
 let g:tex_flavor='latex'
 let g:vimtex_view_method='zathura'
 let g:vimtex_quickfix_mode=0
 let g:tex_conceal='abdmg'
-" Plugin 'python-mode/python-mode' "Python Mode
 
+" project tools/general vim stuff
+Plugin 'editorconfig/editorconfig-vim' " editorconfig support
+Plugin 'skywind3000/asyncrun.vim' " better async running
 
+" snippets
+Plugin 'marcweber/vim-addon-mw-utils' " dependency.
+Plugin 'tomtom/tlib_vim' " dependency.
+Plugin 'garbas/vim-snipmate' " snipmate repo.
+Plugin 'honza/vim-snippets' " default snippets.
 
-" Project tools/General VIM stuff
-Plugin 'editorconfig/editorconfig-vim' " Editorconfig support
-Plugin 'skywind3000/asyncrun.vim' " Better async running
+" wrappers
+Plugin 'tpope/vim-fugitive.git' " git.
+Plugin 'mipmip/vim-run-in-blender' " blender.
 
-" Snippets.
-Plugin 'MarcWeber/vim-addon-mw-utils' " Dependency.
-Plugin 'tomtom/tlib_vim' " Dependency.
-Plugin 'garbas/vim-snipmate' " Snipmate repo.
-Plugin 'honza/vim-snippets' " Default snippets.
+" writing/editing helpers
+Plugin 'tpope/vim-commentary' " easy commenting.
+Plugin 'ntpeters/vim-better-whitespace' " mark and remove trailing whitespace.
 
-Plugin 'sirver/ultisnips'
-let g:UltiSnipsExpandTrigger = '<tab>'
-let g:UltiSnipsJumpForwardTrigger = '<tab>'
-let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
-
-" Wrappers.
-Plugin 'tpope/vim-fugitive.git' " Git.
-Plugin 'mipmip/vim-run-in-blender' " Blender.
-
-" Writing/editing helpers.
-Plugin 'tpope/vim-commentary' " Easy commenting.
-Plugin 'ntpeters/vim-better-whitespace' " Mark and remove trailing whitespace.
-
-" Misc.
-Plugin 'tpope/vim-sensible' " Sensible vim defaults.
-Plugin 'embear/vim-localvimrc' " Load subdirectory specific vimrc files.
-Plugin 'scrooloose/nerdtree' " Textual filesystem navigation.
-Plugin 'jcf/vim-latex' " LaTeX suite.
+" misc
+Plugin 'tpope/vim-sensible' " sensible vim defaults.
+Plugin 'embear/vim-localvimrc' " load subdirectory specific vimrc files.
+Plugin 'scrooloose/nerdtree' " textual filesystem navigation.
+Plugin 'jcf/vim-latex' " latex suite.
 Plugin 'liuchengxu/vim-which-key'
-Plugin 'tmux-plugins/vim-tmux-focus-events'
+Plugin 'tmux-Plugins/vim-tmux-focus-events'
 Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'vimwiki/vimwiki'
 
 call vundle#end()
