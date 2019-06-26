@@ -14,6 +14,7 @@ Plugin 'vundlevim/vundle.vim'
 
 " colorschemes
 Plugin 'flazz/vim-colorschemes' " large colorscheme collection.
+Plugin 'noahfrederick/vim-noctu' " 16-Color ANSI
 Plugin 'dylanaraps/wal.vim' " custom color scheme from pywal
 
 " status line

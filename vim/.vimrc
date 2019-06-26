@@ -1,7 +1,8 @@
+
 scriptencoding utf-8
 set encoding=utf-8
 
-" Basic Settings
+"" Basic Settings
 set nocompatible
 set shiftwidth=2 tabstop=2 expandtab
 set wrap mouse=a
