@@ -30,6 +30,9 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 map <Leader>n :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
+" CTRL+P
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
+
 " Vimtex
 let g:vimtex_view_method = 'zathura'
 

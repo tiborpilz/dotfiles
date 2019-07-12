@@ -67,6 +67,7 @@ Plugin 'mxw/vim-jsx'
 Plugin 'prettier/vim-prettier'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'peitalin/vim-jsx-typescript'
+Plugin 'darthmall/vim-vue'
 
 " latex
 Plugin 'lervag/vimtex'
