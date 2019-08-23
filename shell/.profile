@@ -15,3 +15,10 @@ else
 		sshd|/*sshd) SESSION_TYPE=remote/ssh;;
 	esac
 fi
+
+# Rust
+export PATH="$PATH:$HOME/.cargo/bin"
+
+# GO
+export GOPATH="$HOME/go"
+export PATH="$PATH:$HOME/go/bin"

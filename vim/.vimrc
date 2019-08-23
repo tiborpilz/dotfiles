@@ -14,24 +14,21 @@ set autoread
 set modeline
 set modelines=5
 
+
+" Leader
+let mapleader = ","
+
+" Load plugins
+source $HOME/.vim/plugins.vim
+
 " Statusbar
 source $HOME/.vim/statusline.vim
 
 " Plugin configs
 " Look and feel
-set fillchars+=vert:\ 
-
-" Leader
-let mapleader = ","
-
-" NerdTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-
-map <Leader>n :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
+set fillchars+=vert:\|
 
 " CTRL+P
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
 
 " Vimtex
 let g:vimtex_view_method = 'zathura'
@@ -57,12 +54,8 @@ let g:airline_powerline_fonts = 0
 " let g:user_emmet_leader_key='<Tab>'
 " let g:user_emmet_settings = { 'javascript.jsx' : { 'extends' : 'jsx' } }
 
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-
-imap <C-Space <Plug>(ale_complete)
-" Load plugins
-source $HOME/.vim/bundle.vim
+" nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+" nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " Syntax Highlighting
 syntax enable
