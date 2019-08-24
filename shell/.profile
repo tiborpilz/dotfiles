@@ -20,5 +20,6 @@ fi
 export PATH="$PATH:$HOME/.cargo/bin"
 
 # GO
-export GOPATH="$HOME/go"
-export PATH="$PATH:$HOME/go/bin"
+export GOPATH="${HOME}/go"
+export GOBIN="${GOPATH}/bin"
+export PATH="${PATH}:${GOBIN}"

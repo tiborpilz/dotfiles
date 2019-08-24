@@ -13,3 +13,5 @@ stow -S $(ls -d */)
 
 # Install vim plugins
 vim +PluginInstall +qall
+# Install Go Binaries for vim
+vim +GoInstallBinaries

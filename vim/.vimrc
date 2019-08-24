@@ -19,6 +19,9 @@ let mapleader = ","
 " Load plugins
 source $HOME/.vim/plugins.vim
 
+" Load language-specific config
+source $HOME/.vim/languages/*
+
 " Look and feel
 set fillchars+=vert:│
 
