@@ -8,3 +8,14 @@
 	required = true
 [core]
   editor = vim
+
+[merge]
+	tool = diffconflicts
+[mergetool]
+  keepBackup = false
+[mergetool "diffconflicts"]
+  cmd = vim -c DiffConflicts "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
+  trustExitCode = true
+[mergetool "fugitive"]
+	cmd = vim -f -c "Gvdiffsplit" "$MERGED"
+  trustExitCode = true

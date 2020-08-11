@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+find ~/.config/base16-shell/scripts/*.sh -type f | fzf --bind 'space:execute(source {})'

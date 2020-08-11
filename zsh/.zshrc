@@ -25,6 +25,11 @@ antigen bundle bundler
 antigen bundle vi-mode
 antigen bundle history-substring-search
 
+antigen bundle docker
+antigen bundle docker-compose
+
+antigen bundle srijanshetty/zsh-pandoc-completion
+
 antigen bundle wfxr/forgit
 antigen bundle git
 
@@ -69,13 +74,27 @@ export projectPath="./${project}"
 python -m venv "$projectPath/.venv" --prompt "$project"
 source "${projectPath}/.venv/bin/activate"
 
-# Activate venv and instal kernelspec for jupyter
+# Activate venv and install kernelspec for jupyter
 pip install ipykernel
 python -m ipykernel install --user --name "$project"
 pip install jupyter
 }
-export TAICHI_NUM_THREADS=8
-export TAICHI_REPO_DIR=/home/tibor/Code/taichi
-export PYTHONPATH=$TAICHI_REPO_DIR/python/:$PYTHONPATH
-export PATH=$TAICHI_REPO_DIR/bin/:$PATH
-export PATH="/usr/local/sbin:$PATH"
+
+source <(kubectl completion zsh)
+alias k=kubectl
+complete -F __start_kubectl k
+
+### Bashhub.com Installation
+if [ -f ~/.bashhub/bashhub.zsh ]; then
+    source ~/.bashhub/bashhub.zsh
+fi
+
+autoload -U +X bashcompinit && bashcompinit
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+export PATH="/usr/local/opt/python@3.8/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/tibor.pilz/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tibor.pilz/google-cloud-sdk/completion.zsh.inc'; fi

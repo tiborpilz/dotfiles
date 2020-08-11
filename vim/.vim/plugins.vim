@@ -4,50 +4,61 @@ filetype off
 call plug#begin('~/.vim/plugged')
 
 " colorschemes
-Plug 'dylanaraps/wal.vim' " custom color scheme from pywal
+" Plug 'dylanaraps/wal.vim' " custom color scheme from pywal
+Plug 'chriskempson/base16-vim'
 
 " status line
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 " icons
 Plug 'ryanoasis/vim-devicons'
 
 " general syntax highlighting / linting / autocomplete
+Plug 'dense-analysis/ale'
+let g:ale_sign_column_always = 1
+let g:airline#extensions#ale#enabled = 1
+
 Plug 'honza/dockerfile.vim'
 Plug 'tpope/vim-markdown'
 
+" Natural Language
+Plug 'dpelle/vim-LanguageTool'
+let g:languagetool_jar='/usr/local/bin/languagetool'
+
 " IntelliSense
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-source $HOME/.vim/coc/coc.vim
+" source $HOME/.vim/coc/coc.vim
+
+" Snippets etc.
+Plug 'mattn/emmet-vim'
 
 " file management
 Plug 'junegunn/fzf.vim'
 Plug 'jremmen/vim-ripgrep'
+Plug 'dyng/ctrlsf.vim'
+
+" Git
+"" Git wrapper
+Plug 'tpope/vim-fugitive'
+
+"" DiffTool
+Plug 'whiteinge/diffconflicts'
 
 " CTRL+P
 Plug 'ctrlpvim/ctrlp.vim'
-
 "" Don't scan git-ignored files
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
 
 " NERDTree
 Plug 'scrooloose/nerdtree', { 'commit': '8d005db' } " textual filesystem navigation.
-" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeDirArrow = 0
-
 map <Leader>n :NERDTreeToggle<CR>
-
-" javascript/frontend general
-" Plug 'pangloss/vim-javascript'
-" Plug 'leafgarland/typescript-vim'
-" Plug 'peitalin/vim-jsx-typescript'
-" Plug 'darthmall/vim-vue'
 
 " Natural Language writing
 Plug 'junegunn/goyo.vim'
+
+Plug 'https://manu@framagit.org/manu/coq-au-vim.git'
 
 " Latex
 Plug 'lervag/vimtex'
@@ -62,16 +73,6 @@ Plug 'fatih/vim-go'
 Plug 'editorconfig/editorconfig-vim' " editorconfig support
 Plug 'skywind3000/asyncrun.vim' " better async running
 
-" snippets
-" Plug 'marcweber/vim-addon-mw-utils' " dependency.
-" Plug 'tomtom/tlib_vim' " dependency.
-" Plug 'garbas/vim-snipmate' " snipmate repo.
-" Plug 'honza/vim-snippets' " default snippets.
-
-" wrappers
-Plug 'tpope/vim-fugitive' " git.
-Plug 'mipmip/vim-run-in-blender' " blender.
-
 " writing/editing helpers
 Plug 'tpope/vim-commentary' " easy commenting.
 Plug 'ntpeters/vim-better-whitespace' " mark and remove trailing whitespace.
@@ -82,6 +83,14 @@ Plug 'embear/vim-localvimrc' " load subdirectory specific vimrc files.
 Plug 'jcf/vim-latex' " latex suite.
 Plug 'liuchengxu/vim-which-key'
 "Plug 'christoomey/vim-tmux-navigator'
+
+" Organizational stuff
 Plug 'vimwiki/vimwiki'
+
+" Relative line numbers
+Plug 'vim-scripts/RltvNmbr.vim'
+
+Plug 'mattn/calendar-vim'
+let g:calendar_diary=$HOME.'/vimwiki/diary'
 
 call plug#end()
