@@ -3,6 +3,7 @@ EDITOR="vim"
 # Aliases
 alias svim="sudo -E vim"
 alias base64=gbase64
+alias readlink=greadlink
 
 # Disable beep
 setopt NO_BEEP

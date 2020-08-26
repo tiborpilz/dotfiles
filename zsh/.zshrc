@@ -13,7 +13,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
 
 
-# Antige nPlugin Manager
+# Antigea nPlugin Manager
 source $HOME/.antigen/antigen.zsh
 
 antigen use oh-my-zsh
@@ -55,29 +55,28 @@ stty -ixon
 
 # Functions
 python-init() {
+  # Init python venv in current dir if no argument given
+  projectPath=${PWD##*/}
 
-# Init python venv in current dir if no argument given
-projectPath=${PWD##*/}
+  if [ -n "$1" ]
+  then
+    echo "$1"
+    export project="$1"
+    mkdir "$1"
+  else
+    export project=${PWD##*/}
+  fi
 
-if [ -n "$1" ]
-then
-  echo "$1"
-  export project="$1"
-  mkdir "$1"
-else
-  export project=${PWD##*/}
-fi
+  export projectPath="./${project}"
 
-export projectPath="./${project}"
+  # Create .venv folder with project folder name as prompt
+  python -m venv "$projectPath/.venv" --prompt "$project"
+  source "${projectPath}/.venv/bin/activate"
 
-# Create .venv folder with project folder name as prompt
-python -m venv "$projectPath/.venv" --prompt "$project"
-source "${projectPath}/.venv/bin/activate"
-
-# Activate venv and install kernelspec for jupyter
-pip install ipykernel
-python -m ipykernel install --user --name "$project"
-pip install jupyter
+  # Activate venv and install kernelspec for jupyter
+  pip install ipykernel
+  python -m ipykernel install --user --name "$project"
+  pip install jupyter
 }
 
 source <(kubectl completion zsh)
