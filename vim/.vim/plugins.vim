@@ -69,6 +69,7 @@ let g:tex_conceal='abdmg'
 
 " Go
 Plug 'fatih/vim-go'
+
 " project tools/general vim stuff
 Plug 'editorconfig/editorconfig-vim' " editorconfig support
 Plug 'skywind3000/asyncrun.vim' " better async running

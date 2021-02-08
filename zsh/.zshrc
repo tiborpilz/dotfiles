@@ -97,3 +97,6 @@ if [ -f '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tibo
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/tibor.pilz/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tibor.pilz/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Z
+. /usr/local/etc/profile.d/z.sh

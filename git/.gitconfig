@@ -1,5 +1,5 @@
 [user]
-	email = tibor.pilz@sevenval.com
+	email = tibor.pilz@avenga.com
 	name = Tibor Pilz
 [filter "lfs"]
 	clean = git-lfs clean -- %f
