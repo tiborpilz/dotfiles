@@ -13,7 +13,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
 
 
-# Antige nPlugin Manager
+# Antigea nPlugin Manager
 source $HOME/.antigen/antigen.zsh
 
 antigen use oh-my-zsh
@@ -24,6 +24,11 @@ antigen theme https://github.com/iam4x/zsh-iterm-touchbar
 antigen bundle bundler
 antigen bundle vi-mode
 antigen bundle history-substring-search
+
+antigen bundle docker
+antigen bundle docker-compose
+
+antigen bundle srijanshetty/zsh-pandoc-completion
 
 antigen bundle wfxr/forgit
 antigen bundle git
@@ -50,24 +55,45 @@ stty -ixon
 
 # Functions
 python-init() {
+  # Init python venv in current dir if no argument given
+  projectPath=${PWD##*/}
 
-# Init python venv in current dir if no argument given
-projectPath=${PWD##*/}
+  if [ -n "$1" ]
+  then
+    echo "$1"
+    export project="$1"
+    mkdir "$1"
+  else
+    export project=${PWD##*/}
+  fi
 
-if [ -n "$1" ]
-then
-  echo "$1"
-  export project="$1"
-  mkdir "$1"
-else
-  export project=${PWD##*/}
+  export projectPath="./${project}"
+
+  # Create .venv folder with project folder name as prompt
+  python -m venv "$projectPath/.venv" --prompt "$project"
+  source "${projectPath}/.venv/bin/activate"
+
+  # Activate venv and install kernelspec for jupyter
+  pip install ipykernel
+  python -m ipykernel install --user --name "$project"
+  pip install jupyter
+}
+
+source <(kubectl completion zsh)
+alias k=kubectl
+complete -F __start_kubectl k
+
+### Bashhub.com Installation
+if [ -f ~/.bashhub/bashhub.zsh ]; then
+    source ~/.bashhub/bashhub.zsh
 fi
 
-export projectPath="./${project}"
+autoload -U +X bashcompinit && bashcompinit
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+export PATH="/usr/local/opt/python@3.8/bin:$PATH"
 
-# Create .venv folder with project folder name as prompt
-python -m venv "$projectPath/.venv" --prompt "$project"
-source "${projectPath}/.venv/bin/activate"
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc'; fi
 
 # Activate venv and instal kernelspec for jupyter
 pip install ipykernel
@@ -1247,3 +1273,9 @@ function __tkn_get_clustertasks() { __tkn_get_object clustertasks tkn ;}
 
 # add Pulumi to the PATH
 export PATH=$PATH:$HOME/.pulumi/bin
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/tibor.pilz/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tibor.pilz/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Z
+. /usr/local/etc/profile.d/z.sh

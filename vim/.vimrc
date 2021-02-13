@@ -1,5 +1,6 @@
 scriptencoding utf-8
 set encoding=utf-8
+let base16colorpsace=256
 
 "" Basic Settings
 set nocompatible
@@ -22,6 +23,12 @@ source $HOME/.vim/plugins.vim
 " Load language-specific config
 source $HOME/.vim/languages/*
 
+" Load Color Scheme
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
+
 " Look and feel
 set fillchars+=vert:│
 
@@ -36,4 +43,4 @@ syntax enable
 set t_Co=256
 
 " Color scheme
-colorscheme wal
+colorscheme base16-default-dark
