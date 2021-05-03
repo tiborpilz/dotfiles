@@ -34,3 +34,4 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 [ -n "$PS1" ] && \
   [ -s "$BASE16_SHELL/profile_helper.sh" ] &&
   eval "$("$BASE16_SHELL/profile_helper.sh")"
+if [ -e /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

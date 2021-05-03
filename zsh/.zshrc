@@ -100,3 +100,10 @@ if [ -f '/Users/tibor.pilz/google-cloud-sdk/completion.zsh.inc' ]; then . '/User
 
 # Z
 . /usr/local/etc/profile.d/z.sh
+
+# Fix gpg
+export GPG_TTY=$(tty)
+if [ -e /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
+
+source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
