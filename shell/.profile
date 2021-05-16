@@ -18,6 +18,9 @@ else
 	esac
 fi
 
+# ???
+export PATH="$PATH:/usr/local/bin"
+
 # Scripts
 export PATH="$PATH:$HOME/.bin"
 
