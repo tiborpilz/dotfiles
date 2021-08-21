@@ -24,3 +24,7 @@
 	program = gpg
 [credential]
 	helper = osxkeychain
+[credentials]
+	helper = osxkeychain
+[commit]
+	gpgSign = true

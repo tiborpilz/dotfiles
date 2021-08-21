@@ -86,6 +86,7 @@ complete -F __start_kubectl k
 autoload -U +X bashcompinit && bashcompinit
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 export PATH="/usr/local/opt/python@3.8/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc'; fi
@@ -98,7 +99,3 @@ if [ -f '/Users/tibor.pilz/google-cloud-sdk/completion.zsh.inc' ]; then . '/User
 
 # Fix gpg
 export GPG_TTY=$(tty)
-if [ -e /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
-
-source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh

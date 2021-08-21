@@ -23,8 +23,17 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'honza/dockerfile.vim'
 Plug 'tpope/vim-markdown'
 
+" Ansible
+Plug 'arouene/vim-ansible-vault', { 'for': ['yaml', 'yaml.ansible'] }
+nnoremap <Leader>av :AnsibleVault<CR>
+nnoremap <Leader>au :AnsibleUnvault<CR>
+
 " Nix
 Plug 'LnL7/vim-nix'
+
+" Julia
+Plug 'JuliaEditorSupport/julia-vim'
+Plug 'AtsushiSakai/julia.vim'
 
 " Natural Language
 Plug 'dpelle/vim-LanguageTool'
@@ -44,7 +53,7 @@ Plug 'mattn/emmet-vim'
 
 " file management
 Plug 'junegunn/fzf.vim'
-Plug 'jremmen/vim-ripgrep'
+" Plug 'jremmen/vim-ripgrep'
 Plug 'dyng/ctrlsf.vim'
 
 " Git

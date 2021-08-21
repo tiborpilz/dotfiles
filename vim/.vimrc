@@ -18,7 +18,7 @@ set modelines=5
 set foldmethod=indent
 
 "" Smoother update
-set updatetime=30
+set updatetime=1000
 
 " Leader
 let mapleader = ","
