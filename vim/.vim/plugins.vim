@@ -16,19 +16,36 @@ let g:airline_right_sep = ''
 Plug 'ryanoasis/vim-devicons'
 
 " general syntax highlighting / linting / autocomplete
-Plug 'dense-analysis/ale'
-let g:ale_sign_column_always = 1
-let g:airline#extensions#ale#enabled = 1
+" Plug 'dense-analysis/ale'
+" let g:ale_sign_column_always = 1
+" let g:airline#extensions#ale#enabled = 1
 
 Plug 'honza/dockerfile.vim'
 Plug 'tpope/vim-markdown'
+
+" Ansible
+Plug 'arouene/vim-ansible-vault', { 'for': ['yaml', 'yaml.ansible'] }
+nnoremap <Leader>av :AnsibleVault<CR>
+nnoremap <Leader>au :AnsibleUnvault<CR>
+
+" Nix
+Plug 'LnL7/vim-nix'
+
+" Julia
+Plug 'JuliaEditorSupport/julia-vim'
+Plug 'AtsushiSakai/julia.vim'
 
 " Natural Language
 Plug 'dpelle/vim-LanguageTool'
 let g:languagetool_jar='/usr/local/bin/languagetool'
 
-" IntelliSense
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Coc - IntelliSense
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+vmap <leader>f <Plug>(coc-format-selected)
+nmap <leader>f <Plug>(coc-format-selected)
+
 " source $HOME/.vim/coc/coc.vim
 
 " Snippets etc.
@@ -36,7 +53,7 @@ Plug 'mattn/emmet-vim'
 
 " file management
 Plug 'junegunn/fzf.vim'
-Plug 'jremmen/vim-ripgrep'
+" Plug 'jremmen/vim-ripgrep'
 Plug 'dyng/ctrlsf.vim'
 
 " Git

@@ -1,6 +1,7 @@
 [user]
 	email = tibor@pilz.berlin
 	name = Tibor Pilz
+	signingKey = 864DE3D8314DF278D11AB8DBA21B15175ABFAE70
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -19,3 +20,11 @@
 [mergetool "fugitive"]
 	cmd = vim -f -c "Gvdiffsplit" "$MERGED"
   trustExitCode = true
+[gpg]
+	program = gpg
+[credential]
+	helper = osxkeychain
+[credentials]
+	helper = osxkeychain
+[commit]
+	gpgSign = true

@@ -83,14 +83,10 @@ source <(kubectl completion zsh)
 alias k=kubectl
 complete -F __start_kubectl k
 
-### Bashhub.com Installation
-if [ -f ~/.bashhub/bashhub.zsh ]; then
-    source ~/.bashhub/bashhub.zsh
-fi
-
 autoload -U +X bashcompinit && bashcompinit
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 export PATH="/usr/local/opt/python@3.8/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc'; fi
@@ -1279,3 +1275,6 @@ if [ -f '/Users/tibor.pilz/google-cloud-sdk/completion.zsh.inc' ]; then . '/User
 
 # Z
 . /usr/local/etc/profile.d/z.sh
+
+# Fix gpg
+export GPG_TTY=$(tty)

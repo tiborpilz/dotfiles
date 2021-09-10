@@ -14,6 +14,12 @@ set autoread
 set modeline
 set modelines=5
 
+"" Fold on indent - works independently of syntax
+set foldmethod=indent
+
+"" Smoother update
+set updatetime=1000
+
 " Leader
 let mapleader = ","
 
@@ -36,7 +42,6 @@ set laststatus=2
 
 " Airline font population
 " let g:airline_powerline_fonts = 0
-
 
 " Syntax Highlighting
 syntax enable
