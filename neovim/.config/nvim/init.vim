@@ -22,6 +22,7 @@ set relativenumber
 set autoread
 set modeline
 set modelines=5
+set nofoldenable
 
 "" Smoother update
 set updatetime=1000
@@ -29,11 +30,11 @@ set updatetime=1000
 " Leader
 let mapleader = ","
 
-" UI stuff
+" Load plugins
+source $HOME/.config/nvim/plugins.vim
+
+" Look and Feel
+source $HOME/.config/nvim/look-and-feel.vim
 set signcolumn=yes:1
 highlight clear SignColumn
 set fillchars=eob:\ 
-" highlight EndOfBuffer ctermbg=black ctermfg=black
-
-" Load plugins
-source $HOME/.config/nvim/plugins.vim

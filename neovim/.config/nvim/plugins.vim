@@ -20,8 +20,9 @@ Plug 'preservim/nerdtree'
 nnoremap <leader>n :NERDTreeToggle<CR>
 
 " Tabline
-Plug 'romgrk/barbar.nvim'
-
+" Plug 'romgrk/barbar.nvim'
+" Folds
+Plug 'scr1pt0r/crease.vim'
 " Statusline
 if !exists('g:started_by_firenvim')
   Plug 'vim-airline/vim-airline'
@@ -54,6 +55,9 @@ Plug 'kosayoda/nvim-lightbulb'
 autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
 
 Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
+
+" kubernetes
+Plug 'rottencandy/vimkubectl'
 
 " Colorschemes
 Plug 'eddyekofo94/gruvbox-flat.nvim'
@@ -94,7 +98,7 @@ let g:compe.source.emoji = v:true
 
 call plug#end()
 
-let g:nightfox_style = 'nordfox'
+" let g:nightfox_style = 'nordfox'
 colorscheme nightfox
 
 " LSP settings
