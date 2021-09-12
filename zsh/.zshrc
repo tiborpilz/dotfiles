@@ -48,6 +48,7 @@ source $HOME/.zsh_custom/themes/lnclt.zsh-theme
 # Autocorrect
 if ( type thefuck &> /dev/null ); then
   eval $(thefuck --alias)
+  export THEFUCK_PRIORITY="git_hook_bypass=1100"
 fi
 
 # Fix xon/xoff flow control
