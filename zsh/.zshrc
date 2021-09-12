@@ -81,7 +81,7 @@ python-init() {
 
 source <(kubectl completion zsh)
 alias k=kubectl
-complete -F __start_kubectl k
+# complete -F __start_kubectl k
 
 autoload -U +X bashcompinit && bashcompinit
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
@@ -92,10 +92,10 @@ export PATH="/usr/local/bin:$PATH"
 if [ -f '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc'; fi
 
 # Activate venv and instal kernelspec for jupyter
-pip install ipykernel
-python -m ipykernel install --user --name "$project"
-pip install jupyter
-}
+# pip install ipykernel
+# python -m ipykernel install --user --name "$project"
+# pip install jupyter
+# }
 export TAICHI_NUM_THREADS=8
 export TAICHI_REPO_DIR=/home/tibor/Code/taichi
 export PYTHONPATH=$TAICHI_REPO_DIR/python/:$PYTHONPATH
@@ -1274,7 +1274,7 @@ export PATH=$PATH:$HOME/.pulumi/bin
 if [ -f '/Users/tibor.pilz/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tibor.pilz/google-cloud-sdk/completion.zsh.inc'; fi
 
 # Z
-. /usr/local/etc/profile.d/z.sh
+# . /usr/local/etc/profile.d/z.sh
 
 # Fix gpg
 export GPG_TTY=$(tty)
