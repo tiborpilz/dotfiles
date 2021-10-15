@@ -43,6 +43,9 @@ Plug 'vimwiki/vimwiki'
 "" Terraform
 Plug 'hashivim/vim-terraform'
 
+"" Nix
+Plug 'LnL7/vim-nix'
+
 " LSP
 Plug 'neovim/nvim-lspconfig'
 Plug 'kabouzeid/nvim-lspinstall'
