@@ -48,7 +48,7 @@ Plug 'LnL7/vim-nix'
 
 " LSP
 Plug 'neovim/nvim-lspconfig'
-Plug 'kabouzeid/nvim-lspinstall'
+Plug 'williamboman/nvim-lsp-installer'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'folke/lsp-colors.nvim'
 Plug 'simrat39/symbols-outline.nvim'
