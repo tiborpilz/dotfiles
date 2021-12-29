@@ -36,12 +36,12 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
--- lsp_installer.on_server_ready(function(server)
---   local opts = {}
+lsp_installer.on_server_ready(function(server)
+  local opts = {}
 
---   server:setup(opts)
---   vim.cmd [[ do User LspAttachBuffers ]]
--- end)
+  server:setup(opts)
+  vim.cmd [[ do User LspAttachBuffers ]]
+end)
 
 -- local function setup_servers()
 --   lspinstall.setup()
