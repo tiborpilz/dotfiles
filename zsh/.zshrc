@@ -35,6 +35,8 @@ antigen bundle git
 
 antigen bundle soimort/translate-shell
 
+antigen bundle Tarrasch/zsh-autoenv
+
 # Colorful stuff
 antigen bundle zsh-users/zsh-syntax-highlighting
 
