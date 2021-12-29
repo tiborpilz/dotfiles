@@ -35,8 +35,6 @@ antigen bundle git
 
 antigen bundle soimort/translate-shell
 
-antigen bundle Tarrasch/zsh-autoenv
-
 # Colorful stuff
 antigen bundle zsh-users/zsh-syntax-highlighting
 
@@ -99,5 +97,10 @@ alias k=kubectl
 
 # add Pulumi to the PATH
 export PATH=$PATH:$HOME/.pulumi/bin
-
 export GPG_TTY=$(tty)
+
+# Activate direnv, if it exists
+if command -v direnv &> /dev/null
+then
+  eval "$(direnv hook zsh)"
+fi
