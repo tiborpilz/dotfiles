@@ -2,8 +2,8 @@ EDITOR="vim"
 
 # Aliases
 alias svim="sudo -E vim"
-alias base64=gbase64
-alias readlink=greadlink
+# alias base64=gbase64
+# alias readlink=greadlink
 
 # Disable beep
 setopt NO_BEEP
@@ -48,4 +48,3 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 [ -n "$PS1" ] && \
   [ -s "$BASE16_SHELL/profile_helper.sh" ] &&
   eval "$("$BASE16_SHELL/profile_helper.sh")"
-if [ -e /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

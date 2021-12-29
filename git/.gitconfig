@@ -22,9 +22,7 @@
   trustExitCode = true
 [gpg]
 	program = gpg
-[credential]
-	helper = osxkeychain
-[credentials]
-	helper = osxkeychain
 [commit]
 	gpgSign = false
+[init]
+	defaultBranch = main

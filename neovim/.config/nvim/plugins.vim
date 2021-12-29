@@ -19,6 +19,8 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'preservim/nerdtree'
 nnoremap <leader>n :NERDTreeToggle<CR>
 
+Plug 'andrewstuart/vim-kubernetes'
+
 " Tabline
 " Plug 'romgrk/barbar.nvim'
 " Folds
@@ -61,6 +63,8 @@ Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
 
 " kubernetes
 Plug 'rottencandy/vimkubectl'
+
+" Plug 'SirVer/ultisnips'
 
 " Colorschemes
 Plug 'eddyekofo94/gruvbox-flat.nvim'

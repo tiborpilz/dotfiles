@@ -1,0 +1,7 @@
+[settings]
+
+[repositories]
+
+[virtualenvs]
+create = true
+in-project = true
