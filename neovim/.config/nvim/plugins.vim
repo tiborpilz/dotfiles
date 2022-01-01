@@ -1,4 +1,8 @@
 call plug#begin('~/.config/nvim/plugged')
+
+" Copilot
+Plug 'github/copilot.vim'
+
 " Dashboard
 Plug 'glepnir/dashboard-nvim'
 let g:dashboard_default_executive = 'telescope'
@@ -56,6 +60,9 @@ Plug 'folke/lsp-colors.nvim'
 Plug 'simrat39/symbols-outline.nvim'
 nnoremap <leader>o <cmd>SymbolsOutline <cr>
 
+" Repl
+Plug 'hkupty/iron.nvim'
+
 Plug 'kosayoda/nvim-lightbulb'
 autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
 
@@ -75,6 +82,9 @@ Plug 'RRethy/nvim-base16'
 
 " Autocompletion
 Plug 'hrsh7th/nvim-compe'
+
+" Signatures
+Plug 'ray-x/lsp_signature.nvim'
 
 set completeopt=menuone,noselect
 let g:compe = {}
@@ -115,6 +125,12 @@ lua require('lsp-config')
 lua require('treesitter')
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
+
+" LSP Signature setup
+lua require('lsp-signature')
+
+" Iron repl config
+lua require('iron-config')
 
 " Dashboard settings
 let g:dashboard_custom_header = [
