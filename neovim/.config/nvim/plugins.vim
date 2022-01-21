@@ -19,8 +19,9 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'preservim/nerdtree'
 nnoremap <leader>n :NERDTreeToggle<CR>
 
-" Tabline
-" Plug 'romgrk/barbar.nvim'
+" Git
+Plug 'tpope/vim-fugitive'
+
 " Folds
 Plug 'scr1pt0r/crease.vim'
 " Statusline
@@ -65,6 +66,8 @@ Plug 'marko-cerovac/material.nvim'
 Plug 'kdheepak/monochrome.nvim'
 Plug 'EdenEast/nightfox.nvim'
 Plug 'RRethy/nvim-base16'
+Plug 'mcchrish/zenbones.nvim'
+Plug 'rktjmp/lush.nvim'
 
 " Autocompletion
 Plug 'hrsh7th/nvim-compe'

@@ -30,3 +30,5 @@
 	gpgSign = false
 [author]
 	email = tibor.pilz@avenga.com
+[push]
+	default = current

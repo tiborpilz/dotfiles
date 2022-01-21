@@ -99,3 +99,4 @@ alias k=kubectl
 export PATH=$PATH:$HOME/.pulumi/bin
 
 export GPG_TTY=$(tty)
+if [ -e /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
