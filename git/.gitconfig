@@ -1,5 +1,5 @@
 [user]
-	email = tibor@pilz.berlin
+	email = tibor.pilz@avenga.com
 	name = Tibor Pilz
 	signingKey = 864DE3D8314DF278D11AB8DBA21B15175ABFAE70
 [filter "lfs"]
@@ -28,3 +28,5 @@
 	helper = osxkeychain
 [commit]
 	gpgSign = false
+[author]
+	email = tibor.pilz@avenga.com
