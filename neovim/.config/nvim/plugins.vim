@@ -57,8 +57,16 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'folke/lsp-colors.nvim'
-Plug 'simrat39/symbols-outline.nvim'
-nnoremap <leader>o <cmd>SymbolsOutline <cr>
+" Plug 'simrat39/symbols-outline.nvim'
+" Plug 'folke/trouble.nvim'
+" nnoremap <leader>o <cmd>SymbolsOutline <cr>
+" Tests
+Plug 'vim-test/vim-test'
+nmap <silent> <leader>tt :TestNearest<CR>
+nmap <silent> <leader>tT :TestFile<CR>
+nmap <silent> <leader>ta :TestSuite<CR>
+nmap <silent> <leader>tl :TestLast<CR>
+nmap <silent> <leader>tg :TestVisit<CR>
 
 " Repl
 Plug 'hkupty/iron.nvim'
@@ -91,7 +99,7 @@ let g:compe = {}
 let g:compe.enabled = v:true
 let g:compe.autocomplete = v:true
 let g:compe.debug = v:false
-let g:compe.min_length = 1
+let g:compe.min_length = 0
 let g:compe.preselect = 'enable'
 let g:compe.throttle_time = 80
 let g:compe.source_timeout = 200
@@ -120,6 +128,9 @@ colorscheme nightfox
 
 " LSP settings
 lua require('lsp-config')
+
+" Diagnostics Settings
+lua require('diagnostics')
 
 " Treesitter settings
 lua require('treesitter')

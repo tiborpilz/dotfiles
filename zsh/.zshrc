@@ -35,6 +35,7 @@ antigen bundle git
 
 antigen bundle soimort/translate-shell
 
+antigen bundle jscutlery/nx-completion@main
 # Colorful stuff
 antigen bundle zsh-users/zsh-syntax-highlighting
 
@@ -104,3 +105,5 @@ if command -v direnv &> /dev/null
 then
   eval "$(direnv hook zsh)"
 fi
+
+# source $HOME/.antigen/bundles/jscutlery/nx-completion-main/nx-completion.plugin.zsh
