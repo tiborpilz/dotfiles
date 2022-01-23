@@ -65,6 +65,12 @@
 (package! org-appear :recipe (:host github :repo "awth13/org-appear")
   :pin "148aa124901ae598f69320e3dcada6325cdc2cf0")
 
+;; Remove heading starts
+(package! org-starless :recipe (:host github :repo "TonCherAmi/org-starless"))
+
+;; Padding for org mode
+(package! org-padding :recipe (:host github :repo "TonCherAmi/org-padding"))
+
 ;; View and manage heading structure
 (package! org-ol-tree :recipe (:host github :repo "Townk/org-ol-tree")
   :pin "207c748aa5fea8626be619e8c55bdb1c16118c25")

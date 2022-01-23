@@ -21,9 +21,9 @@
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 20)
+(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 22)
       doom-big-font (font-spec :family "FiraCode Nerd Font" :size 32)
-      doom-variable-pitch-font (font-spec :family "Open Sans" :size 20)
+      doom-variable-pitch-font (font-spec :family "Open Sans" :size 22)
       doom-serif-font (font-spec :family "ETbb" :weight 'light))
 
 (setq display-line-numbers-type 'relative)
@@ -62,6 +62,22 @@
   ;; for proper first-time setup, `org-appear--set-elements'
   ;; needs to be run after other hooks have acted.
   (run-at-time nil nil #'org-appear--set-elements))
+
+;; Remove stars from heading
+;; (use-package! org-starless
+;;   :quelpa (org-starless :repo "TonCherAmi/org-starless" :fetcher github))
+(use-package org-starless)
+(add-hook 'org-mode-hook #'org-starless-mode)
+
+
+;; Add padding to orgmode
+;; (use-package org-padding)
+;; (setq org-padding-block-begin-line-padding '(2.0 . nil))
+;; (setq org-padding-block-end-line-padding '(nil . 1.0))
+;; (setq org-padding-heading-padding-alist
+;;   '((10.0 . 10.5) (30.0 . 10.5) (13.0 . 15.5) (32.0 . 10.5) (21.5 . 10.5) (20.0 . 10.5) (20.5 . 10.5) (20.5 . 10.5)))
+
+;;(add-hook 'org-mode-hook #'org-padding-mode)
 
 ;; Julia babel language improvements
 (use-package! ob-julia
@@ -205,20 +221,17 @@
 ;; mixed pitch & org-pretty-mode
 (add-hook 'org-mode-hook #'+org-pretty-mode)
 
-;; Bigger headlines
-(custom-set-faces!
-  '(outline-1  :weight extra-bold :height 1.25)
-  '(outline-2 :weight bold :height 1.15)
-  '(outline-3 :weight bold :height 1.12)
-  '(outline-4 :weight semi-bold :height 1.09)
-  '(outline-5 :weight semi-bold :height 1.06)
-  '(outline-6 :weight semi-bold :height 1.03)
-  '(outline-8 :weight semi-bold)
-  '(outline-9 :weight semi-bold))
-
-;; bigger title
-(custom-set-faces!
-  '(org-document-title :height 1.2))
+;; Font and size of Orgmode Headlines
+;; Set font for Org headlines. Try different fonts, and use a sans serif family if all else fails
+;; (custom-set-faces !
+;;   '(outline-1 :font "ETbb" :weight extra-bold)
+;;   '(outline-2 :font "ETbb" :weight bold)
+;;   '(outline-3 :font "ETbb" :weight bold)
+;;   '(outline-4 :font "ETbb" :weight semi-bold)
+;;   '(outline-5 :weight semi-bold)
+;;   '(outline-6 :weight semi-bold)
+;;   '(outline-8 :weight semi-bold)
+;;   '(outline-9 :weight semi-bold))
 
 ;; Show passed deadlines as error
 (setq org-agenda-deadline-faces
@@ -253,90 +266,6 @@
         (?D . 'all-the-icons-green)
          (?E . 'all-the-icons-blue)))
 
-;; Unicode & Ligatures
-(appendq! +ligatures-extra-symbols
-          `(:checkbox      "☐"
-            :pending       "◼"
-            :checkedbox    "☑"
-            :list_property "∷"
-            :em_dash       "—"
-            :ellipses      "…"
-            :arrow_right   "→"
-            :arrow_left    "←"
-            :title         "𝙏"
-            :subtitle      "𝙩"
-            :author        "𝘼"
-            :date          "𝘿"
-            :property      "☸"
-            :options       "⌥"
-            :startup       "⏻"
-            :macro         "𝓜"
-            :html_head     "🅷"
-            :html          "🅗"
-            :latex_class   "🄻"
-            :latex_header  "🅻"
-            :beamer_header "🅑"
-            :latex         "🅛"
-            :attr_latex    "🄛"
-            :attr_html     "🄗"
-            :attr_org      "⒪"
-            :begin_quote   "❝"
-            :end_quote     "❞"
-            :caption       "☰"
-            :header        "›"
-            :results       "🠶"
-            :begin_export  "⏩"
-            :end_export    "⏪"
-            :properties    "⚙"
-            :end           "∎"
-            :priority_a   ,(propertize "⚑" 'face 'all-the-icons-red)
-            :priority_b   ,(propertize "⬆" 'face 'all-the-icons-orange)
-            :priority_c   ,(propertize "■" 'face 'all-the-icons-yellow)
-            :priority_d   ,(propertize "⬇" 'face 'all-the-icons-green)
-            :priority_e   ,(propertize "❓" 'face 'all-the-icons-blue)))
-(set-ligatures! 'org-mode
-  :merge t
-  :checkbox      "[ ]"
-  :pending       "[-]"
-  :checkedbox    "[X]"
-  :list_property "::"
-  :em_dash       "---"
-  :ellipsis      "..."
-  :arrow_right   "->"
-  :arrow_left    "<-"
-  :title         "#+title:"
-  :subtitle      "#+subtitle:"
-  :author        "#+author:"
-  :date          "#+date:"
-  :property      "#+property:"
-  :options       "#+options:"
-  :startup       "#+startup:"
-  :macro         "#+macro:"
-  :html_head     "#+html_head:"
-  :html          "#+html:"
-  :latex_class   "#+latex_class:"
-  :latex_header  "#+latex_header:"
-  :beamer_header "#+beamer_header:"
-  :latex         "#+latex:"
-  :attr_latex    "#+attr_latex:"
-  :attr_html     "#+attr_html:"
-  :attr_org      "#+attr_org:"
-  :begin_quote   "#+begin_quote"
-  :end_quote     "#+end_quote"
-  :caption       "#+caption:"
-  :header        "#+header:"
-  :begin_export  "#+begin_export"
-  :end_export    "#+end_export"
-  :results       "#+RESULTS:"
-  :property      ":PROPERTIES:"
-  :end           ":END:"
-  :priority_a    "[#A]"
-  :priority_b    "[#B]"
-  :priority_c    "[#C]"
-  :priority_d    "[#D]"
-  :priority_e    "[#E]")
-(plist-put +ligatures-extra-symbols :name "⁍")
-
 ;; Latex fragments
 (setq org-highlight-latex-and-related '(native script entities))
 
@@ -355,60 +284,8 @@
 (require 'ox-extra)
 (ox-extras-activate '(ignore-headlines))
 
-;; MathJax
-;; Use version 3 because it's about 5 times as fast
-(setq org-html-mathjax-options
-      '((path "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" )
-        (scale "1")
-        (autonumber "ams")
-        (multlinewidth "85%")
-        (tagindent ".8em")
-        (tagside "right")))
-
-(setq org-html-mathjax-template
-      "<script>
-MathJax = {
-  chtml: {
-    scale: %SCALE
-  },
-  svg: {
-    scale: %SCALE,
-    fontCache: \"global\"
-  },
-  tex: {
-    tags: \"%AUTONUMBER\",
-    multlineWidth: \"%MULTLINEWIDTH\",
-    tagSide: \"%TAGSIDE\",
-    tagIndent: \"%TAGINDENT\"
-  }
-};
-</script>
-<script id=\"MathJax-script\" async
-        src=\"%PATH\"></script>")
-
-;; org-latex-compilers = ("pdflatex" "xelatex" "lualatex")
-(setq org-latex-pdf-process '("latexmk -f -pdf '%latex -shell-escape -interaction=nonstopmode -output-direcory=%o %f"))
-
-;; Match emacs theme for Latex document
-(use-package! ox-chameleon
-  :after ox)
-
 ;; use github markdown
-(use-package! ox-gfm
-  :after ox)
-
-
-;; Set font for Org headlines. Try different fonts, and use a sans serif family if all else fails
-;; (let* ((variable-tuple
-;;          (cond ((x-list-fonts   "ETbb")         '(:font   "ETbb"))
-;;            ((x-list-fonts   "Source Sans Pro") '(:font   "Source Sans Pro"))
-;;            ((x-list-fonts   "Lucida Grande")   '(:font   "Lucida Grande"))
-;;            ((x-list-fonts   "Verdana")         '(:font   "Verdana"))
-;;            ((x-family-fonts "Sans Serif")      '(:family "Sans Serif"))
-;;            (nil (warn "Cannot find a Sans Serif Font."))))
-;;         (base-font-color (face-foreground 'default nil 'default))
-;;         (headline `(:inherit default :weight bold
-;;                      :foreground ,base-font-color)))
+(use-package! ox-gfm :after ox)
 
 ;; ;; Set heights for headlines
 ;;   (custom-theme-set-faces
