@@ -40,13 +40,9 @@
   org-catch-invisible-edits 'smart) ; don't treat lone _ / ^ as sub/superscripts, require _{} / ^{}
 
 
-;; Remove indentation
-(after! org
-  (setq org-startup-indented nil))
-
 ;; Roam setup
 (setq org-roam-directory "~/Roam")
-;; Packege configs
+;; Packege configs
 
 ;; Prettier tables
 (use-package! org-pretty-table
@@ -63,21 +59,15 @@
   ;; needs to be run after other hooks have acted.
   (run-at-time nil nil #'org-appear--set-elements))
 
-;; Remove stars from heading
-;; (use-package! org-starless
-;;   :quelpa (org-starless :repo "TonCherAmi/org-starless" :fetcher github))
-(use-package org-starless)
-(add-hook 'org-mode-hook #'org-starless-mode)
 
 
-;; Add padding to orgmode
-;; (use-package org-padding)
-;; (setq org-padding-block-begin-line-padding '(2.0 . nil))
-;; (setq org-padding-block-end-line-padding '(nil . 1.0))
-;; (setq org-padding-heading-padding-alist
-;;   '((10.0 . 10.5) (30.0 . 10.5) (13.0 . 15.5) (32.0 . 10.5) (21.5 . 10.5) (20.0 . 10.5) (20.5 . 10.5) (20.5 . 10.5)))
 
-;;(add-hook 'org-mode-hook #'org-padding-mode)
+;; Remove indentation and headline stars
+(after! org
+  (setq org-startup-indented nil))
+
+(use-package! org-starless)
+(add-hook 'org-mode-hook 'org-starless-mode)
 
 ;; Julia babel language improvements
 (use-package! ob-julia
