@@ -19,6 +19,10 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'preservim/nerdtree'
 nnoremap <leader>n :NERDTreeToggle<CR>
 
+" Which-Key
+Plug 'liuchengxu/vim-which-key'
+Plug 'AckslD/nvim-whichkey-setup.lua'
+
 " Git
 Plug 'tpope/vim-fugitive'
 
@@ -46,11 +50,11 @@ Plug 'hashivim/vim-terraform'
 
 " LSP
 Plug 'neovim/nvim-lspconfig'
-Plug 'kabouzeid/nvim-lspinstall'
+Plug 'williamboman/nvim-lsp-installer'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'folke/lsp-colors.nvim'
-Plug 'simrat39/symbols-outline.nvim'
-nnoremap <leader>o <cmd>SymbolsOutline <cr>
+" Plug 'simrat39/symbols-outline.nvim'
+" nnoremap <leader>o <cmd>SymbolsOutline <cr>
 
 Plug 'kosayoda/nvim-lightbulb'
 autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()

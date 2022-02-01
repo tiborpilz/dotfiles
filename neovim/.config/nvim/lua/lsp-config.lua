@@ -1,7 +1,7 @@
 local lspconfig_present, lspconfig = pcall(require, 'lspconfig')
-local lspinstall_present, lspinstall = pcall(require, 'lspinstall')
+-- local lspinstall_present, lspinstall = pcall(require, 'lspinstall')
 
-if not (lspconfig_present or lspinstall_present) then
+if not (lspconfig_present) then
   return
 end
 
@@ -34,49 +34,49 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-local function setup_servers()
-  lspinstall.setup()
+-- local function setup_servers()
+--   lspinstall.setup()
 
-  local servers = lspinstall.installed_servers()
+--   local servers = lspinstall.installed_servers()
 
-  for _, lang in pairs(servers) do
-    if lang == "lua" then
-      lspconfig[lang].setup {
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { "vim" },
-            },
-            workspace = {
-              library = {
-                [vim.fn.expand "$VIMRUNTIME/lua"] = true,
-                [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
-              },
-              maxPreload = 100000,
-              preloadFileSize = 10000,
-            },
-            telemetry = {
-              enable = false,
-            },
-          },
-        },
-      }
-    else
-      lspconfig[lang].setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-      }
-    end
-  end
-end
+--   for _, lang in pairs(servers) do
+--     if lang == "lua" then
+--       lspconfig[lang].setup {
+--         settings = {
+--           Lua = {
+--             diagnostics = {
+--               globals = { "vim" },
+--             },
+--             workspace = {
+--               library = {
+--                 [vim.fn.expand "$VIMRUNTIME/lua"] = true,
+--                 [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+--               },
+--               maxPreload = 100000,
+--               preloadFileSize = 10000,
+--             },
+--             telemetry = {
+--               enable = false,
+--             },
+--           },
+--         },
+--       }
+--     else
+--       lspconfig[lang].setup {
+--         on_attach = on_attach,
+--         capabilities = capabilities,
+--       }
+--     end
+--   end
+-- end
 
-setup_servers()
+-- setup_servers()
 
 -- reload after `:LspInstall <server>`
-lspinstall.post_install_hook = function()
-   setup_servers() -- reload installed servers
-   vim.cmd "bufdo e"
-end
+-- lspinstall.post_install_hook = function()
+--    setup_servers() -- reload installed servers
+--    vim.cmd "bufdo e"
+-- end
 
 -- replace diagnostic symbols
 function lspSymbol(name, icon)
