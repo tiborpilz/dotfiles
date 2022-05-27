@@ -7,13 +7,7 @@ PATH=$PATH:$HOME/.npm-global/bin
 
 PATH=$PATH:$HOME/go/bin
 
-# Node Version Manager
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
-
-
-# Antigea nPlugin Manager
+# Antigen nPlugin Manager
 source $HOME/.antigen/antigen.zsh
 
 antigen use oh-my-zsh
@@ -44,12 +38,6 @@ antigen apply
 COMPLETION_WAITING_DOTS="true"
 
 source $HOME/.zsh_custom/themes/lnclt.zsh-theme
-
-# Autocorrect
-if ( type thefuck &> /dev/null ); then
-  eval $(thefuck --alias)
-  export THEFUCK_PRIORITY="git_hook_bypass=1100"
-fi
 
 # Fix xon/xoff flow control
 stty -ixon
@@ -84,7 +72,7 @@ source <(kubectl completion zsh)
 alias k=kubectl
 # complete -F __start_kubectl k
 
-autoload -U +X bashcompinit && bashcompinit
+# autoload -U +X bashcompinit && bashcompinit
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 export PATH="/usr/local/opt/python@3.8/bin:$PATH"
 export PATH="/usr/local/bin:$PATH"
@@ -92,11 +80,10 @@ export PATH="/usr/local/bin:$PATH"
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc'; fi
 
-alias k=kubectl
-#compdef _tkn tkn
 
 # add Pulumi to the PATH
 export PATH=$PATH:$HOME/.pulumi/bin
 
 export GPG_TTY=$(tty)
-if [ -e /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/tibor.pilz/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+if type gfind >/dev/null; then alias find=gfind; fi

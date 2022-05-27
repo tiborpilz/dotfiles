@@ -1,7 +1,7 @@
 local lspconfig_present, lspconfig = pcall(require, 'lspconfig')
--- local lspinstall_present, lspinstall = pcall(require, 'lspinstall')
+local lsp_installer_present, lsp_installer = pcall(require, 'nvim-lsp-installer')
 
-if not (lspconfig_present) then
+if not (lspconfig_present or lsp_installer_present) then
   return
 end
 
@@ -34,49 +34,12 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
--- local function setup_servers()
---   lspinstall.setup()
+lsp_installer.on_server_ready(function(server)
+  local opts = {}
 
---   local servers = lspinstall.installed_servers()
+  server:setup(opts)
+end)
 
---   for _, lang in pairs(servers) do
---     if lang == "lua" then
---       lspconfig[lang].setup {
---         settings = {
---           Lua = {
---             diagnostics = {
---               globals = { "vim" },
---             },
---             workspace = {
---               library = {
---                 [vim.fn.expand "$VIMRUNTIME/lua"] = true,
---                 [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
---               },
---               maxPreload = 100000,
---               preloadFileSize = 10000,
---             },
---             telemetry = {
---               enable = false,
---             },
---           },
---         },
---       }
---     else
---       lspconfig[lang].setup {
---         on_attach = on_attach,
---         capabilities = capabilities,
---       }
---     end
---   end
--- end
-
--- setup_servers()
-
--- reload after `:LspInstall <server>`
--- lspinstall.post_install_hook = function()
---    setup_servers() -- reload installed servers
---    vim.cmd "bufdo e"
--- end
 
 -- replace diagnostic symbols
 function lspSymbol(name, icon)

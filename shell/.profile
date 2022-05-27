@@ -4,6 +4,7 @@ EDITOR="vim"
 alias svim="sudo -E vim"
 alias base64=gbase64
 alias readlink=greadlink
+alias find=gfind
 
 # Disable beep
 setopt NO_BEEP

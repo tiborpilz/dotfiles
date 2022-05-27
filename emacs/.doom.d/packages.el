@@ -114,3 +114,12 @@
 
 ;; Google Tasks integration
 (package! org-gtasks :recipe (:host github :repo "JulienMasson/org-gtasks"))
+
+;; K8s
+(package! k8s-mode)
+
+;; Jest-Test-Mode
+(package! jest-test-mode)
+
+;; Vue-Mode
+(package! vue-mode)
