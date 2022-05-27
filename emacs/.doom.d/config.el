@@ -21,9 +21,9 @@
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 22)
+(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 20)
       doom-big-font (font-spec :family "FiraCode Nerd Font" :size 32)
-      doom-variable-pitch-font (font-spec :family "Open Sans" :size 22)
+      doom-variable-pitch-font (font-spec :family "Open Sans" :size 20)
       doom-serif-font (font-spec :family "ETbb" :weight 'light))
 
 (setq display-line-numbers-type 'relative)
@@ -59,13 +59,11 @@
   ;; needs to be run after other hooks have acted.
   (run-at-time nil nil #'org-appear--set-elements))
 
+;; Remove indentation
+;; (after! org
+;;   (setq org-startup-indented nil))
 
-
-
-;; Remove indentation and headline stars
-(after! org
-  (setq org-startup-indented nil))
-
+;; Remove headline stars
 (use-package! org-starless)
 (add-hook 'org-mode-hook 'org-starless-mode)
 
@@ -213,15 +211,16 @@
 
 ;; Font and size of Orgmode Headlines
 ;; Set font for Org headlines. Try different fonts, and use a sans serif family if all else fails
-;; (custom-set-faces !
-;;   '(outline-1 :font "ETbb" :weight extra-bold)
-;;   '(outline-2 :font "ETbb" :weight bold)
-;;   '(outline-3 :font "ETbb" :weight bold)
-;;   '(outline-4 :font "ETbb" :weight semi-bold)
-;;   '(outline-5 :weight semi-bold)
-;;   '(outline-6 :weight semi-bold)
-;;   '(outline-8 :weight semi-bold)
-;;   '(outline-9 :weight semi-bold))
+;; (custom-theme-set-faces
+;;     'user
+;;     `(org-level-8        ((t (:family "ETbb" ))))
+;;     `(org-level-7        ((t (:family "ETbb" ))))
+;;     `(org-level-6        ((t (:family "ETbb" ))))
+;;     `(org-level-5        ((t (:family "ETbb" ))))
+;;     `(org-level-4        ((t (:family "ETbb" :height 1.1))))
+;;     `(org-level-3        ((t (:family "ETbb" :height 1.25))))
+;;     `(org-level-2        ((t (:family "ETbb" :height 1.5))))
+;;     `(org-level-1        ((t (:family "ETbb" :height 1.75)))))
 
 ;; Show passed deadlines as error
 (setq org-agenda-deadline-faces
@@ -267,6 +266,9 @@
 (use-package! org-fragtog
   :hook (org-mode . org-fragtog-mode))
 
+;(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+;(setq org-format-latex-options (plist-put org-format-latex-options :background "Transparent"))
+
 ;; Export headings up to five levels deep
 (setq org-export-headline-levels 5)
 
@@ -276,21 +278,6 @@
 
 ;; use github markdown
 (use-package! ox-gfm :after ox)
-
-;; ;; Set heights for headlines
-;;   (custom-theme-set-faces
-;;     'user
-;;     `(org-level-8        ((t (,@headline ,@variable-tuple))))
-;;     `(org-level-7        ((t (,@headline ,@variable-tuple))))
-;;     `(org-level-6        ((t (,@headline ,@variable-tuple))))
-;;     `(org-level-5        ((t (,@headline ,@variable-tuple))))
-;;     `(org-level-4        ((t (,@headline ,@variable-tuple :height 1.1))))
-;;     `(org-level-3        ((t (,@headline ,@variable-tuple :height 1.25))))
-;;     `(org-level-2        ((t (,@headline ,@variable-tuple :height 1.5))))
-;;     `(org-level-1        ((t (,@headline ,@variable-tuple :height 1.75))))
-;;     `(org-headline-done  ((t (,@headline ,@variable-tuple :strike-through t))))
-;;     `(org-document-title ((t (,@headline ,@variable-tuple
-;;                                :height 2.0 :underline nil))))))
 
 ;; Set different fonts for freeform text and codeblocks
 ;; (variable-pitch ((t (:family "ETbb" :height 180 :weight thin))))

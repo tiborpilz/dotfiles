@@ -41,6 +41,8 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 
 antigen apply
 
+antigen bundle chisui/zsh-nix-shell
+
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 

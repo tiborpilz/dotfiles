@@ -48,3 +48,25 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 [ -n "$PS1" ] && \
   [ -s "$BASE16_SHELL/profile_helper.sh" ] &&
   eval "$("$BASE16_SHELL/profile_helper.sh")"
+
+if [ -e /home/tibor/.nix-profile/etc/profile.d/nix.sh ]; then . /home/tibor/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+PATH="$(bash -ec 'IFS=:; paths=($PATH); for i in ${!paths[@]}; do if [[ ${paths[i]} == "'/home/tibor/.pyenv/shims'" ]]; then unset '\''paths[i]'\''; fi; done; echo "${paths[*]}"')"
+export PATH="/home/tibor/.pyenv/shims:${PATH}"
+export PYENV_SHELL=zsh
+command pyenv rehash 2>/dev/null
+pyenv() {
+  local command
+  command="${1:-}"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  rehash|shell)
+    eval "$(pyenv "sh-$command" "$@")"
+    ;;
+  *)
+    command pyenv "$command" "$@"
+    ;;
+  esac
+}

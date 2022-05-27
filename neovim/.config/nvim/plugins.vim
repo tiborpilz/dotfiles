@@ -1,7 +1,7 @@
 call plug#begin('~/.config/nvim/plugged')
 
 " Copilot
-Plug 'github/copilot.vim'
+" Plug 'github/copilot.vim'
 
 " Dashboard
 Plug 'glepnir/dashboard-nvim'
@@ -56,7 +56,7 @@ Plug 'LnL7/vim-nix'
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'jose-elias-alvarez/null-ls.nvim'
-Plug 'folke/lsp-colors.nvim'
+" Plug 'folke/lsp-colors.nvim'
 " Plug 'simrat39/symbols-outline.nvim'
 " Plug 'folke/trouble.nvim'
 " nnoremap <leader>o <cmd>SymbolsOutline <cr>
