@@ -13,7 +13,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/usr/share/nvm/etc/bash_completion" ] && . "/usr/share/nvm/etc/bash_completion"  # This loads nvm bash_completion
 
 
-# Antigen Plugin Manager
+# Antigen nPlugin Manager
 source $HOME/.antigen/antigen.zsh
 
 antigen use oh-my-zsh
@@ -103,3 +103,7 @@ then
 fi
 
 # source $HOME/.antigen/bundles/jscutlery/nx-completion-main/nx-completion.plugin.zsh
+# load nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
