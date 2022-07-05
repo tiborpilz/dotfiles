@@ -7,7 +7,13 @@ PATH=$PATH:$HOME/.npm-global/bin
 
 PATH=$PATH:$HOME/go/bin
 
-# Antigen nPlugin Manager
+# Node Version Manager
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/share/nvm/nvm.sh" ] && . "/usr/share/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/share/nvm/etc/bash_completion" ] && . "/usr/share/nvm/etc/bash_completion"  # This loads nvm bash_completion
+
+
+# Antigen Plugin Manager
 source $HOME/.antigen/antigen.zsh
 
 antigen use oh-my-zsh
@@ -29,8 +35,11 @@ antigen bundle git
 
 antigen bundle soimort/translate-shell
 
+antigen bundle jscutlery/nx-completion@main
 # Colorful stuff
 antigen bundle zsh-users/zsh-syntax-highlighting
+
+antigen bundle chisui/zsh-nix-shell
 
 antigen apply
 
@@ -83,7 +92,14 @@ if [ -f '/Users/tibor.pilz/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tibo
 
 # add Pulumi to the PATH
 export PATH=$PATH:$HOME/.pulumi/bin
-
 export GPG_TTY=$(tty)
 
 if type gfind >/dev/null; then alias find=gfind; fi
+
+# Activate direnv, if it exists
+if command -v direnv &> /dev/null
+then
+  eval "$(direnv hook zsh)"
+fi
+
+# source $HOME/.antigen/bundles/jscutlery/nx-completion-main/nx-completion.plugin.zsh

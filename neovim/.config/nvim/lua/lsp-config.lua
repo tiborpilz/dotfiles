@@ -42,31 +42,31 @@ end)
 
 
 -- replace diagnostic symbols
-function lspSymbol(name, icon)
-   vim.fn.sign_define("LspDiagnosticsSign" .. name, { text = icon, numhl = "LspDiagnosticsDefaul" .. name })
-end
+-- function lspSymbol(name, icon)
+--    vim.fn.sign_define("LspDiagnosticsSign" .. name, { text = icon, numhl = "LspDiagnosticsDefaul" .. name })
+-- end
 
-lspSymbol("Error", "")
-lspSymbol("Warning", "")
-lspSymbol("Information", "")
-lspSymbol("Hint", "")
+-- lspSymbol("Error", "E")
+-- lspSymbol("Warning", "W")
+-- lspSymbol("Information", "I")
+-- lspSymbol("Hint", "h")
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-   virtual_text = {
-      prefix = "",
-      spacing = 0,
-   },
-   signs = true,
-   underline = false,
-   update_in_insert = false, -- update diagnostics insert mode
-})
+-- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+--    -- virtual_text = {
+--    --    prefix = "",
+--    --    spacing = 0,
+--    -- },
+--    signs = true,
+--    underline = false,
+--    update_in_insert = false, -- update diagnostics insert mode
+-- })
 
-require("lsp-colors").setup({
-  Error = "#FF0000",
-  Warning = "#e0af68",
-  Information = "#0db9d7",
-  Hint = "#10B981"
-})
+-- require("lsp-colors").setup({
+--   Error = "#FF0000",
+--   Warning = "#e0af68",
+--   Information = "#0db9d7",
+--   Hint = "#10B981"
+-- })
 
 -- suppress error messages from lang servers
 vim.notify = function(msg, log_level)

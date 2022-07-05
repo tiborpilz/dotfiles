@@ -10,8 +10,3 @@ git submodule update --init --recursive
 
 # Stow all files in directories
 stow -S $(ls -d */)
-
-# Install vim plugins
-vim +PlugInstall +qall
-# Install Go Binaries for vim
-vim +GoInstallBinaries

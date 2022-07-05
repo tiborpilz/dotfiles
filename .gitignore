@@ -1,3 +1,4 @@
 /tmux/.tmux/plugins/
 /.gtm/
 neovim/.local
+**/*~

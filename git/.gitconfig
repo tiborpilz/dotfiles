@@ -22,13 +22,11 @@
   trustExitCode = true
 [gpg]
 	program = gpg
-[credential]
-	helper = osxkeychain
-[credentials]
-	helper = osxkeychain
 [commit]
 	gpgSign = false
 [author]
 	email = tibor.pilz@avenga.com
 [push]
 	default = current
+[init]
+	defaultBranch = main

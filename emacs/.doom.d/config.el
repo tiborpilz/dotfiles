@@ -1,10 +1,10 @@
 (setq user-full-name "Tibor Pilz"
       user-mail-address "tibor@pilz.berlin")
 
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
-      doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
-      doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
-      doom-serif-font (font-spec :family "Baskerville" :weight 'light))
+;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
+;;       doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
+;;       doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
+;;       doom-serif-font (font-spec :family "Baskerville" :weight 'light))
 
 (setq doom-theme 'doom-opera)
 
@@ -53,15 +53,15 @@
 
 (use-package! org-gcal
   :config
-  (setq org-gcal-client-id "286119799195-9k2vklv49rj62ksgn8ec5coevgb7fpb0.apps.googleusercontent.com"
-        org-gcal-client-secret "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"
+  (setq org-gcal-client-id "CLIENT_ID"
+        org-gcal-client-secret "CLIENT_SECRET"
         org-gcal-fetch-file-alit '(("tbrpilz@googlemail.com" . "~/org/schedule.org"))))
 
 (use-package! org-gtasks)
 (org-gtasks-register-account :name "Personal"
                              :directory "~/org"
-                             :client-id "286119799195-9k2vklv49rj62ksgn8ec5coevgb7fpb0.apps.googleusercontent.com"
-                             :client-secret "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")
+                             :client-id "CLIENT_ID"
+                             :client-secret "CLIENT_SECRET")
 
 (remove-hook 'text-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'auto-fill-mode)
@@ -222,3 +222,30 @@
   :hook (typescript-mode js-mode typescript-tsx-mode))
 
 (use-package! vue-mode)
+
+(use-package! svelte-mode
+    :mode "\\.svelte\\'")
+
+(use-package! nix-mode
+  :mode "\\.nix\\'")
+
+;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+;; (lsp-register-client
+;;  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+;;                   :major-modes '(nix-mode)
+;;                   :server-id 'nix'))
+
+(defun tab-complete-copilot ()
+  (interactive)
+  (or (copilot-accept-completion)
+      (company-indent-or-complete-common nil)))
+
+(setq copilot-node-executable "/home/tibor/.nvm/versions/node/v16.15.1/bin/node")
+
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
+         :map company-active-map
+         ("<backtab>" . 'copilot-accept-completion)
+         :map company-mode-map
+         ("<backtab>" . 'copilot-accept-completion)))

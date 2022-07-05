@@ -1,4 +1,8 @@
 call plug#begin('~/.config/nvim/plugged')
+
+" Copilot
+" Plug 'github/copilot.vim'
+
 " Dashboard
 Plug 'glepnir/dashboard-nvim'
 let g:dashboard_default_executive = 'telescope'
@@ -48,13 +52,33 @@ Plug 'vimwiki/vimwiki'
 "" Terraform
 Plug 'hashivim/vim-terraform'
 
+"" Nix
+Plug 'LnL7/vim-nix'
+
 " LSP
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'jose-elias-alvarez/null-ls.nvim'
+<<<<<<< HEAD
 Plug 'folke/lsp-colors.nvim'
 " Plug 'simrat39/symbols-outline.nvim'
 " nnoremap <leader>o <cmd>SymbolsOutline <cr>
+=======
+" Plug 'folke/lsp-colors.nvim'
+" Plug 'simrat39/symbols-outline.nvim'
+" Plug 'folke/trouble.nvim'
+" nnoremap <leader>o <cmd>SymbolsOutline <cr>
+" Tests
+Plug 'vim-test/vim-test'
+nmap <silent> <leader>tt :TestNearest<CR>
+nmap <silent> <leader>tT :TestFile<CR>
+nmap <silent> <leader>ta :TestSuite<CR>
+nmap <silent> <leader>tl :TestLast<CR>
+nmap <silent> <leader>tg :TestVisit<CR>
+
+" Repl
+Plug 'hkupty/iron.nvim'
+>>>>>>> doom_emacs
 
 Plug 'kosayoda/nvim-lightbulb'
 autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
@@ -63,6 +87,8 @@ Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
 
 " kubernetes
 Plug 'rottencandy/vimkubectl'
+
+" Plug 'SirVer/ultisnips'
 
 " Colorschemes
 Plug 'eddyekofo94/gruvbox-flat.nvim'
@@ -76,12 +102,15 @@ Plug 'rktjmp/lush.nvim'
 " Autocompletion
 Plug 'hrsh7th/nvim-compe'
 
+" Signatures
+Plug 'ray-x/lsp_signature.nvim'
+
 set completeopt=menuone,noselect
 let g:compe = {}
 let g:compe.enabled = v:true
 let g:compe.autocomplete = v:true
 let g:compe.debug = v:false
-let g:compe.min_length = 1
+let g:compe.min_length = 0
 let g:compe.preselect = 'enable'
 let g:compe.throttle_time = 80
 let g:compe.source_timeout = 200
@@ -111,10 +140,19 @@ colorscheme nightfox
 " LSP settings
 lua require('lsp-config')
 
+" Diagnostics Settings
+lua require('diagnostics')
+
 " Treesitter settings
 lua require('treesitter')
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
+
+" LSP Signature setup
+lua require('lsp-signature')
+
+" Iron repl config
+lua require('iron-config')
 
 " Dashboard settings
 let g:dashboard_custom_header = [

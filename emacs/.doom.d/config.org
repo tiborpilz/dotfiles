@@ -6,12 +6,12 @@ Set Name and mail adress
 #+end_src
 
 * Font selection
-I'm using FiraCode Nerd Font.
+I'm using FiraCode Nerd Font. TODO: Enable fonts for multiple systems
 #+begin_src elisp
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
-      doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
-      doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
-      doom-serif-font (font-spec :family "Baskerville" :weight 'light))
+;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
+;;       doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
+;;       doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
+;;       doom-serif-font (font-spec :family "Baskerville" :weight 'light))
 #+end_src
 
 * Theme
@@ -330,4 +330,42 @@ Jest-Test-Mode.el is a minor mode for running jest via npx.
 ** Vue
 #+begin_src elisp
 (use-package! vue-mode)
+#+end_src
+
+** Svelte
+#+begin_src elisp
+(use-package! svelte-mode
+    :mode "\\.svelte\\'")
+#+end_src
+* Nix
+** nix-mode
+#+begin_src elisp
+(use-package! nix-mode
+  :mode "\\.nix\\'")
+#+end_src
+** LSP
+#+begin_src elisp
+;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+;; (lsp-register-client
+;;  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+;;                   :major-modes '(nix-mode)
+;;                   :server-id 'nix'))
+
+#+end_src
+* Copilot
+#+begin_src elisp
+(defun tab-complete-copilot ()
+  (interactive)
+  (or (copilot-accept-completion)
+      (company-indent-or-complete-common nil)))
+
+(setq copilot-node-executable "/home/tibor/.nvm/versions/node/v16.15.1/bin/node")
+
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
+         :map company-active-map
+         ("<backtab>" . 'copilot-accept-completion)
+         :map company-mode-map
+         ("<backtab>" . 'copilot-accept-completion)))
 #+end_src

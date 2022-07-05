@@ -123,3 +123,11 @@
 
 ;; Vue-Mode
 (package! vue-mode)
+
+;; Svelte-Mode
+(package! svelte-mode)
+
+;; Copilot
+(package! jsonrpc)
+(package! copilot
+  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
