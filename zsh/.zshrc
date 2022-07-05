@@ -9,8 +9,8 @@ PATH=$PATH:$HOME/go/bin
 
 # Node Version Manager
 export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
+[ -s "/usr/share/nvm/nvm.sh" ] && . "/usr/share/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/share/nvm/etc/bash_completion" ] && . "/usr/share/nvm/etc/bash_completion"  # This loads nvm bash_completion
 
 
 # Antigea nPlugin Manager
@@ -39,9 +39,9 @@ antigen bundle jscutlery/nx-completion@main
 # Colorful stuff
 antigen bundle zsh-users/zsh-syntax-highlighting
 
-antigen apply
-
 antigen bundle chisui/zsh-nix-shell
+
+antigen apply
 
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
