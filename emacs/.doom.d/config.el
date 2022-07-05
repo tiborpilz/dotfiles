@@ -1,54 +1,29 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
-
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets.
 (setq user-full-name "Tibor Pilz"
       user-mail-address "tibor@pilz.berlin")
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
-;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   Presentations streaming.
-;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
+;;       doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
+;;       doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
+;;       doom-serif-font (font-spec :family "Baskerville" :weight 'light))
 
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 20)
-      doom-big-font (font-spec :family "FiraCode Nerd Font" :size 32)
-      doom-variable-pitch-font (font-spec :family "Open Sans" :size 20)
-      doom-serif-font (font-spec :family "ETbb" :weight 'light))
+(setq doom-theme 'doom-opera)
 
-(setq display-line-numbers-type 'relative)
+(setq org-directory "~/org/")
+(setq org-agenda-files (list org-directory))
+
+(setq org-use-property-inheritance t)
+(setq org-log-done 'time) ; Log time when task completes
+(setq org-list-allow-alphabetical t)       ; a, A, a) A) list bullets)
+(setq org-catch-invisible-edits 'smart) ; don't treat lone _ / ^ as sub/superscripts, require _{} / ^{})
 
 
-(setq doom-theme 'doom-one)
+(setq org-return-follows-link 1)
+(setq calendar-week-start-day 1) ;; start on monday
+(setq org-agenda-include-diary t)
 
-;; Org-Mode
-;; settings
-(setq org-directory "~/org/"
-  org-use-property-inheritance t
-  org-log-done 'time
-  org-list-allow-alphabetical t       ; a, A, a) A) list bullets
-  org-catch-invisible-edits 'smart) ; don't treat lone _ / ^ as sub/superscripts, require _{} / ^{}
-
-
-;; Roam setup
-(setq org-roam-directory "~/Roam")
-;; Packege configs
-
-;; Prettier tables
 (use-package! org-pretty-table
   :commands (org-pretty-table-mode global-org-pretty-table-mode))
 
-;; Only show emphasis markers when editing
 (use-package! org-appear
   :hook (org-mode . org-appear-mode)
   :config
@@ -59,36 +34,8 @@
   ;; needs to be run after other hooks have acted.
   (run-at-time nil nil #'org-appear--set-elements))
 
-;; Remove indentation
-;; (after! org
-;;   (setq org-startup-indented nil))
+(setq org-roam-directory "~/org")
 
-;; Remove headline stars
-(use-package! org-starless)
-(add-hook 'org-mode-hook 'org-starless-mode)
-
-;; Julia babel language improvements
-(use-package! ob-julia
-  :commands org-babel-execute:julia
-  :config
-  (setq org-babel-julia-command-arguments
-        `("--sysimage"
-          ,(when-let ((img "~/.local/lib/julia.so")
-                      (exists? (file-exists-p img)))
-             (expand-file-name img))
-          "--threads"
-          ,(number-to-string (- (doom-system-cpus) 2))
-          "--banner=no")))
-
-;; HTTP requests via babel
-(use-package! ob-http
-  :commands org-babel-execute:http)
-
-;; Non-Org import
-(use-package! org-pandoc-import
-  :after org)
-
-;; OrgRoam visualization / webapp
 (use-package! websocket
   :after org-roam)
 
@@ -100,51 +47,46 @@
   (require 'org-roam) ; in case autoloaded
   (defun org-roam-ui-open ()
     "Ensure the server is active, then open the roam graph."
-    (interactive)
+    (interactive    )
     (unless org-roam-ui-mode (org-roam-ui-mode 1))
     (browse-url-xdg-open (format "http://localhost:%d" org-roam-ui-port))))
 
-;; Babel header args, see https://org-babel.readthedocs.io/en/latest/header-args/
-(setq org-babel-default-header-args
-  '((:session . "none")
-     (:results . "replace")
-     (:exports . "code")
-     (:cache . "no")
-     (:noeweb . "no")
-     (:hlines . "no")
-     (:tanble . "no")
-     (:comments . "link")))
+(use-package! org-gcal
+  :config
+  (setq org-gcal-client-id "CLIENT_ID"
+        org-gcal-client-secret "CLIENT_SECRET"
+        org-gcal-fetch-file-alit '(("tbrpilz@googlemail.com" . "~/org/schedule.org"))))
 
-;; visual-line-mode messes with with plaintext (markdow, latex)
+(use-package! org-gtasks)
+(org-gtasks-register-account :name "Personal"
+                             :directory "~/org"
+                             :client-id "CLIENT_ID"
+                             :client-secret "CLIENT_SECRET")
+
 (remove-hook 'text-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'auto-fill-mode)
 
-;; Create an org buffer
 (evil-define-command evil-buffer-org-new (count file)
   "creates a new ORG buffer replacing the current window, optionally
    editing a certain FILE"
   :repeat nil
   (interactive "P<f>")
   (if file
-    (evil-edit file)
+      (evil-edit file)
     (let ((buffer (generate-new-buffer "*new org*")))
       (set-window-buffer nil buffer)
       (with-current-buffer buffer
         (org-mode)))))
-
 (map! :leader
-  (:prefix "b"
-    :desc "new empty ORG buffer" "o" #'evil-buffer-org-new))
+      (:prefix "b"
+       :desc "new empty ORG buffer" "o" #'evil-buffer-org-new))
 
-;; Insert cdlatex enviornments and edit immediately
 (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
 
 (defadvice! org-edit-latex-env-after-insert ()
   :after #'org-cdlatex-environment-indent
   (org-edit-latex-environment))
 
-
-;; LSP in org-babel src blocks
 (cl-defmacro lsp-org-babel-enable (lang)
   "Support LANG in org source code block."
   (setq centaur-lsp 'lsp-mode)
@@ -174,10 +116,9 @@
 (dolist (lang org-babel-lang-list)
   (eval `(lsp-org-babel-enable ,lang)))
 
-;; View exported file
 (map! :map org-mode-map
-  :localleader
-  :desc "View exported file" "v" #'org-view-output-file)
+      :localleader
+      :desc "View exported file" "v" #'org-view-output-file)
 
 (defun org-view-output-file (&optional org-file-path)
   "Visit buffer open on the first output file (if any) found, using `org-view-output-file-extensions'"
@@ -203,43 +144,22 @@
 (defvar org-view-external-file-extensions '("html")
   "File formats that should be opened externally.")
 
-
-;; Org-Mode visual improvements
-
-;; mixed pitch & org-pretty-mode
 (add-hook 'org-mode-hook #'+org-pretty-mode)
 
-;; Font and size of Orgmode Headlines
-;; Set font for Org headlines. Try different fonts, and use a sans serif family if all else fails
-;; (custom-theme-set-faces
-;;     'user
-;;     `(org-level-8        ((t (:family "ETbb" ))))
-;;     `(org-level-7        ((t (:family "ETbb" ))))
-;;     `(org-level-6        ((t (:family "ETbb" ))))
-;;     `(org-level-5        ((t (:family "ETbb" ))))
-;;     `(org-level-4        ((t (:family "ETbb" :height 1.1))))
-;;     `(org-level-3        ((t (:family "ETbb" :height 1.25))))
-;;     `(org-level-2        ((t (:family "ETbb" :height 1.5))))
-;;     `(org-level-1        ((t (:family "ETbb" :height 1.75)))))
-
-;; Show passed deadlines as error
 (setq org-agenda-deadline-faces
       '((1.001 . error)
         (1.0 . org-warning)
         (0.5 . org-upcoming-deadline)
-         (0.0 . org-upcoming-distant-deadline)))
+        (0.0 . org-upcoming-distant-deadline)))
 
-;; Show quote blocks in italic
 (setq org-fontify-quote-and-verse-blocks t)
 
-;; defer font-lock for a more responsive editing experience TODO: Keep an eye out
 (defun locally-defer-font-lock ()
   "Set jit-lock defer and stealth, when buffer is over a certain size."
   (when (> (buffer-size) 50000)
     (setq-local jit-lock-defer-time 0.05
                 jit-lock-stealth-time 1)))
 
-;; Symbols
 (after! org-superstar
   (setq org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶")
         org-superstar-prettify-item-bullets t ))
@@ -255,62 +175,77 @@
         (?D . 'all-the-icons-green)
          (?E . 'all-the-icons-blue)))
 
-;; Latex fragments
 (setq org-highlight-latex-and-related '(native script entities))
 
-;; Prevent org-block face for latex fragments, since they look weird
 (require 'org-src)
 (add-to-list 'org-src-block-faces '("latex" (:inherit default :extend t)))
 
-;; automatic latex rendering
 (use-package! org-fragtog
   :hook (org-mode . org-fragtog-mode))
 
-;(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
-;(setq org-format-latex-options (plist-put org-format-latex-options :background "Transparent"))
-
-;; Export headings up to five levels deep
 (setq org-export-headline-levels 5)
 
-;; possibility to add `:ignore:` tag to headings, so only the headings will be ignored for an export
 (require 'ox-extra)
 (ox-extras-activate '(ignore-headlines))
 
-;; use github markdown
 (use-package! ox-gfm :after ox)
 
-;; Set different fonts for freeform text and codeblocks
-;; (variable-pitch ((t (:family "ETbb" :height 180 :weight thin))))
-;; (fixed-pitch ((t (:family "FiraCode Nerd Font" :height 160))))
-;; fix vertical spacing in code blocks
-;(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-;(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+(use-package! ob-julia
+  :commands org-babel-execute:julia
+  :config
+  (setq org-babel-julia-command-arguments
+        `("--sysimage"
+          ,(when-let ((img "~/.local/lib/julia.so")
+                      (exists? (file-exists-p img)))
+             (expand-file-name img))
+          "--threads"
+          ,(number-to-string (- (doom-system-cpus) 2))
+          "--banner=no")))
 
-;; Style DONE items
-;; (org-fontify-done-headline t)
-;; (org-done ((t (:foreground "PaleGreen"
-;;               :strike-through t))))
+(use-package! ob-http
+  :commands org-babel-execute:http)
 
-;; (org-tags-column 0)
+(setq org-babel-default-header-args
+      '((:session . "none")
+        (:results . "replace")
+        (:exports . "code")
+        (:cache . "no")
+        (:noeweb . "no")
+        (:hlines . "no")
+        (:tanble . "no")
+        (:comments . "link")))
 
-;; Set visual-line-mode so paraphraphs wrap nicely
-;; (org-mode . visual-line-mode)
-;; (org-mode . variable-pitch-mode)
+(use-package! org-re-reveal)
 
+(use-package! jest-test-mode
+  :commands jest-test-mode
+  :hook (typescript-mode js-mode typescript-tsx-mode))
 
-;; Here are some additional functions/macros that could help you configure Doom:
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
+(use-package! vue-mode)
+
+(use-package! svelte-mode
+    :mode "\\.svelte\\'")
+
+(use-package! nix-mode
+  :mode "\\.nix\\'")
+
+;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
+;; (lsp-register-client
+;;  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
+;;                   :major-modes '(nix-mode)
+;;                   :server-id 'nix'))
+
+(defun tab-complete-copilot ()
+  (interactive)
+  (or (copilot-accept-completion)
+      (company-indent-or-complete-common nil)))
+
+(setq copilot-node-executable "/home/tibor/.nvm/versions/node/v16.15.1/bin/node")
+
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
+         :map company-active-map
+         ("<backtab>" . 'copilot-accept-completion)
+         :map company-mode-map
+         ("<backtab>" . 'copilot-accept-completion)))

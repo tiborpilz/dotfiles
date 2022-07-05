@@ -95,8 +95,8 @@
            :files ("*.el" "filters" "preprocessors")))
 
 ;; OrgRoam visualization / webapp
-(package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui")
-  :pin "cd1aefd56f648d32a25aae672ac1ab90893c0133")
+(unpin! org-roam)
+(package! org-roam-ui)
 
 (package! websocket :pin "fda4455333309545c0787a79d73c19ddbeb57980") ; dependency of `org-roam-ui'
 
@@ -108,3 +108,26 @@
 
 ;; export github markdown
 (package! ox-gfm :pin "99f93011b069e02b37c9660b8fcb45dab086a07f")
+
+;; Google Calendar integration
+(package! org-gcal :recipe (:host github :repo "kidd/org-gcal.el"))
+
+;; Google Tasks integration
+(package! org-gtasks :recipe (:host github :repo "JulienMasson/org-gtasks"))
+
+;; K8s
+(package! k8s-mode)
+
+;; Jest-Test-Mode
+(package! jest-test-mode)
+
+;; Vue-Mode
+(package! vue-mode)
+
+;; Svelte-Mode
+(package! svelte-mode)
+
+;; Copilot
+(package! jsonrpc)
+(package! copilot
+  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
