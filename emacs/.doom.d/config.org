@@ -8,10 +8,10 @@ Set Name and mail adress
 * Font selection
 I'm using FiraCode Nerd Font. TODO: Enable fonts for multiple systems
 #+begin_src elisp
-;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
-;;       doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
-;;       doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
-;;       doom-serif-font (font-spec :family "Baskerville" :weight 'light))
+(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
+      doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
+      doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
+      doom-serif-font (font-spec :family "Baskerville" :weight 'light))
 #+end_src
 
 * Theme
@@ -34,6 +34,20 @@ I'm using FiraCode Nerd Font. TODO: Enable fonts for multiple systems
 (setq org-return-follows-link 1)
 (setq calendar-week-start-day 1) ;; start on monday
 (setq org-agenda-include-diary t)
+#+end_src
+
+** Disable auto-fill-mode
+Auto-fill-mode automatically adds line breaks while typing in markdown and org files.
+Since those files are going to be exported to pdf or html, which take care of proper formatting, I'm disabling this.
+
+In Doom Emacs, there already is a hook for enabling auto-fill-mode - it needs to be removed.
+#+begin_src elisp
+(remove-hook! org-mode #'auto-fill-mode')
+#+end_src
+
+For Markdown, add a hook setting auto-fill-mode to -1.
+#+begin_src elisp
+(add-hook! markdown-mode (auto-fill-mode -1))
 #+end_src
 
 ** Prettier tables
@@ -96,7 +110,6 @@ I'm using FiraCode Nerd Font. TODO: Enable fonts for multiple systems
                              :client-id "CLIENT_ID"
                              :client-secret "CLIENT_SECRET")
 #+end_src
-
 
 ** Visual-line-mode messes with with plaintext (markdow, latex)
 #+begin_src elisp
@@ -319,6 +332,13 @@ See https://org-babel.readthedocs.io/en/latest/header-args/
 #+begin_src elisp
 (use-package! org-re-reveal)
 #+end_src
+* Markdown
+** Code blocks
+To set up code-highlighting in markdown code blocks, we need multiple major modes in one buffer. The package polymode promises to allow that:
+#+begin_src elisp
+(use-package! polymode)
+(use-package! poly-markdown)
+#+end_src
 * WebDev
 ** Jest
 Jest-Test-Mode.el is a minor mode for running jest via npx.
@@ -359,7 +379,7 @@ Jest-Test-Mode.el is a minor mode for running jest via npx.
   (or (copilot-accept-completion)
       (company-indent-or-complete-common nil)))
 
-(setq copilot-node-executable "/home/tibor/.nvm/versions/node/v16.15.1/bin/node")
+(setq copilot-node-executable "/Users/tibor.pilz/.nvm/versions/node/v16.13.2/bin/node")
 
 (use-package! copilot
   :hook (prog-mode . copilot-mode)

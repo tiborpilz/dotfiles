@@ -131,3 +131,7 @@
 (package! jsonrpc)
 (package! copilot
   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+
+;; Multiple major modes in one buffer
+(package! polymode)
+(package! poly-markdown)

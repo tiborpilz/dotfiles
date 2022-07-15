@@ -1,10 +1,10 @@
 (setq user-full-name "Tibor Pilz"
       user-mail-address "tibor@pilz.berlin")
 
-;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
-;;       doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
-;;       doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
-;;       doom-serif-font (font-spec :family "Baskerville" :weight 'light))
+(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
+      doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
+      doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
+      doom-serif-font (font-spec :family "Baskerville" :weight 'light))
 
 (setq doom-theme 'doom-opera)
 
@@ -20,6 +20,10 @@
 (setq org-return-follows-link 1)
 (setq calendar-week-start-day 1) ;; start on monday
 (setq org-agenda-include-diary t)
+
+(remove-hook! org-mode #'auto-fill-mode')
+
+(add-hook! markdown-mode (auto-fill-mode -1))
 
 (use-package! org-pretty-table
   :commands (org-pretty-table-mode global-org-pretty-table-mode))
@@ -217,6 +221,9 @@
 
 (use-package! org-re-reveal)
 
+(use-package! polymode)
+(use-package! poly-markdown)
+
 (use-package! jest-test-mode
   :commands jest-test-mode
   :hook (typescript-mode js-mode typescript-tsx-mode))
@@ -240,7 +247,7 @@
   (or (copilot-accept-completion)
       (company-indent-or-complete-common nil)))
 
-(setq copilot-node-executable "/home/tibor/.nvm/versions/node/v16.15.1/bin/node")
+(setq copilot-node-executable "/Users/tibor.pilz/.nvm/versions/node/v16.13.2/bin/node")
 
 (use-package! copilot
   :hook (prog-mode . copilot-mode)

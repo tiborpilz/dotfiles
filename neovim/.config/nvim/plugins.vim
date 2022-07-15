@@ -59,11 +59,6 @@ Plug 'LnL7/vim-nix'
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'jose-elias-alvarez/null-ls.nvim'
-<<<<<<< HEAD
-Plug 'folke/lsp-colors.nvim'
-" Plug 'simrat39/symbols-outline.nvim'
-" nnoremap <leader>o <cmd>SymbolsOutline <cr>
-=======
 " Plug 'folke/lsp-colors.nvim'
 " Plug 'simrat39/symbols-outline.nvim'
 " Plug 'folke/trouble.nvim'
@@ -78,7 +73,6 @@ nmap <silent> <leader>tg :TestVisit<CR>
 
 " Repl
 Plug 'hkupty/iron.nvim'
->>>>>>> doom_emacs
 
 Plug 'kosayoda/nvim-lightbulb'
 autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
