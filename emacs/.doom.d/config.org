@@ -8,10 +8,10 @@ Set Name and mail adress
 * Font selection
 I'm using FiraCode Nerd Font. TODO: Enable fonts for multiple systems
 #+begin_src elisp
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
-      doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
-      doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
-      doom-serif-font (font-spec :family "Baskerville" :weight 'light))
+;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
+;;       doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
+;;       doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
+;;       doom-serif-font (font-spec :family "Baskerville" :weight 'light))
 #+end_src
 
 * Theme
@@ -39,11 +39,6 @@ I'm using FiraCode Nerd Font. TODO: Enable fonts for multiple systems
 ** Disable auto-fill-mode
 Auto-fill-mode automatically adds line breaks while typing in markdown and org files.
 Since those files are going to be exported to pdf or html, which take care of proper formatting, I'm disabling this.
-
-In Doom Emacs, there already is a hook for enabling auto-fill-mode - it needs to be removed.
-#+begin_src elisp
-(remove-hook! org-mode #'auto-fill-mode')
-#+end_src
 
 For Markdown, add a hook setting auto-fill-mode to -1.
 #+begin_src elisp
@@ -363,15 +358,7 @@ Jest-Test-Mode.el is a minor mode for running jest via npx.
 (use-package! nix-mode
   :mode "\\.nix\\'")
 #+end_src
-** LSP
-#+begin_src elisp
-;; (add-to-list 'lsp-language-id-configuration '(nix-mode . "nix"))
-;; (lsp-register-client
-;;  (make-lsp-client :new-connection (lsp-stdio-connection '("rnix-lsp"))
-;;                   :major-modes '(nix-mode)
-;;                   :server-id 'nix'))
 
-#+end_src
 * Copilot
 #+begin_src elisp
 (defun tab-complete-copilot ()
@@ -379,7 +366,7 @@ Jest-Test-Mode.el is a minor mode for running jest via npx.
   (or (copilot-accept-completion)
       (company-indent-or-complete-common nil)))
 
-(setq copilot-node-executable "/Users/tibor.pilz/.nvm/versions/node/v16.13.2/bin/node")
+(setq copilot-node-executable "/home/tibor/.nvm/versions/node/v16.15.1/bin/node")
 
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
@@ -388,4 +375,19 @@ Jest-Test-Mode.el is a minor mode for running jest via npx.
          ("<backtab>" . 'copilot-accept-completion)
          :map company-mode-map
          ("<backtab>" . 'copilot-accept-completion)))
+#+end_src
+
+* Python
+
+** Run pytest in virtualenv
+python-pytest does not use the virtualenv's binary by default. As a fix, I'm
+adding a hook to python-mode to set the correct executable - since python-mode
+plays nicely with direnv.
+
+#+begin_src elisp
+(add-hook! python-mode
+           (advice-add 'python-pytest-file :before
+                       (lambda (&rest args)
+                         (setq-local python-pytest-executable
+                                     (executable-find "pytest")))))
 #+end_src
