@@ -394,3 +394,54 @@ plays nicely with direnv.
                          (setq-local python-pytest-executable
                                      (executable-find "pytest")))))
 #+end_src
+
+** Debugger
+Doom Emacs has a debugger module, we only need to enable the dap debugger for
+python.
+
+#+begin_src elisp
+(setq dap-python-debugger 'debugpy)
+
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy))
+#+end_src
+
+*** Fix Doom "+debugger/start"
+
+By default, ~+debugger/start~ will look for the last configuration set in the
+project's doom-store - which has to be cleared manually to reset. This function
+will remove the debugger configuration from the doom-store.
+
+#+begin_src elisp
+;;;###autoload
+(defun +debugger/clear ()
+  "Clear the debugger configuration from the doom-store."
+  (interactive)
+  (doom-store-rem (doom-project-root) "+debugger"))
+#+end_src
+
+The old function is renamed to ~+debugger/repeat~.
+
+#+begin_src elisp
+(setq debugger-start-copy (symbol-function '+debugger/start))
+
+;;;###autoload
+(defun +debugger/repeat (arg)
+  "Start the debugger."
+  (interactive)
+  (funcall debugger-start-copy arg))
+#+end_src
+
+And ~+debugger/start~  is redefined to clear the configuration before starting.
+
+#+begin_src elisp
+;;;###autoload
+(defun +debugger/start (arg)
+  "Launch a debugger session.
+Launches the last used debugger, if one exists. Otherwise, you will be prompted
+for what debugger to use. If the prefix ARG is set, prompt anyway."
+  (interactive "P")
+  (message arg)
+  (+debugger--set-config (+debugger-completing-read))
+  (+debugger/start-last))
+#+end_src

@@ -257,3 +257,32 @@
                        (lambda (&rest args)
                          (setq-local python-pytest-executable
                                      (executable-find "pytest")))))
+
+(setq dap-python-debugger 'debugpy)
+
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy))
+
+;;;###autoload
+(defun +debugger/clear ()
+  "Clear the debugger configuration from the doom-store."
+  (interactive)
+  (doom-store-rem (doom-project-root) "+debugger"))
+
+(setq debugger-start-copy (symbol-function '+debugger/start))
+
+;;;###autoload
+(defun +debugger/repeat (arg)
+  "Start the debugger."
+  (interactive)
+  (funcall debugger-start-copy arg))
+
+;;;###autoload
+(defun +debugger/start (arg)
+  "Launch a debugger session.
+Launches the last used debugger, if one exists. Otherwise, you will be prompted
+for what debugger to use. If the prefix ARG is set, prompt anyway."
+  (interactive "P")
+  (message arg)
+  (+debugger--set-config (+debugger-completing-read))
+  (+debugger/start-last))
