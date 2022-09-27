@@ -49,7 +49,7 @@ COMPLETION_WAITING_DOTS="true"
 source $HOME/.zsh_custom/themes/lnclt.zsh-theme
 
 # Fix xon/xoff flow control
-stty -ixon
+[[ $- == *i* ]] && stty -ixon
 
 # Functions
 python-init() {

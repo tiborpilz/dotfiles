@@ -239,7 +239,10 @@
   (or (copilot-accept-completion)
       (company-indent-or-complete-common nil)))
 
-(setq copilot-node-executable "/home/tibor/.nvm/versions/node/v16.15.1/bin/node")
+;; Get nvm 16 via nvm command
+
+(setq copilot-node-executable
+      (replace-regexp-in-string "\n" "" (shell-command-to-string ". $HOME/.zshrc; nvm which 16")))
 
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
