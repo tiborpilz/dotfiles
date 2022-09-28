@@ -1,12 +1,10 @@
 (setq user-full-name "Tibor Pilz"
       user-mail-address "tibor@pilz.berlin")
 
-;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
-;;       doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
-;;       doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
-;;       doom-serif-font (font-spec :family "Baskerville" :weight 'light))
-
-(setq doom-theme 'doom-opera)
+(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
+      doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
+      doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
+      doom-serif-font (font-spec :family "FreeSerif" :weight 'light))
 
 (setq org-directory "~/org/")
 (setq org-agenda-files (list org-directory))
@@ -21,73 +19,64 @@
 (setq calendar-week-start-day 1) ;; start on monday
 (setq org-agenda-include-diary t)
 
-(add-hook! markdown-mode (auto-fill-mode -1))
-
 (use-package! org-pretty-table
   :commands (org-pretty-table-mode global-org-pretty-table-mode))
 
-(use-package! org-appear
-  :hook (org-mode . org-appear-mode)
+(add-hook 'org-mode-hook #'+org-pretty-mode)
+
+(setq org-agenda-deadline-faces
+      '((1.001 . error)
+        (1.0 . org-warning)
+        (0.5 . org-upcoming-deadline)
+        (0.0 . org-upcoming-distant-deadline)))
+
+(setq org-fontify-quote-and-verse-blocks t)
+
+(defun locally-defer-font-lock ()
+  "Set jit-lock defer and stealth, when buffer is over a certain size."
+  (when (> (buffer-size) 50000)
+    (setq-local jit-lock-defer-time 0.05
+                jit-lock-stealth-time 1)))
+
+(after! org-superstar
+  (setq org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶")
+        org-superstar-prettify-item-bullets t ))
+
+(setq org-ellipsis " ▾ "
+      org-hide-leading-stars t
+      org-priority-highest ?A
+      org-priority-lowest ?E
+      org-priority-faces
+      '((?A . 'all-the-icons-red)
+        (?B . 'all-the-icons-orange)
+        (?C . 'all-the-icons-yellow)
+        (?D . 'all-the-icons-green)
+         (?E . 'all-the-icons-blue)))
+
+(use-package! ob-julia
+  :commands org-babel-execute:julia
   :config
-  (setq org-appear-autoemphasis t
-        org-appear-autosubmarkers t
-        org-appear-autolinks nil)
-  ;; for proper first-time setup, `org-appear--set-elements'
-  ;; needs to be run after other hooks have acted.
-  (run-at-time nil nil #'org-appear--set-elements))
+  (setq org-babel-julia-command-arguments
+        `("--sysimage"
+          ,(when-let ((img "~/.local/lib/julia.so")
+                      (exists? (file-exists-p img)))
+             (expand-file-name img))
+          "--threads"
+          ,(number-to-string (- (doom-system-cpus) 2))
+          "--banner=no")))
 
-(setq org-roam-directory "~/org")
+(use-package! ob-http
+  :commands org-babel-execute:http)
 
-(use-package! websocket
-  :after org-roam)
-
-(use-package! org-roam-ui
-  :after org-roam
-  :commands org-roam-ui-open
-  :hook (org-roam . org-roam-ui-mode)
-  :config
-  (require 'org-roam) ; in case autoloaded
-  (defun org-roam-ui-open ()
-    "Ensure the server is active, then open the roam graph."
-    (interactive    )
-    (unless org-roam-ui-mode (org-roam-ui-mode 1))
-    (browse-url-xdg-open (format "http://localhost:%d" org-roam-ui-port))))
-
-(use-package! org-gcal
-  :config
-  (setq org-gcal-client-id "CLIENT_ID"
-        org-gcal-client-secret "CLIENT_SECRET"
-        org-gcal-fetch-file-alit '(("tbrpilz@googlemail.com" . "~/org/schedule.org"))))
-
-(use-package! org-gtasks)
-(org-gtasks-register-account :name "Personal"
-                             :directory "~/org"
-                             :client-id "CLIENT_ID"
-                             :client-secret "CLIENT_SECRET")
-
-(remove-hook 'text-mode-hook #'visual-line-mode)
-(add-hook 'text-mode-hook #'auto-fill-mode)
-
-(evil-define-command evil-buffer-org-new (count file)
-  "creates a new ORG buffer replacing the current window, optionally
-   editing a certain FILE"
-  :repeat nil
-  (interactive "P<f>")
-  (if file
-      (evil-edit file)
-    (let ((buffer (generate-new-buffer "*new org*")))
-      (set-window-buffer nil buffer)
-      (with-current-buffer buffer
-        (org-mode)))))
-(map! :leader
-      (:prefix "b"
-       :desc "new empty ORG buffer" "o" #'evil-buffer-org-new))
-
-(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-
-(defadvice! org-edit-latex-env-after-insert ()
-  :after #'org-cdlatex-environment-indent
-  (org-edit-latex-environment))
+(setq org-babel-default-header-args
+      '((:session . "none")
+        (:results . "replace")
+        (:exports . "code")
+        (:cache . "no")
+        (:noeweb . "no")
+        (:hlines . "no")
+        (:tanble . "no")
+        (:comments . "link")))
 
 (cl-defmacro lsp-org-babel-enable (lang)
   "Support LANG in org source code block."
@@ -146,81 +135,87 @@
 (defvar org-view-external-file-extensions '("html")
   "File formats that should be opened externally.")
 
-(add-hook 'org-mode-hook #'+org-pretty-mode)
+(use-package! ox-gfm :after ox)
 
-(setq org-agenda-deadline-faces
-      '((1.001 . error)
-        (1.0 . org-warning)
-        (0.5 . org-upcoming-deadline)
-        (0.0 . org-upcoming-distant-deadline)))
+(setq org-export-headline-levels 5)
 
-(setq org-fontify-quote-and-verse-blocks t)
-
-(defun locally-defer-font-lock ()
-  "Set jit-lock defer and stealth, when buffer is over a certain size."
-  (when (> (buffer-size) 50000)
-    (setq-local jit-lock-defer-time 0.05
-                jit-lock-stealth-time 1)))
-
-(after! org-superstar
-  (setq org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶")
-        org-superstar-prettify-item-bullets t ))
-
-(setq org-ellipsis " ▾ "
-      org-hide-leading-stars t
-      org-priority-highest ?A
-      org-priority-lowest ?E
-      org-priority-faces
-      '((?A . 'all-the-icons-red)
-        (?B . 'all-the-icons-orange)
-        (?C . 'all-the-icons-yellow)
-        (?D . 'all-the-icons-green)
-         (?E . 'all-the-icons-blue)))
-
-(setq org-highlight-latex-and-related '(native script entities))
-
-(require 'org-src)
-(add-to-list 'org-src-block-faces '("latex" (:inherit default :extend t)))
+;(require 'ox-extra)
+;(ox-extras-activate '(ignore-headlines))
 
 (use-package! org-fragtog
   :hook (org-mode . org-fragtog-mode))
 
-(setq org-export-headline-levels 5)
+(setq org-highlight-latex-and-related '(native script entities))
 
-(require 'ox-extra)
-(ox-extras-activate '(ignore-headlines))
+;(use-package! org-re-reveal)
 
-(use-package! ox-gfm :after ox)
+(setq org-roam-directory "~/org")
 
-(use-package! ob-julia
-  :commands org-babel-execute:julia
+(use-package! websocket
+  :after org-roam)
+
+(use-package! org-roam-ui
+  :after org-roam
+  :commands org-roam-ui-open
+  :hook (org-roam . org-roam-ui-mode)
   :config
-  (setq org-babel-julia-command-arguments
-        `("--sysimage"
-          ,(when-let ((img "~/.local/lib/julia.so")
-                      (exists? (file-exists-p img)))
-             (expand-file-name img))
-          "--threads"
-          ,(number-to-string (- (doom-system-cpus) 2))
-          "--banner=no")))
+  (require 'org-roam) ; in case autoloaded
+  (defun org-roam-ui-open ()
+    "Ensure the server is active, then open the roam graph."
+    (interactive    )
+    (unless org-roam-ui-mode (org-roam-ui-mode 1))
+    (browse-url-xdg-open (format "http://localhost:%d" org-roam-ui-port))))
 
-(use-package! ob-http
-  :commands org-babel-execute:http)
+(use-package! org-gcal
+  :config
+  (setq org-gcal-client-id "CLIENT_ID"
+        org-gcal-client-secret "CLIENT_SECRET"
+        org-gcal-fetch-file-alit '(("tbrpilz@googlemail.com" . "~/org/schedule.org"))))
 
-(setq org-babel-default-header-args
-      '((:session . "none")
-        (:results . "replace")
-        (:exports . "code")
-        (:cache . "no")
-        (:noeweb . "no")
-        (:hlines . "no")
-        (:tanble . "no")
-        (:comments . "link")))
+(use-package! org-gtasks)
+(org-gtasks-register-account :name "Personal"
+                             :directory "~/org"
+                             :client-id "CLIENT_ID"
+                             :client-secret "CLIENT_SECRET")
 
-(use-package! org-re-reveal)
+(remove-hook 'text-mode-hook #'visual-line-mode)
+(add-hook 'text-mode-hook #'auto-fill-mode)
 
-(use-package! polymode)
-(use-package! poly-markdown)
+(require 'org-src)
+(add-to-list 'org-src-block-faces '("latex" (:inherit default :extend t)))
+
+(evil-define-command evil-buffer-org-new (count file)
+  "creates a new ORG buffer replacing the current window, optionally
+   editing a certain FILE"
+  :repeat nil
+  (interactive "P<f>")
+  (if file
+      (evil-edit file)
+    (let ((buffer (generate-new-buffer "*new org*")))
+      (set-window-buffer nil buffer)
+      (with-current-buffer buffer
+        (org-mode)))))
+(map! :leader
+      (:prefix "b"
+       :desc "new empty ORG buffer" "o" #'evil-buffer-org-new))
+
+(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+
+(defadvice! org-edit-latex-env-after-insert ()
+  :after #'org-cdlatex-environment-indent
+  (org-edit-latex-environment))
+
+(add-hook! markdown-mode (auto-fill-mode -1))
+
+(use-package! org-appear
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-appear-autoemphasis t
+        org-appear-autosubmarkers t
+        org-appear-autolinks nil)
+  ;; for proper first-time setup, `org-appear--set-elements'
+  ;; needs to be run after other hooks have acted.
+  (run-at-time nil nil #'org-appear--set-elements))
 
 (use-package! jest-test-mode
   :commands jest-test-mode
@@ -233,6 +228,15 @@
 
 (use-package! nix-mode
   :mode "\\.nix\\'")
+
+(add-hook! python-mode
+  (advice-add 'python-pytest-file :before
+              (lambda (&rest args)
+                (setq-local python-pytest-executable
+                            (executable-find "pytest")))))
+
+(use-package! polymode)
+(use-package! poly-markdown)
 
 (defun tab-complete-copilot ()
   (interactive)
@@ -251,12 +255,6 @@
          ("<backtab>" . 'copilot-accept-completion)
          :map company-mode-map
          ("<backtab>" . 'copilot-accept-completion)))
-
-(add-hook! python-mode
-  (advice-add 'python-pytest-file :before
-              (lambda (&rest args)
-                (setq-local python-pytest-executable
-                            (executable-find "pytest")))))
 
 (setq dap-python-debugger 'debugpy)
 
@@ -306,6 +304,32 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
 
 (add-hook 'dap-mode-hook 'add-reset-file-window-buffer-hook)
 
+(map! :leader
+      (:prefix-map ("d" . "debugger")
+       :desc "Debug" "d" #'dap-debug
+       :desc "Next" "n" #'dap-next
+       :desc "Step in" "i" #'dap-step-in
+       :desc "Step out" "o" #'dap-step-out
+       :desc "Continue" "c" #'dap-continue
+       :desc "Restart" "r" #'dap-restart-frame
+       :desc "Disconnect" "D" #'dap-disconnect
+       :desc "Evaluate" "e" #'dap-eval
+       :desc "Add Expression" "a" #'dap-ui-expressions-add
+       (:prefix ("b" . "breakpoints")
+        :desc "Toggle" "t" #'dap-breakpoint-toggle
+        :desc "Add" "a" #'dap-breakpoint-add
+        :desc "Delete" "d" #'dap-breakpoint-delete
+        :desc "Set condition" "c" #'dap-breakpoint-condition
+        :desc "Set log message" "m" #'dap-breakpoint-log-message
+        :desc "Set hit condition" "h" #'dap-breakpoint-hit-condition)))
+
+(use-package blamer
+    :defer 20
+    :config
+    (global-blamer-mode 1))
+
+(setq doom-theme 'doom-opera)
+
 (require 'all-the-icons)
 
 (defvar func-suffixes '("faicon" "fileicon" "octicon" "material"))
@@ -328,13 +352,10 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
                      icon)))
     (s-concat icon (if nospace "" " ") str)))
 
-(defun get-key-description (char docstring)
+(defun get-key-description (key docstring)
   "Get the description for a key from the docstring."
-  (when (string-match (format "\\(_%s_\\): \\([a-zA-Z]*\\)" char) docstring)
+  (when (string-match (format "\\(_%s_\\):[[:space:]]\\(\\(\\w+\\)\\([[:space:]]\\w+\\)*\\)" key) docstring)
     (match-string 2 docstring)))
-
-;; Get the categories from the docstring by splitting on linebreaks and then
-;; capturing the in ^ characters enclosed strings on the second line. Also, throw away whitespace results.
 
 (defun get-categories (docstring)
     "Get the categories from the docstring."
@@ -345,6 +366,11 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
 (defun split-row (row)
   "Split a row into a list of keys."
   (-slice (split-string (replace-regexp-in-string ":[^_]*\\(_\\|$\\)" "" row) "_") 1 -1))
+
+(defun get-all-keys (docstring)
+  "Get all keys from the docstring."
+  (let ((lines (-slice (split-string docstring "\n") 3 -3)))
+    (mapcan #'split-row lines)))
 
 (defun get-category-offsets (categories docstring)
   "Get the category titles' offsets in the docstring."
@@ -359,6 +385,7 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
       (< x-diff y-diff))))
 
 (defun get-row-for-key (key docstring)
+  "Get the row for a given key from the docstring."
   (let ((rows (split-string docstring "\n")))
     (seq-find (lambda (x) (member key (split-row x))) rows)))
 
@@ -375,37 +402,55 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
 (defun add-description (entry docstring)
   "Add the description to a single entry."
   (let* ((key (car entry))
-         (func (cdr entry))
-         (desc (get-key-description key docstring)))
-    (list key func desc)))
+         (func (nth 1 entry))
+         (desc (get-key-description key docstring))
+         (rest (-slice entry 2)))
+    `(,key ,func ,desc)))
 
-(defun convert-hydra-heads (name)
-  "Convert the heads definitions for a hydra, given the hydra's name."
-  (let* ((heads (eval (intern (concat name "/heads"))))
-         (docstring (eval (intern (concat name "/docstring")))))
-    (mapcar (lambda (entry) (add-description-to-entry entry docstring)) heads)))
+(defun preprocess-heads (heads docstring)
+  "Preprocess the heads by checking whether their key is in the docstring and by adding the description."
+  (let ((filtered-heads (seq-filter (lambda (x) (member (car x) (get-all-keys docstring))) heads)))
+    (mapcar (lambda (x) (add-description x docstring)) filtered-heads)))
 
-(defvar heads `("Base" ,(convert-hydra-heads "dap-hydra")))
+(defun associate-categories-with-heads (heads docstring)
+  "Associate categories with heads."
+  (mapcar (lambda (x) `(,x . ,(get-categories-for-key (car x) docstring))) heads))
+
+(defun group-heads (category head-category-alist)
+  "Group heads into a category."
+  (let ((category-heads (mapcar #'car (seq-filter (lambda (x) (string= (cdr x) category)) head-category-alist))))
+    `(,category ,category-heads)))
+
+(defun get-category-header-alist (heads docstring)
+  "Get an alist of categories and their head entries."
+  (let* ((keys (get-all-keys docstring))
+         (processed-heads (preprocess-heads heads docstring))
+         (categories (get-categories docstring))
+         (head-category-alist (associate-categories-with-heads processed-heads docstring))
+         (grouped-heads (mapcan (lambda (x) (group-heads x head-category-alist)) categories)))
+    grouped-heads))
+
+(dap-hydra)
+(hydra-keyboard-quit)
 
 (eval `(pretty-hydra-define dap-hydra-pretty
-         (:color amaranth :quit-key "q" :title (with-faicon "toggle-on" "Title"))
-         ,heads))
+         (:color amaranth :quit-key "q" :title (with-faicon "windows" "Dap" 1 -0.05))
+         ,(get-category-header-alist dap-hydra/heads dap-hydra/docstring)))
 
-(map! :leader
-      (:prefix-map ("d" . "debugger")
-       :desc "Debug" "d" #'dap-debug
-       :desc "Next" "n" #'dap-next
-       :desc "Step in" "i" #'dap-step-in
-       :desc "Step out" "o" #'dap-step-out
-       :desc "Continue" "c" #'dap-continue
-       :desc "Restart" "r" #'dap-restart-frame
-       :desc "Disconnect" "D" #'dap-disconnect
-       :desc "Evaluate" "e" #'dap-eval
-       :desc "Add Expression" "a" #'dap-ui-expressions-add
-       (:prefix ("b" . "breakpoints")
-        :desc "Toggle" "t" #'dap-breakpoint-toggle
-        :desc "Add" "a" #'dap-breakpoint-add
-        :desc "Delete" "d" #'dap-breakpoint-delete
-        :desc "Set condition" "c" #'dap-breakpoint-condition
-        :desc "Set log message" "m" #'dap-breakpoint-log-message
-        :desc "Set hit condition" "h" #'dap-breakpoint-hit-condition)))
+(defun wjb/posframe-arghandler (buffer-or-name arg-name value)
+  (let ((info '(:internal-border-width 2 :width 500 :height 48)))
+    (or (plist-get info arg-name) value)))
+(setq posframe-arghandler #'wjb/posframe-arghandler)
+
+;; (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-partial)
+;; (define-key ivy-minibuffer-map (kbd "<return>") 'ivy-alt-done)
+
+(use-package all-the-icons-ivy-rich
+  :after counsel-projectile
+  :init (all-the-icons-ivy-rich-mode +1)
+  :config
+  (setq all-the-icons-ivy-rich-icon-size 0.8))
+
+(setq ivy-posframe-width 80)
+
+(setq doom-modeline-major-mode-color-icon t)

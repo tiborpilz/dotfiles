@@ -1,6 +1,32 @@
-(package! pretty-hydra)
+(package! ob-julia :recipe (:host github :repo "nico202/ob-julia"))
+
+(package! org-present)
+
+(unpin! org-roam)
+(package! org-roam-ui)
+(package! websocket :pin "fda4455333309545c0787a79d73c19ddbeb57980") ; dependency of `org-roam-ui'
+
+(package! jest-test-mode)
+
+(package! vue-mode)
+
+(package! svelte-mode)
 
 (package! poetry)
+
+(package! blamer)
+
+(package! doom-themes)
+
+(package! grayscale-theme)
+
+(package! pretty-hydra)
+
+(package! which-key-posframe)
+
+(package! all-the-icons-ivy-rich)
+
+;; (package! treemacs-all-the-icons)
 
 (package! dap-mode)
 
@@ -28,9 +54,6 @@
 ;; Citations
 (package! org-ref :pin "3ca9beb744621f007d932deb8a4197467012c23a")
 
-;; Julia babel language improvements
-(package! ob-julia :recipe (:host github :repo "nico202/ob-julia"))
-
 ;; HTTP requests via babel
 (package! ob-http :pin "b1428ea2a63bcb510e7382a1bf5fe82b19c104a7")
 
@@ -45,10 +68,6 @@
            :files ("*.el" "filters" "preprocessors")))
 
 ;; OrgRoam visualization / webapp
-(unpin! org-roam)
-(package! org-roam-ui)
-
-(package! websocket :pin "fda4455333309545c0787a79d73c19ddbeb57980") ; dependency of `org-roam-ui'
 
 ;; automatic latex rendering
 (package! org-fragtog :pin "479e0a1c3610dfe918d89a5f5a92c8aec37f131d")
@@ -67,15 +86,6 @@
 
 ;; K8s
 (package! k8s-mode)
-
-;; Jest-Test-Mode
-(package! jest-test-mode)
-
-;; Vue-Mode
-(package! vue-mode)
-
-;; Svelte-Mode
-(package! svelte-mode)
 
 ;; Copilot
 (package! jsonrpc)
