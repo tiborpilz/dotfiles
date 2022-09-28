@@ -152,7 +152,7 @@ For Markdown, add a hook setting auto-fill-mode to -1.
          (let ((file-name (->> info caddr (alist-get :file))))
            (unless file-name
              (setq file-name (make-temp-file "babel-lsp-")))
-           (setq buffer-file-name file-name)
+           (setq buffer-file-name fie)
            (lsp-deferred)))
        (put ',intern-pre 'function-documentation
             (format "Enable lsp-mode in the buffer of org source block (%s)."
@@ -389,23 +389,27 @@ plays nicely with direnv.
 
 #+begin_src elisp
 (add-hook! python-mode
-           (advice-add 'python-pytest-file :before
-                       (lambda (&rest args)
-                         (setq-local python-pytest-executable
-                                     (executable-find "pytest")))))
+  (advice-add 'python-pytest-file :before
+              (lambda (&rest args)
+                (setq-local python-pytest-executable
+                            (executable-find "pytest")))))
 #+end_src
 
-** Debugger
-Doom Emacs has a debugger module, we only need to enable the dap debugger for
-python.
+
+* Debugging
+Doom Emacs has a debugger module which uses ~dap-mode~ under the hood.
+
+** Language-Specific Debugger settings
+
+*** Python
+
+I'm using debugpy for python.
 
 #+begin_src elisp
 (setq dap-python-debugger 'debugpy)
-
-(after! dap-mode
-  (setq dap-python-debugger 'debugpy))
 #+end_src
 
+** Fixes
 *** Fix Doom "+debugger/start"
 
 By default, ~+debugger/start~ will look for the last configuration set in the
@@ -444,4 +448,377 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
   (message arg)
   (+debugger--set-config (+debugger-completing-read))
   (+debugger/start-last))
+#+end_src
+
+*** Missing fringes in dap-mode
+When running the dap-mode debugger, for some reason, the code window's fringes
+get set to 0 width. This can be fixed with a workaround by setting the window's
+buffer again via ~set-window-buffer~. Since this only should happen on windows
+with file buffers, we need some helper functions to get the correct window.
+
+**** Get the window containing a file buffer
+
+Since there's only one window with a file buffer when running the debugger, this
+can be kept fairly simple.
+
+#+begin_src elisp
+(defun get-window-with-file-buffer ()
+  "Get the window with a file buffer."
+  (seq-find (lambda (window)
+              (buffer-file-name (window-buffer window)))
+            (window-list)))
+#+end_src
+
+**** Reset file buffer window
+
+Using the helper function, wen can reset the file window's buffer.
+
+#+begin_src elisp
+(defun reset-file-window-buffer ()
+  "Reset the file window's buffer."
+  (let ((window (get-window-with-file-buffer)))
+    (when window
+      (set-window-buffer window (window-buffer window)))))
+
+#+end_src
+
+**** Add reset to window configuration change hook
+
+Having tried multiple dap hooks to no avail, I've resigned to just resetting the
+file window's buffer on every window configuration change. This can be achieved
+with the ~window-configuration-change-hook~. Here, I only want to have the hook
+active when in a dap session, so I'm adding the reset function after the dap
+session has been created and removing it when the session is terminated.
+
+#+begin_src elisp
+(defun add-reset-file-window-buffer-hook (&rest args)
+  "Add the reset-file-window-buffer function to the window-configuration-change-hook."
+  (add-hook 'window-configuration-change-hook 'reset-file-window-buffer))
+
+(defun remove-reset-file-window-buffer-hook (&rest args)
+    "Remove the reset-file-window-buffer function from the window-configuration-change-hook."
+    (remove-hook 'window-configuration-change-hook 'reset-file-window-buffer))
+
+(add-hook 'dap-mode-hook 'add-reset-file-window-buffer-hook)
+#+end_src
+
+** Improvements
+*** Pretty dap/hydra
+[[https://github.com/jerrypnz/major-mode-hydra.el#pretty-hydra][Pretty Hydra]] is a package for improving the looks of [[https://github.com/abo-abo/hydra][Hydra]], which is a keybinding tool with a
+ui - similar to emacs-which-key.
+
+Dap-Mode has Hydra built in, which can be opened via the command ~dap/hydra~. Out
+of the box, the ui is not very pretty, which is why I'm wrapping the existing
+config in pretty hydra.
+
+First off, I need to install the package.
+
+#+begin_src elisp :tangle packages.el
+(package! pretty-hydra)
+#+end_src
+
+Then, I'm defining the hydra, using the existing dap-hydra config.
+
+First, I'll define helper functions for using ~all-the-icons~ specification, specifically for:
+- faicon (font awesome)
+- fileicon (file icons)
+- octicon (github octicons)
+- material (material icons)
+- mode-icon (mode icons)
+
+Since faicon, fileicon, octicon and material are very similar - the only
+difference between them is the suffix for both the name and the wrapper
+all-the-icons function - I'll generate those functions dynamically.
+
+#+begin_src elisp
+(require 'all-the-icons)
+
+(defvar func-suffixes '("faicon" "fileicon" "octicon" "material"))
+
+;; loop over func-suffixes and generate all-the-icons-functions
+(dolist (suffix func-suffixes)
+  (let ((func-name (intern (concat "with-" suffix)))
+        (call-name (intern (concat "all-the-icons-" suffix))))
+    (eval `(defun ,func-name (icon str &optional height v-adjust)
+      (s-concat (,call-name icon :v-adjust (or v-adjust 0) :height (or height 0)) " " str)))))
+#+end_src
+
+Then, I'll define the mode-icon function seperately, since it functions a little
+differently.
+
+#+begin_src elisp
+(defun with-mode-icon (mode str &optional height nospace face)
+  (let* ((v-adjust (if (eq major-mode 'emacs-lisp-mode) 0.0 0.05))
+         (args     `(:height ,(or height 1) :v-adjust ,v-adjust))
+         (_         (when face
+                      (lax-plist-put args :face face)))
+         (icon     (apply #'all-the-icons-icon-for-mode mode args))
+         (icon     (if (symbolp icon)
+                       (apply #'all-the-icons-octicon "file-text" args)
+                     icon)))
+    (s-concat icon (if nospace "" " ") str)))
+#+end_src
+
+For future-proofing this config, I want to build the hydra config dynamically as
+well, using the existing ~dap-hydra~.
+
+Here, I've run into another issue though, since ~dap-hydra~ is defined using a
+single list of pairs of (~key~, ~function~), while the description is defined using
+a docstring format. Sadly, ~pretty-hydra~ does not support this format, so I'll
+need to generate the hydra config manually.
+
+First, a helper function to get a key's description from the docstring:
+
+#+begin_src elisp
+(defun get-key-description (char docstring)
+  "Get the description for a key from the docstring."
+  (when (string-match (format "\\(_%s_\\): \\([a-zA-Z]*\\)" char) docstring)
+    (match-string 2 docstring)))
+#+end_src
+
+Then, I have to extract the categories from the docstring. They are in the
+second line and are surrounded by ~^~ characters, so I can use ~split-string~ and
+~regexp~ to get them.
+
+#+begin_src elisp
+;; Get the categories from the docstring by splitting on linebreaks and then
+;; capturing the in ^ characters enclosed strings on the second line. Also, throw away whitespace results.
+
+(defun get-categories (docstring)
+    "Get the categories from the docstring."
+    (let ((lines (split-string docstring "\n")))
+        (seq-filter (lambda (x) (not (string-blank-p x)))
+                    (split-string (nth 1 lines) "\\^"))))
+#+end_src
+
+Now I need to match the keys to their category.
+
+First, a helper function to split a docstring row into a list of its keys.
+#+begin_src elisp
+(defun split-row (row)
+  "Split a row into a list of keys."
+  (-slice (split-string (replace-regexp-in-string ":[^_]*\\(_\\|$\\)" "" row) "_") 1 -1))
+#+end_src
+
+
+For the rows at the bottom of the docstring I need to be careful, since, after
+splitting, they might have an index of 0, but since they are padded with
+whitespace, they actually belong to a category with a higher index.
+
+To check for this, I will need to generate a char offset for the category titles
+in their row - then, I can check each row that starts with a whitespace
+character by matching the length of consecutive whitespaces to the category
+titles' offsets.
+
+#+begin_src elisp
+(defun get-category-offsets (categories docstring)
+  "Get the category titles' offsets in the docstring."
+  (let ((title-row (nth 1 (split-string docstring "\n"))))
+    (mapcar (lambda (x) `(,x . ,(string-match x title-row))) categories)))
+#+end_src
+
+Although most of the rows could be compared to the category titels via the
+index, I would need a separate function for handling the edge cases (columns
+without keys) anyway, so I'll handle finding category the same for every key.
+
+Each key gets assigned to its category by comparing the character offset from
+the start of the row to the offset of each categories' title.
+
+First, I'll need a higher-order-function that returns a comparison function for
+a given offset. This will make sorting easier and more readable.
+
+Because the offset is being passed into a lambda function, it needs to be
+evaluated when the function is being returned.
+
+#+begin_src elisp
+(defun get-comparer (offset)
+  "Get a comparer function for a given number of blank characters."
+  `(lambda (x y)
+    (let ((x-diff (abs (- (cdr x) ,offset)))
+          (y-diff (abs (- (cdr y) ,offset))))
+      (< x-diff y-diff))))
+
+#+end_src
+
+Next, I need a small utility function to get the correct row for a given key.
+
+#+begin_src elisp
+(defun get-row-for-key (key docstring)
+  (let ((rows (split-string docstring "\n")))
+    (seq-find (lambda (x) (member key (split-row x))) rows)))
+
+#+end_src
+
+Now, I can write the function that will assign the keys to their categories.
+
+#+begin_src elisp
+(defun get-categories-for-key (key docstring)
+  "Get the category for a key."
+  (let* ((row (get-row-for-key key docstring))
+         (categories (get-categories docstring))
+         (category-offsets (get-category-offsets categories docstring))
+         (key-offset (string-match (format "_%s_:" key) row))
+         (comparer (get-comparer key-offset))
+         (index (-elem-index (car (car (sort category-offsets comparer))) categories)))
+    (nth index categories)))
+#+end_src
+
+Next, a function to add the description to a single entry:
+
+#+begin_src elisp
+(defun add-description (entry docstring)
+  "Add the description to a single entry."
+  (let* ((key (car entry))
+         (func (cdr entry))
+         (desc (get-key-description key docstring)))
+    (list key func desc)))
+#+end_src
+
+Finally, a function that converts the heads definitions for a hydra, given the
+hydra's name:
+
+#+begin_src elisp
+(defun convert-hydra-heads (name)
+  "Convert the heads definitions for a hydra, given the hydra's name."
+  (let* ((heads (eval (intern (concat name "/heads"))))
+         (docstring (eval (intern (concat name "/docstring")))))
+    (mapcar (lambda (entry) (add-description-to-entry entry docstring)) heads)))
+#+end_src
+
+#+RESULTS:
+: convert-hydra-heads
+
+Finally, I can convert the definitions.
+
+#+begin_src elisp
+(defvar heads `("Base" ,(convert-hydra-heads "dap-hydra")))
+#+end_src
+
+Another problem arises - sinze ~pretty-hydra-define~ is a macro and not a
+function, I can't pass the converted heads definitions as an argument. Instead,
+I need to write my own macro that expands the heads definitions before the macro
+is applied.
+
+Finally I can define the hydra. One last pitfall - since ~pretty-hydra-define~ is
+a macro and not a function, passing in the variable ~heads~ as an argument will
+not work. As a workaround, I'm using ~eval~ to expand the variable before passing.
+
+#+begin_src elisp
+(eval `(pretty-hydra-define dap-hydra-pretty
+         (:color amaranth :quit-key "q" :title (with-faicon "toggle-on" "Title"))
+         ,heads))
+#+end_src
+
+** Keybindings
+#+begin_src elisp
+(map! :leader
+      (:prefix-map ("d" . "debugger")
+       :desc "Debug" "d" #'dap-debug
+       :desc "Next" "n" #'dap-next
+       :desc "Step in" "i" #'dap-step-in
+       :desc "Step out" "o" #'dap-step-out
+       :desc "Continue" "c" #'dap-continue
+       :desc "Restart" "r" #'dap-restart-frame
+       :desc "Disconnect" "D" #'dap-disconnect
+       :desc "Evaluate" "e" #'dap-eval
+       :desc "Add Expression" "a" #'dap-ui-expressions-add
+       (:prefix ("b" . "breakpoints")
+        :desc "Toggle" "t" #'dap-breakpoint-toggle
+        :desc "Add" "a" #'dap-breakpoint-add
+        :desc "Delete" "d" #'dap-breakpoint-delete
+        :desc "Set condition" "c" #'dap-breakpoint-condition
+        :desc "Set log message" "m" #'dap-breakpoint-log-message
+        :desc "Set hit condition" "h" #'dap-breakpoint-hit-condition)))
+
+#+end_src
+
+* Unsorted Packages
+#+begin_src elisp :tangle packages.el
+
+(package! poetry)
+
+(package! dap-mode)
+
+;; Orgmode
+
+;; Tables
+(package! org-pretty-table
+  :recipe (:host github :repo "Fuco1/org-pretty-table") :pin
+  "87772a9469d91770f87bfa788580fca69b9e697a")
+
+;; Only show emphasis markers when editing them
+(package! org-appear :recipe (:host github :repo "awth13/org-appear")
+  :pin "148aa124901ae598f69320e3dcada6325cdc2cf0")
+
+;; Remove heading starts
+(package! org-starless :recipe (:host github :repo "TonCherAmi/org-starless"))
+
+;; Padding for org mode
+(package! org-padding :recipe (:host github :repo "TonCherAmi/org-padding"))
+
+;; View and manage heading structure
+(package! org-ol-tree :recipe (:host github :repo "Townk/org-ol-tree")
+  :pin "207c748aa5fea8626be619e8c55bdb1c16118c25")
+
+;; Citations
+(package! org-ref :pin "3ca9beb744621f007d932deb8a4197467012c23a")
+
+;; Julia babel language improvements
+(package! ob-julia :recipe (:host github :repo "nico202/ob-julia"))
+
+;; HTTP requests via babel
+(package! ob-http :pin "b1428ea2a63bcb510e7382a1bf5fe82b19c104a7")
+
+;; graph view
+(package! org-graph-view :recipe (:host github :repo "alphapapa/org-graph-view")
+  :pin "13314338d70d2c19511efccc491bed3ca0758170")
+
+;; Import non-org via pandoc
+(package! org-pandoc-import
+  :recipe (:host github
+           :repo "tecosaur/org-pandoc-import"
+           :files ("*.el" "filters" "preprocessors")))
+
+;; OrgRoam visualization / webapp
+(unpin! org-roam)
+(package! org-roam-ui)
+
+(package! websocket :pin "fda4455333309545c0787a79d73c19ddbeb57980") ; dependency of `org-roam-ui'
+
+;; automatic latex rendering
+(package! org-fragtog :pin "479e0a1c3610dfe918d89a5f5a92c8aec37f131d")
+
+;; Match emacs theme for Latex document
+(package! ox-chameleon :recipe (:host github :repo "tecosaur/ox-chameleon"))
+
+;; export github markdown
+(package! ox-gfm :pin "99f93011b069e02b37c9660b8fcb45dab086a07f")
+
+;; Google Calendar integration
+(package! org-gcal :recipe (:host github :repo "kidd/org-gcal.el"))
+
+;; Google Tasks integration
+(package! org-gtasks :recipe (:host github :repo "JulienMasson/org-gtasks"))
+
+;; K8s
+(package! k8s-mode)
+
+;; Jest-Test-Mode
+(package! jest-test-mode)
+
+;; Vue-Mode
+(package! vue-mode)
+
+;; Svelte-Mode
+(package! svelte-mode)
+
+;; Copilot
+(package! jsonrpc)
+(package! copilot
+  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+
+;; Multiple major modes in one buffer
+(package! polymode)
+(package! poly-markdown)
+
 #+end_src

@@ -100,7 +100,7 @@
          (let ((file-name (->> info caddr (alist-get :file))))
            (unless file-name
              (setq file-name (make-temp-file "babel-lsp-")))
-           (setq buffer-file-name file-name)
+           (setq buffer-file-name fie)
            (lsp-deferred)))
        (put ',intern-pre 'function-documentation
             (format "Enable lsp-mode in the buffer of org source block (%s)."
@@ -253,15 +253,12 @@
          ("<backtab>" . 'copilot-accept-completion)))
 
 (add-hook! python-mode
-           (advice-add 'python-pytest-file :before
-                       (lambda (&rest args)
-                         (setq-local python-pytest-executable
-                                     (executable-find "pytest")))))
+  (advice-add 'python-pytest-file :before
+              (lambda (&rest args)
+                (setq-local python-pytest-executable
+                            (executable-find "pytest")))))
 
 (setq dap-python-debugger 'debugpy)
-
-(after! dap-mode
-  (setq dap-python-debugger 'debugpy))
 
 ;;;###autoload
 (defun +debugger/clear ()
@@ -286,3 +283,129 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
   (message arg)
   (+debugger--set-config (+debugger-completing-read))
   (+debugger/start-last))
+
+(defun get-window-with-file-buffer ()
+  "Get the window with a file buffer."
+  (seq-find (lambda (window)
+              (buffer-file-name (window-buffer window)))
+            (window-list)))
+
+(defun reset-file-window-buffer ()
+  "Reset the file window's buffer."
+  (let ((window (get-window-with-file-buffer)))
+    (when window
+      (set-window-buffer window (window-buffer window)))))
+
+(defun add-reset-file-window-buffer-hook (&rest args)
+  "Add the reset-file-window-buffer function to the window-configuration-change-hook."
+  (add-hook 'window-configuration-change-hook 'reset-file-window-buffer))
+
+(defun remove-reset-file-window-buffer-hook (&rest args)
+    "Remove the reset-file-window-buffer function from the window-configuration-change-hook."
+    (remove-hook 'window-configuration-change-hook 'reset-file-window-buffer))
+
+(add-hook 'dap-mode-hook 'add-reset-file-window-buffer-hook)
+
+(require 'all-the-icons)
+
+(defvar func-suffixes '("faicon" "fileicon" "octicon" "material"))
+
+;; loop over func-suffixes and generate all-the-icons-functions
+(dolist (suffix func-suffixes)
+  (let ((func-name (intern (concat "with-" suffix)))
+        (call-name (intern (concat "all-the-icons-" suffix))))
+    (eval `(defun ,func-name (icon str &optional height v-adjust)
+      (s-concat (,call-name icon :v-adjust (or v-adjust 0) :height (or height 0)) " " str)))))
+
+(defun with-mode-icon (mode str &optional height nospace face)
+  (let* ((v-adjust (if (eq major-mode 'emacs-lisp-mode) 0.0 0.05))
+         (args     `(:height ,(or height 1) :v-adjust ,v-adjust))
+         (_         (when face
+                      (lax-plist-put args :face face)))
+         (icon     (apply #'all-the-icons-icon-for-mode mode args))
+         (icon     (if (symbolp icon)
+                       (apply #'all-the-icons-octicon "file-text" args)
+                     icon)))
+    (s-concat icon (if nospace "" " ") str)))
+
+(defun get-key-description (char docstring)
+  "Get the description for a key from the docstring."
+  (when (string-match (format "\\(_%s_\\): \\([a-zA-Z]*\\)" char) docstring)
+    (match-string 2 docstring)))
+
+;; Get the categories from the docstring by splitting on linebreaks and then
+;; capturing the in ^ characters enclosed strings on the second line. Also, throw away whitespace results.
+
+(defun get-categories (docstring)
+    "Get the categories from the docstring."
+    (let ((lines (split-string docstring "\n")))
+        (seq-filter (lambda (x) (not (string-blank-p x)))
+                    (split-string (nth 1 lines) "\\^"))))
+
+(defun split-row (row)
+  "Split a row into a list of keys."
+  (-slice (split-string (replace-regexp-in-string ":[^_]*\\(_\\|$\\)" "" row) "_") 1 -1))
+
+(defun get-category-offsets (categories docstring)
+  "Get the category titles' offsets in the docstring."
+  (let ((title-row (nth 1 (split-string docstring "\n"))))
+    (mapcar (lambda (x) `(,x . ,(string-match x title-row))) categories)))
+
+(defun get-comparer (offset)
+  "Get a comparer function for a given number of blank characters."
+  `(lambda (x y)
+    (let ((x-diff (abs (- (cdr x) ,offset)))
+          (y-diff (abs (- (cdr y) ,offset))))
+      (< x-diff y-diff))))
+
+(defun get-row-for-key (key docstring)
+  (let ((rows (split-string docstring "\n")))
+    (seq-find (lambda (x) (member key (split-row x))) rows)))
+
+(defun get-categories-for-key (key docstring)
+  "Get the category for a key."
+  (let* ((row (get-row-for-key key docstring))
+         (categories (get-categories docstring))
+         (category-offsets (get-category-offsets categories docstring))
+         (key-offset (string-match (format "_%s_:" key) row))
+         (comparer (get-comparer key-offset))
+         (index (-elem-index (car (car (sort category-offsets comparer))) categories)))
+    (nth index categories)))
+
+(defun add-description (entry docstring)
+  "Add the description to a single entry."
+  (let* ((key (car entry))
+         (func (cdr entry))
+         (desc (get-key-description key docstring)))
+    (list key func desc)))
+
+(defun convert-hydra-heads (name)
+  "Convert the heads definitions for a hydra, given the hydra's name."
+  (let* ((heads (eval (intern (concat name "/heads"))))
+         (docstring (eval (intern (concat name "/docstring")))))
+    (mapcar (lambda (entry) (add-description-to-entry entry docstring)) heads)))
+
+(defvar heads `("Base" ,(convert-hydra-heads "dap-hydra")))
+
+(eval `(pretty-hydra-define dap-hydra-pretty
+         (:color amaranth :quit-key "q" :title (with-faicon "toggle-on" "Title"))
+         ,heads))
+
+(map! :leader
+      (:prefix-map ("d" . "debugger")
+       :desc "Debug" "d" #'dap-debug
+       :desc "Next" "n" #'dap-next
+       :desc "Step in" "i" #'dap-step-in
+       :desc "Step out" "o" #'dap-step-out
+       :desc "Continue" "c" #'dap-continue
+       :desc "Restart" "r" #'dap-restart-frame
+       :desc "Disconnect" "D" #'dap-disconnect
+       :desc "Evaluate" "e" #'dap-eval
+       :desc "Add Expression" "a" #'dap-ui-expressions-add
+       (:prefix ("b" . "breakpoints")
+        :desc "Toggle" "t" #'dap-breakpoint-toggle
+        :desc "Add" "a" #'dap-breakpoint-add
+        :desc "Delete" "d" #'dap-breakpoint-delete
+        :desc "Set condition" "c" #'dap-breakpoint-condition
+        :desc "Set log message" "m" #'dap-breakpoint-log-message
+        :desc "Set hit condition" "h" #'dap-breakpoint-hit-condition)))
