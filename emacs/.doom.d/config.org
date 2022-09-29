@@ -616,10 +616,9 @@ session has been created and removing it when the session is terminated.
 
 #+end_src
 
-
 *** Completion/Search
 **** Corfu
-Use corfu instead of company. This means I have to set up some stuff manually.
+I want to use corfu instead of company. This means I have to set up some stuff manually.
 
 ***** Install packages
 
@@ -635,13 +634,13 @@ Use corfu instead of company. This means I have to set up some stuff manually.
 ***** Configure Corfu
 
 #+begin_src elisp
-(use-package! corfu-doc
+(use-package corfu-doc
   :config
   (setq corfu-doc-delay 0.2
         corfu-doc-max-width 80
         corfu-doc-max-height 40))
 
-(use-package! corfu
+(use-package corfu
   :config
   (defun ++corfu-quit ()
     (interactive)
@@ -679,14 +678,13 @@ Use corfu instead of company. This means I have to set up some stuff manually.
       (corfu-doc-termnal-mode +1))))
 #+END_SRC
 
-
 ***** Configure Kind-Cion
 
 Kind-icon provides configurable icon or text-based completion prefixes based on
 the ~:company-kind~ property that many completion backends use, just like corfu.
 
 #+BEGIN_SRC elisp
-(use-package! kind-icon
+(use-package kind-icon
   :ensure t
   :after corfu
   :custom
@@ -1252,7 +1250,6 @@ will rapidly change its width, which is not very pleasant to look at.
 (setq ivy-posframe-width 80)
 #+end_src
 
-
 ** Treemacs
 
 Treemacs is a file and project explorer similar to NeoTree or vim’s
@@ -1344,7 +1341,6 @@ Usually, the buffer names are not very useful, so I'm renaming each buffer to th
           (lambda ()
             (exwm-workspace-rename-buffer exwm-class-name)))
 #+end_src
-
 
 ** helpful
 

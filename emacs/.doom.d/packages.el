@@ -6,6 +6,8 @@
 (package! org-roam-ui)
 (package! websocket :pin "fda4455333309545c0787a79d73c19ddbeb57980") ; dependency of `org-roam-ui'
 
+(package! delve :recipe (:host github :repo "publicimageltd/delve"))
+
 (package! jest-test-mode)
 
 (package! vue-mode)
@@ -14,7 +16,12 @@
 
 (package! poetry)
 
-(package! blamer)
+(package! company :disable t)
+(package! corfu)
+(package! cape)
+(package! corfu-doc
+  :recipe (:host github :repo "galeo/corfu-doc"))
+(package! kind-icon)
 
 (package! doom-themes)
 
@@ -25,8 +32,6 @@
 (package! tao-theme)
 
 (package! nano-modeline)
-
-(package! dashboard)
 
 (package! pretty-hydra)
 

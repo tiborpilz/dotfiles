@@ -339,13 +339,13 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
         :desc "Set log message" "m" #'dap-breakpoint-log-message
         :desc "Set hit condition" "h" #'dap-breakpoint-hit-condition)))
 
-(use-package! corfu-doc
+(use-package corfu-doc
   :config
   (setq corfu-doc-delay 0.2
         corfu-doc-max-width 80
         corfu-doc-max-height 40))
 
-(use-package! corfu
+(use-package corfu
   :config
   (defun ++corfu-quit ()
     (interactive)
@@ -382,7 +382,7 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
       (corfu-terminal-mode +1)
       (corfu-doc-termnal-mode +1))))
 
-(use-package! kind-icon
+(use-package kind-icon
   :ensure t
   :after corfu
   :custom
