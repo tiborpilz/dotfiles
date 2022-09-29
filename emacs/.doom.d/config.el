@@ -339,6 +339,117 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
         :desc "Set log message" "m" #'dap-breakpoint-log-message
         :desc "Set hit condition" "h" #'dap-breakpoint-hit-condition)))
 
+(use-package! corfu-doc
+  :config
+  (setq corfu-doc-delay 0.2
+        corfu-doc-max-width 80
+        corfu-doc-max-height 40))
+
+(use-package! corfu
+  :config
+  (defun ++corfu-quit ()
+    (interactive)
+    (call-interactively 'corfu-quit)
+    (evil-normal-state +1))
+  (setq corfu-cycle t
+        corfu-auto t
+        corfu-auto-prefix 1
+        corfu-auto-delay 0.01
+        corfu-seperator ?\s
+        corfu-quit-at-boundary 'seperator
+        corfu-quit-no-match t
+        corfu-preview-current nil
+        corfu-echo-documentation nil
+        corfu-scroll-margin 10)
+  (map! :map global-map
+        :nvi "C-SPC" #'completion-at-point)
+  (map! :map corfu-map
+        "C-j" #'corfu-next
+        "C-k" #'corfu-previous
+        "C-l" #'corfu-insert
+        "C-;" #'corfu-insert
+        "TAB" #'corfu-insert
+        "<tab>" #'corfu-insert
+        :nvi "<escape>" #'++corfu-quit
+        :nvi "ESC" #'++corfu-quit)
+  (global-corfu-mode +1)
+  (global-company-mode -1)
+
+  (add-hook! '(prog-mode-hook
+               text-mode-hook)
+    (corfu-doc-mode +1)
+    (unless (display-graphic-p)
+      (corfu-terminal-mode +1)
+      (corfu-doc-termnal-mode +1))))
+
+(use-package! kind-icon
+  :ensure t
+  :after corfu
+  :custom
+  (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+(use-package! orderless
+  :init
+  (setq completion-styles '(orderless partial-completion basic)
+        completion-category-defaults nil
+        completion-category-overrides nil))
+
+(use-package! lsp-mode
+  :custom
+  (lsp-completion-provider :none) ;; we use Corfu!
+  :init
+  (defun my/lsp-mode-setup-completion ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))) ;; Configure orderless
+  :hook
+  (lsp-completion-mode . my/lsp-mode-setup-completion))
+
+;; Add extensions
+(use-package! cape
+  :init
+  ;; Add `completion-at-point-functions', used by `completion-at-point'.
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
+  :config
+  (setq cape-dabbrev-min-length 2
+        cape-dabbrev-check-other-buffers 'some))
+
+(advice-add #'corfu--make-frame :around
+            (defun +corfu--make-frame-a (oldfun &rest args)
+              (cl-letf (((symbol-function #'frame-parent)
+                         (lambda (frame)
+                           (or (frame-parameter frame 'parent-frame)
+                               exwm-workspace--current))))
+                (apply oldfun args))
+              (when exwm--connection
+                (set-frame-parameter corfu--frame 'parent-frame nil))))
+
+(advice-add #'corfu--popup-redirect-focus :override
+            (defun +corfu--popup-redirect-focus-a ()
+              (redirect-frame-focus corfu--frame
+                                    (or (frame-parent corfu--frame)
+                                        exwm-workspace--current))))
+
+(advice-add #'corfu-doc--make-frame :around
+            (defun +corfu-doc--make-frame-a (oldfun &rest args)
+              (cl-letf (((symbol-function #'frame-parent)
+                         (lambda (frame)
+                           (or (frame-parameter frame 'parent-frame)
+                               exwm-workspace--current))))
+                (apply oldfun args))
+              (when exwm--connection
+                (set-frame-parameter corfu-doc--frame 'parent-frame nil))))
+
+(advice-add #'corfu-doc--redirect-focus :override
+            (defun +corfu-doc--redirect-focus ()
+              (redirect-frame-focus corfu-doc--frame
+                                    (or (frame-parent corfu-doc--frame)
+                                        exwm-workspace--current))))
+
 (setq doom-theme 'doom-opera)
 
 ;; (add-to-list 'load-path "~/Code/doom-nano-testing")
@@ -464,7 +575,7 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
 ;; (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-partial)
 ;; (define-key ivy-minibuffer-map (kbd "<return>") 'ivy-alt-done)
 
-(use-package all-the-icons-ivy-rich
+(use-package! all-the-icons-ivy-rich
   :after counsel-projectile
   :init (all-the-icons-ivy-rich-mode +1)
   :config

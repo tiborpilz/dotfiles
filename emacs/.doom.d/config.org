@@ -634,50 +634,50 @@ Use corfu instead of company. This means I have to set up some stuff manually.
 
 ***** Configure Corfu
 
-# #+begin_src elisp
-# (use-package corfu-doc
-#   :config
-#   (setq corfu-doc-delay 0.2
-#         corfu-doc-max-width 80
-#         corfu-doc-max-height 40))
+#+begin_src elisp
+(use-package! corfu-doc
+  :config
+  (setq corfu-doc-delay 0.2
+        corfu-doc-max-width 80
+        corfu-doc-max-height 40))
 
-# (use-package corfu
-#   :config
-#   (defun ++corfu-quit ()
-#     (interactive)
-#     (call-interactively 'corfu-quit')
-#     (evil-normal-state +1))
-#   (setq corfu-cycle t
-#         corfu-auto t
-#         corfu-auto-prefix 1
-#         corfu-auto-delay 0.01
-#         corfu-seperator ?\s
-#         corfu-quit-at-boundary 'seperator
-#         corfu-quit-no-match t
-#         corfu-preview-current nil
-#         corfu-echo-documentation nil
-#         corfu-scroll-margin 10)
-#   (map! :map global-map
-#         :nvi "C-SPC" #'completion-at-point)
-#   (map! :map corfu-map
-#         "C-j" #'corfu-next
-#         "C-k" #'corfu-previous
-#         "C-l" #'corfu-insert
-#         "C-;" #'corfu-insert
-#         "TAB" #'corfu-insert
-#         "<tab>" #'corfu-insert
-#         :nvi "<escape>" #'++corfu-quit
-#         :nvi "ESC" #'++corfu-quit)
-#   (global-corfu-mode +1)
-#   (global-company-mode -1)
+(use-package! corfu
+  :config
+  (defun ++corfu-quit ()
+    (interactive)
+    (call-interactively 'corfu-quit)
+    (evil-normal-state +1))
+  (setq corfu-cycle t
+        corfu-auto t
+        corfu-auto-prefix 1
+        corfu-auto-delay 0.01
+        corfu-seperator ?\s
+        corfu-quit-at-boundary 'seperator
+        corfu-quit-no-match t
+        corfu-preview-current nil
+        corfu-echo-documentation nil
+        corfu-scroll-margin 10)
+  (map! :map global-map
+        :nvi "C-SPC" #'completion-at-point)
+  (map! :map corfu-map
+        "C-j" #'corfu-next
+        "C-k" #'corfu-previous
+        "C-l" #'corfu-insert
+        "C-;" #'corfu-insert
+        "TAB" #'corfu-insert
+        "<tab>" #'corfu-insert
+        :nvi "<escape>" #'++corfu-quit
+        :nvi "ESC" #'++corfu-quit)
+  (global-corfu-mode +1)
+  (global-company-mode -1)
 
-#   (add-hook! '(prog-mode-hook
-#                text-mode-hook)
-#     (corfu-doc-mode +1)
-#     (unless (display-graphic-p)
-#       (corfu-terminal-mode +1)
-#       (corfu-doc-termnal-mode +1))))
-# #+END_SRC
+  (add-hook! '(prog-mode-hook
+               text-mode-hook)
+    (corfu-doc-mode +1)
+    (unless (display-graphic-p)
+      (corfu-terminal-mode +1)
+      (corfu-doc-termnal-mode +1))))
+#+END_SRC
 
 
 ***** Configure Kind-Cion
@@ -685,16 +685,16 @@ Use corfu instead of company. This means I have to set up some stuff manually.
 Kind-icon provides configurable icon or text-based completion prefixes based on
 the ~:company-kind~ property that many completion backends use, just like corfu.
 
-# #+BEGIN_SRC elisp
-# (use-package kind-icon
-#   :ensure t
-#   :after corfu
-#   :custom
-#   (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
-#   :config
-#   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+#+BEGIN_SRC elisp
+(use-package! kind-icon
+  :ensure t
+  :after corfu
+  :custom
+  (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
-# #+END_SRC
+#+END_SRC
 
 ***** Configure Orderless
 
@@ -702,94 +702,94 @@ the ~:company-kind~ property that many completion backends use, just like corfu.
 is completion style. A completion style is a back-end for completion and is used
 from a front-end that provides a completion UI.
 
-# #+BEGIN_SRC elisp
-# (use-package orderless
-#   :init
-#   (setq completion-styles '(orderless partial-completion basic)
-#         completion-category-defaults nil
-#         completion-category-overrides nil))
-# #+END_SRC
+#+BEGIN_SRC elisp
+(use-package! orderless
+  :init
+  (setq completion-styles '(orderless partial-completion basic)
+        completion-category-defaults nil
+        completion-category-overrides nil))
+#+END_SRC
 
-# #+begin_src  elisp
-# (use-package lsp-mode
-#   :custom
-#   (lsp-completion-provider :none) ;; we use Corfu!
-#   :init
-#   (defun my/lsp-mode-setup-completion ()
-#     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-#           '(orderless))) ;; Configure orderless
-#   :hook
-#   (lsp-completion-mode . my/lsp-mode-setup-completion))
+#+begin_src  elisp
+(use-package! lsp-mode
+  :custom
+  (lsp-completion-provider :none) ;; we use Corfu!
+  :init
+  (defun my/lsp-mode-setup-completion ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))) ;; Configure orderless
+  :hook
+  (lsp-completion-mode . my/lsp-mode-setup-completion))
 
-# #+end_src
+#+end_src
 
 ***** Configure cape
 
-# #+begin_src  elisp
+#+begin_src  elisp
 
-# ;; Add extensions
-# (use-package cape
-#   :init
-#   ;; Add `completion-at-point-functions', used by `completion-at-point'.
-#   (add-to-list 'completion-at-point-functions #'cape-file)
-#   ;;(add-to-list 'completion-at-point-functions #'cape-tex)
-#   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-#   (add-to-list 'completion-at-point-functions #'cape-keyword)
-#   :config
-#   (setq cape-dabbrev-min-length 2
-#         cape-dabbrev-check-other-buffers 'some))
-# #+end_src
+;; Add extensions
+(use-package! cape
+  :init
+  ;; Add `completion-at-point-functions', used by `completion-at-point'.
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
+  :config
+  (setq cape-dabbrev-min-length 2
+        cape-dabbrev-check-other-buffers 'some))
+#+end_src
 
-# ***** Configure Corfu (And COrfu-Doc) for EXWM
+***** Configure Corfu (And COrfu-Doc) for EXWM
 
-# If you use Corfu in the minibuffer below an X11 window, the Corfu childframe is
-# displayed beneath the X11 window, rendering candidates invisible. In order to
-# keep all candidates visible in this scenario use the following code:
+If you use Corfu in the minibuffer below an X11 window, the Corfu childframe is
+displayed beneath the X11 window, rendering candidates invisible. In order to
+keep all candidates visible in this scenario use the following code:
 
-# #+begin_src elisp
-# (advice-add #'corfu--make-frame :around
-#             (defun +corfu--make-frame-a (oldfun &rest args)
-#               (cl-letf (((symbol-function #'frame-parent)
-#                          (lambda (frame)
-#                            (or (frame-parameter frame 'parent-frame)
-#                                exwm-workspace--current))))
-#                 (apply oldfun args))
-#               (when exwm--connection
-#                 (set-frame-parameter corfu--frame 'parent-frame nil))))
+#+begin_src elisp
+(advice-add #'corfu--make-frame :around
+            (defun +corfu--make-frame-a (oldfun &rest args)
+              (cl-letf (((symbol-function #'frame-parent)
+                         (lambda (frame)
+                           (or (frame-parameter frame 'parent-frame)
+                               exwm-workspace--current))))
+                (apply oldfun args))
+              (when exwm--connection
+                (set-frame-parameter corfu--frame 'parent-frame nil))))
 
-# (advice-add #'corfu--popup-redirect-focus :override
-#             (defun +corfu--popup-redirect-focus-a ()
-#               (redirect-frame-focus corfu--frame
-#                                     (or (frame-parent corfu--frame)
-#                                         exwm-workspace--current))))
+(advice-add #'corfu--popup-redirect-focus :override
+            (defun +corfu--popup-redirect-focus-a ()
+              (redirect-frame-focus corfu--frame
+                                    (or (frame-parent corfu--frame)
+                                        exwm-workspace--current))))
 
-# #+end_src
+#+end_src
 
-# If you additionally use corfu-doc, then the same situation above also applies to
-# childframes created by corfu-doc. To fix analogously, use the following code:
+If you additionally use corfu-doc, then the same situation above also applies to
+childframes created by corfu-doc. To fix analogously, use the following code:
 
-# #+begin_src  elisp
+#+begin_src  elisp
 
-# (advice-add #'corfu-doc--make-frame :around
-#             (defun +corfu-doc--make-frame-a (oldfun &rest args)
-#               (cl-letf (((symbol-function #'frame-parent)
-#                          (lambda (frame)
-#                            (or (frame-parameter frame 'parent-frame)
-#                                exwm-workspace--current))))
-#                 (apply oldfun args))
-#               (when exwm--connection
-#                 (set-frame-parameter corfu-doc--frame 'parent-frame nil))))
+(advice-add #'corfu-doc--make-frame :around
+            (defun +corfu-doc--make-frame-a (oldfun &rest args)
+              (cl-letf (((symbol-function #'frame-parent)
+                         (lambda (frame)
+                           (or (frame-parameter frame 'parent-frame)
+                               exwm-workspace--current))))
+                (apply oldfun args))
+              (when exwm--connection
+                (set-frame-parameter corfu-doc--frame 'parent-frame nil))))
 
-# (advice-add #'corfu-doc--redirect-focus :override
-#             (defun +corfu-doc--redirect-focus ()
-#               (redirect-frame-focus corfu-doc--frame
-#                                     (or (frame-parent corfu-doc--frame)
-#                                         exwm-workspace--current))))
+(advice-add #'corfu-doc--redirect-focus :override
+            (defun +corfu-doc--redirect-focus ()
+              (redirect-frame-focus corfu-doc--frame
+                                    (or (frame-parent corfu-doc--frame)
+                                        exwm-workspace--current))))
 
-# #+end_src
+#+end_src
 
-# There are more possible configurations, but I'm not shure whether they are
-# necessary.  X
+There are more possible configurations, but I'm not shure whether they are
+necessary.  X
 * UI
 ** Theming
 *** Doom Themes
@@ -1234,7 +1234,7 @@ to All-The-icons-Ivy (which had some issues with my setup)
 #+end_src
 
 #+begin_src elisp
-(use-package all-the-icons-ivy-rich
+(use-package! all-the-icons-ivy-rich
   :after counsel-projectile
   :init (all-the-icons-ivy-rich-mode +1)
   :config
