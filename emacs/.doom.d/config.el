@@ -15,7 +15,7 @@
 (defun scale-font (size)
   (round (* size font-scale-factor)))
 
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size (scale-font 16))
+(setq doom-font (font-spec :family "FiraCode Nerd Font" :size (scale-font 16) :weight 'light)
       doom-big-font (font-spec :family "FiraCode Nerd Font" :size (scale-font 24))
       doom-variable-pitch-font (font-spec :family "Open Sans" :size (scale-font 16))
       doom-serif-font (font-spec :family "FreeSerif" :weight 'light))
@@ -117,7 +117,7 @@
                 (format "Prepare local buffer environment for org source block (%s)."
                         (upcase ,lang))))))))
 (defvar org-babel-lang-list
-  '("go" "python" "ipython" "bash" "sh"))
+  '("go" "python" "ipython" "bash" "sh" "ditaa"))
 (dolist (lang org-babel-lang-list)
   (eval `(lsp-org-babel-enable ,lang)))
 
@@ -345,6 +345,29 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
   :config
   (nano-modeline-mode 1))
 
+(use-package! dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
+
+(setq dashboard-startup-banner-logo-title "(emacs)")
+(setq dashboard-startup-banner 2)
+(setq dashboard-set-navigator t)
+(setq dashboard-center-content t)
+(setq dashboard-items '((bookmarks . 5)
+                        (agenda . 5)))
+(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-set-navigator t)
+(setq dashboard-set-init-info t)
+(setq dashboard-footer-icon (all-the-icons-octicon "dashboard"
+                                                   :height 1.1
+                                                   :v-adjust -0.05
+                                                   :face 'font-lock-keyword-face))
+(setq dashboard-projects-switch-function 'projectile-persp-switch-project)
+(setq doom-fallback-buffer-name "*dashboard*")
+
 (defun with-mode-icon (mode str &optional height nospace face)
   (let* ((v-adjust (if (eq major-mode 'emacs-lisp-mode) 0.0 0.05))
          (args     `(:height ,(or height 1) :v-adjust ,v-adjust))
@@ -457,13 +480,11 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
 
 (setq ivy-posframe-width 80)
 
-(setq doom-modeline-major-mode-color-icon t)
-
 (setq default-frame-alist
       (append (list
                '(vertical-scroll-bars . nil)
                '(internal-border-width . 24))))
 
-;; (require 'exwm)
-;; (require 'exwm-config)
-;; (exwm-config-example)
+(require 'exwm)
+(require 'exwm-config)
+(exwm-config-example)

@@ -26,6 +26,8 @@
 
 (package! nano-modeline)
 
+(package! dashboard)
+
 (package! pretty-hydra)
 
 (package! which-key-posframe)

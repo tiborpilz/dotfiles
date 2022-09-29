@@ -36,7 +36,7 @@ the macine I'm running on, and then use that to set the font size.
 
 I'm a big fan of ligatures, and I've been using FiraCode for as long as I can remember.
 #+begin_src elisp
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size (scale-font 16))
+(setq doom-font (font-spec :family "FiraCode Nerd Font" :size (scale-font 16) :weight 'light)
       doom-big-font (font-spec :family "FiraCode Nerd Font" :size (scale-font 24))
       doom-variable-pitch-font (font-spec :family "Open Sans" :size (scale-font 16))
       doom-serif-font (font-spec :family "FreeSerif" :weight 'light))
@@ -184,7 +184,7 @@ See https://org-babel.readthedocs.io/en/latest/header-args/
                 (format "Prepare local buffer environment for org source block (%s)."
                         (upcase ,lang))))))))
 (defvar org-babel-lang-list
-  '("go" "python" "ipython" "bash" "sh"))
+  '("go" "python" "ipython" "bash" "sh" "ditaa"))
 (dolist (lang org-babel-lang-list)
   (eval `(lsp-org-babel-enable ,lang)))
 #+end_src
@@ -667,6 +667,45 @@ Very appealing, minimalistic themes.
   (nano-modeline-mode 1))
 #+end_src
 
+** Dashboard
+I don't really have much use for the Doom dashboard, so I'm replacing it with
+the package [[https://github.com/emacs-dashboard/emacs-dashboard][Emacs Dashboard]].
+
+- Install the package.
+#+begin_src elisp :tangle packages.el
+(package! dashboard)
+#+end_src
+
+Initialize the package
+#+begin_src elisp
+(use-package! dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
+
+#+end_src
+
+Show just a small text as startup banner, center the content and add a mix of widgets.
+#+begin_src  elisp
+(setq dashboard-startup-banner-logo-title "(emacs)")
+(setq dashboard-startup-banner 2)
+(setq dashboard-set-navigator t)
+(setq dashboard-center-content t)
+(setq dashboard-items '((bookmarks . 5)
+                        (agenda . 5)))
+(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-set-navigator t)
+(setq dashboard-set-init-info t)
+(setq dashboard-footer-icon (all-the-icons-octicon "dashboard"
+                                                   :height 1.1
+                                                   :v-adjust -0.05
+                                                   :face 'font-lock-keyword-face))
+(setq dashboard-projects-switch-function 'projectile-persp-switch-project)
+(setq doom-fallback-buffer-name "*dashboard*")
+#+end_src
+
 ** Hydra
 *** Pretty Hydra
 
@@ -1046,17 +1085,6 @@ Treemacs also has a package that adds icons to the file explorer.
 ;; (package! treemacs-all-the-icons)
 #+end_src
 
-** Modeline
-I'm currently using the Doom Emacs default - [[https://github.com/seagle0128/doom-modeline][Doom Modeline]], although I'm looking
-for alternatives.
-
-*** Settings
-
-#+begin_src elisp
-(setq doom-modeline-major-mode-color-icon t)
-#+end_src
-
-
 ** Custom tweaks
 *** Adding margin to the default frame
 
@@ -1074,6 +1102,7 @@ scroll bars, as they serve no purpose and.
 Turns out, emacs can be used as a fully featured window manager - using [[https://github.com/ch11ng/exwm][exwm]], short for
 Emacs X Window Manager.
 
+*** Installation
 #+begin_src elisp :tangle packages.el
 (package! exwm)
 #+end_src
@@ -1081,9 +1110,9 @@ Emacs X Window Manager.
 For now, I'm running the example config.
 
 #+begin_src elisp
-;; (require 'exwm)
-;; (require 'exwm-config)
-;; (exwm-config-example)
+(require 'exwm)
+(require 'exwm-config)
+(exwm-config-example)
 #+end_src
 
 I will also need a desktop entry to start the emacs wm from my display manager
@@ -1093,6 +1122,40 @@ I will also need a desktop entry to start the emacs wm from my display manager
 Name=Emacs
 Exec=emacs
 Type=Application
+
+*** Configuration
+
+**** Keybindings
+I'm using the default keybindings for now, but I will probably change them to be
+more vim-like.
+
+One thing to note is that not all commands will reach the X windows, since they
+are caught by EXWM and noth passed through to the program. These keys are stored
+in ~exwm-input-prefix-keys~. To adjust the global commands, EXWM will need to be restarted.
+
+**** Multi-Monitor-Setup
+
+Using more than one screen necessitates the usage of exwm-randr.
+
+#+begin_src elisp
+(require 'exwm-randr)
+(setq exwm-randr-workspace-output-plist '(1 "DP-1"))
+(add-hook 'exwm-randr-screen-change-hook
+          (lambda ()
+            (start-process-shell-command
+             "xrandr" nil "xtrandr --output DP-1 --left-of HDMI-1 --auto")))
+(exwm-randr-enable)
+#+end_src
+
+Enable a system tray
+
+#+begin_src elisp
+(require 'exwm-systemtray)
+(exwm-systemtray-enable)
+#+end_src
+
+
+
 #+end_src
 * Unsorted Packages
 #+begin_src elisp :tangle packages.el

@@ -100,9 +100,9 @@ Can be an integer to determine the exact padding."
     (when doom-plain-padded-modeline
       (if (integerp doom-plain-padded-modeline) doom-plain-padded-modeline 4)))
 
-   (modeline-bg              (doom-darken bg-alt 0.15))
-   (modeline-bg-alt          (doom-darken bg-alt 0.1))
-   (modeline-bg-inactive     (doom-darken bg-alt 0.1))
+   (modeline-bg              (doom-darken bg-alt 0.4))
+   (modeline-bg-alt          (doom-darken bg-alt 0.3))
+   (modeline-bg-inactive     (doom-darken bg-alt 0.3))
    (modeline-bg-inactive-alt bg-alt)
    (modeline-fg              fg)
    (modeline-fg-alt          (doom-darken modeline-bg-inactive 0.35)))
