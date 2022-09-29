@@ -28,7 +28,7 @@ running this config, and adjust certain settings accordingly.
 Instead of setting the fonts twice, I'll define a scaling factor depending on
 the macine I'm running on, and then use that to set the font size.
 #+begin_src elisp
-(setq font-scale-factor (if (is-workstation) 1.2 1.0))
+(setq font-scale-factor (if (is-workstation) 1.1 1.0))
 
 (defun scale-font (size)
   (round (* size font-scale-factor)))
@@ -294,6 +294,25 @@ The closest comparison to org-roam-ui is Obsidian.
     (interactive    )
     (unless org-roam-ui-mode (org-roam-ui-mode 1))
     (browse-url-xdg-open (format "http://localhost:%d" org-roam-ui-port))))
+#+end_src
+
+*** Delve
+[[https://github.com/publicimageltd/delve][Delve]] is a package that provides tools to collect, inspect and edit Org Roam nodes in a sperate application buffer.
+
+#+begin_src elisp :tangle packages.el
+(package! delve :recipe (:host github :repo "publicimageltd/delve"))
+#+end_src
+
+#+begin_src elisp
+(use-package! delve
+  :after org-roam
+  :bind
+  (("<f12>" . delve))
+  :config
+  (setq delve-dashboard-tags '("Inbox" "Waiting" "Someday" "Reference" "Note" "Journal" "Event" "Task" "Text" "Code"))
+  (add-hook #'delve-mode-hook #'delve-compact-view-mode)
+  (delve-global-minor-mode))
+
 #+end_src
 
 *** Google Calendar integration
@@ -597,21 +616,180 @@ session has been created and removing it when the session is terminated.
 
 #+end_src
 
-*** Git
-**** Blamer.el
-Blamer.el is a git blame plugin for emacs inspired by VS Code's GitLens plugin
-and Vim plugin.
 
-#+begin_src elisp :tangle packages.el
-(package! blamer)
-#+end_src
+*** Completion/Search
+**** Corfu
+Use corfu instead of company. This means I have to set up some stuff manually.
 
-#+begin_src elisp
-(use-package blamer
-    :defer 20
-    :config
-    (global-blamer-mode 1))
-#+end_src
+***** Install packages
+
+#+BEGIN_SRC elisp :tangle packages.el
+(package! company :disable t)
+(package! corfu)
+(package! cape)
+(package! corfu-doc
+  :recipe (:host github :repo "galeo/corfu-doc"))
+(package! kind-icon)
+#+END_SRC
+
+***** Configure Corfu
+
+# #+begin_src elisp
+# (use-package corfu-doc
+#   :config
+#   (setq corfu-doc-delay 0.2
+#         corfu-doc-max-width 80
+#         corfu-doc-max-height 40))
+
+# (use-package corfu
+#   :config
+#   (defun ++corfu-quit ()
+#     (interactive)
+#     (call-interactively 'corfu-quit')
+#     (evil-normal-state +1))
+#   (setq corfu-cycle t
+#         corfu-auto t
+#         corfu-auto-prefix 1
+#         corfu-auto-delay 0.01
+#         corfu-seperator ?\s
+#         corfu-quit-at-boundary 'seperator
+#         corfu-quit-no-match t
+#         corfu-preview-current nil
+#         corfu-echo-documentation nil
+#         corfu-scroll-margin 10)
+#   (map! :map global-map
+#         :nvi "C-SPC" #'completion-at-point)
+#   (map! :map corfu-map
+#         "C-j" #'corfu-next
+#         "C-k" #'corfu-previous
+#         "C-l" #'corfu-insert
+#         "C-;" #'corfu-insert
+#         "TAB" #'corfu-insert
+#         "<tab>" #'corfu-insert
+#         :nvi "<escape>" #'++corfu-quit
+#         :nvi "ESC" #'++corfu-quit)
+#   (global-corfu-mode +1)
+#   (global-company-mode -1)
+
+#   (add-hook! '(prog-mode-hook
+#                text-mode-hook)
+#     (corfu-doc-mode +1)
+#     (unless (display-graphic-p)
+#       (corfu-terminal-mode +1)
+#       (corfu-doc-termnal-mode +1))))
+# #+END_SRC
+
+
+***** Configure Kind-Cion
+
+Kind-icon provides configurable icon or text-based completion prefixes based on
+the ~:company-kind~ property that many completion backends use, just like corfu.
+
+# #+BEGIN_SRC elisp
+# (use-package kind-icon
+#   :ensure t
+#   :after corfu
+#   :custom
+#   (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+#   :config
+#   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+# #+END_SRC
+
+***** Configure Orderless
+
+[[https://github.com/oantolin/orderless][Orderless]]
+is completion style. A completion style is a back-end for completion and is used
+from a front-end that provides a completion UI.
+
+# #+BEGIN_SRC elisp
+# (use-package orderless
+#   :init
+#   (setq completion-styles '(orderless partial-completion basic)
+#         completion-category-defaults nil
+#         completion-category-overrides nil))
+# #+END_SRC
+
+# #+begin_src  elisp
+# (use-package lsp-mode
+#   :custom
+#   (lsp-completion-provider :none) ;; we use Corfu!
+#   :init
+#   (defun my/lsp-mode-setup-completion ()
+#     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+#           '(orderless))) ;; Configure orderless
+#   :hook
+#   (lsp-completion-mode . my/lsp-mode-setup-completion))
+
+# #+end_src
+
+***** Configure cape
+
+# #+begin_src  elisp
+
+# ;; Add extensions
+# (use-package cape
+#   :init
+#   ;; Add `completion-at-point-functions', used by `completion-at-point'.
+#   (add-to-list 'completion-at-point-functions #'cape-file)
+#   ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+#   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+#   (add-to-list 'completion-at-point-functions #'cape-keyword)
+#   :config
+#   (setq cape-dabbrev-min-length 2
+#         cape-dabbrev-check-other-buffers 'some))
+# #+end_src
+
+# ***** Configure Corfu (And COrfu-Doc) for EXWM
+
+# If you use Corfu in the minibuffer below an X11 window, the Corfu childframe is
+# displayed beneath the X11 window, rendering candidates invisible. In order to
+# keep all candidates visible in this scenario use the following code:
+
+# #+begin_src elisp
+# (advice-add #'corfu--make-frame :around
+#             (defun +corfu--make-frame-a (oldfun &rest args)
+#               (cl-letf (((symbol-function #'frame-parent)
+#                          (lambda (frame)
+#                            (or (frame-parameter frame 'parent-frame)
+#                                exwm-workspace--current))))
+#                 (apply oldfun args))
+#               (when exwm--connection
+#                 (set-frame-parameter corfu--frame 'parent-frame nil))))
+
+# (advice-add #'corfu--popup-redirect-focus :override
+#             (defun +corfu--popup-redirect-focus-a ()
+#               (redirect-frame-focus corfu--frame
+#                                     (or (frame-parent corfu--frame)
+#                                         exwm-workspace--current))))
+
+# #+end_src
+
+# If you additionally use corfu-doc, then the same situation above also applies to
+# childframes created by corfu-doc. To fix analogously, use the following code:
+
+# #+begin_src  elisp
+
+# (advice-add #'corfu-doc--make-frame :around
+#             (defun +corfu-doc--make-frame-a (oldfun &rest args)
+#               (cl-letf (((symbol-function #'frame-parent)
+#                          (lambda (frame)
+#                            (or (frame-parameter frame 'parent-frame)
+#                                exwm-workspace--current))))
+#                 (apply oldfun args))
+#               (when exwm--connection
+#                 (set-frame-parameter corfu-doc--frame 'parent-frame nil))))
+
+# (advice-add #'corfu-doc--redirect-focus :override
+#             (defun +corfu-doc--redirect-focus ()
+#               (redirect-frame-focus corfu-doc--frame
+#                                     (or (frame-parent corfu-doc--frame)
+#                                         exwm-workspace--current))))
+
+# #+end_src
+
+# There are more possible configurations, but I'm not shure whether they are
+# necessary.  X
 * UI
 ** Theming
 *** Doom Themes
@@ -667,44 +845,50 @@ Very appealing, minimalistic themes.
   (nano-modeline-mode 1))
 #+end_src
 
-** Dashboard
-I don't really have much use for the Doom dashboard, so I'm replacing it with
-the package [[https://github.com/emacs-dashboard/emacs-dashboard][Emacs Dashboard]].
+# ** Dashboard
+# I don't really have much use for the Doom dashboard, so I'm replacing it with
+# the package [[https://github.com/emacs-dashboard/emacs-dashboard][Emacs Dashboard]].
 
-- Install the package.
-#+begin_src elisp :tangle packages.el
-(package! dashboard)
-#+end_src
+# - Install the package.
+# #+begin_src elisp :tangle packages.el
+# (package! dashboard)
+# #+end_src
 
-Initialize the package
-#+begin_src elisp
-(use-package! dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook))
+# Initialize the package
+# #+begin_src elisp
+# (use-package! dashboard
+#   :ensure t
+#   :config
+#   (dashboard-setup-startup-hook))
 
-#+end_src
+# #+end_src
 
-Show just a small text as startup banner, center the content and add a mix of widgets.
-#+begin_src  elisp
-(setq dashboard-startup-banner-logo-title "(emacs)")
-(setq dashboard-startup-banner 2)
-(setq dashboard-set-navigator t)
-(setq dashboard-center-content t)
-(setq dashboard-items '((bookmarks . 5)
-                        (agenda . 5)))
-(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-(setq dashboard-set-heading-icons t)
-(setq dashboard-set-file-icons t)
-(setq dashboard-set-navigator t)
-(setq dashboard-set-init-info t)
-(setq dashboard-footer-icon (all-the-icons-octicon "dashboard"
-                                                   :height 1.1
-                                                   :v-adjust -0.05
-                                                   :face 'font-lock-keyword-face))
-(setq dashboard-projects-switch-function 'projectile-persp-switch-project)
-(setq doom-fallback-buffer-name "*dashboard*")
-#+end_src
+# #+RESULTS:
+# : t
+
+# Show just a small text as startup banner, center the content and add a mix of widgets.
+# #+begin_src  elisp
+# (setq dashboard-startup-banner-logo-title "(emacs)")
+# (setq dashboard-startup-banner 2)
+# (setq dashboard-set-navigator t)
+# (setq dashboard-center-content t)
+# (setq dashboard-items '((bookmarks . 5)
+#                         (agenda . 5)))
+# (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+# (setq dashboard-set-heading-icons t)
+# (setq dashboard-set-file-icons t)
+# (setq dashboard-set-navigator t)
+# (setq dashboard-set-init-info t)
+# (setq dashboard-footer-icon (all-the-icons-octicon "dashboard"
+#                                                    :height 1.1
+#                                                    :v-adjust -0.05
+#                                                    :face 'font-lock-keyword-face))
+# (setq dashboard-projects-switch-function 'projectile-persp-switch-project)
+# (setq doom-fallback-buffer-name "*dashboard*")
+# #+end_src
+
+# #+RESULTS:
+# : *dashboard*
 
 ** Hydra
 *** Pretty Hydra
@@ -735,7 +919,7 @@ Since faicon, fileicon, octicon and material are very similar - the only
 difference between them is the suffix for both the name and the wrapper
 all-the-icons function - I'll generate those functions dynamically.
 
-+begin_src elisp
+#+begin_src elisp
 (require 'all-the-icons)
 
 (defvar func-suffixes '("faicon" "fileicon" "octicon" "material"))
@@ -1122,10 +1306,10 @@ I will also need a desktop entry to start the emacs wm from my display manager
 Name=Emacs
 Exec=emacs
 Type=Application
+#+end_src
 
 *** Configuration
 
-**** Keybindings
 I'm using the default keybindings for now, but I will probably change them to be
 more vim-like.
 
@@ -1133,7 +1317,7 @@ One thing to note is that not all commands will reach the X windows, since they
 are caught by EXWM and noth passed through to the program. These keys are stored
 in ~exwm-input-prefix-keys~. To adjust the global commands, EXWM will need to be restarted.
 
-**** Multi-Monitor-Setup
+Multi-Monitor-Setup
 
 Using more than one screen necessitates the usage of exwm-randr.
 
@@ -1143,7 +1327,7 @@ Using more than one screen necessitates the usage of exwm-randr.
 (add-hook 'exwm-randr-screen-change-hook
           (lambda ()
             (start-process-shell-command
-             "xrandr" nil "xtrandr --output DP-1 --left-of HDMI-1 --auto")))
+             "xrandr" nil "xrandr --output DP-1 --left-of HDMI-1 --auto")))
 (exwm-randr-enable)
 #+end_src
 
@@ -1154,9 +1338,16 @@ Enable a system tray
 (exwm-systemtray-enable)
 #+end_src
 
-
-
+Usually, the buffer names are not very useful, so I'm renaming each buffer to the respective class name.
+#+begin_src elisp
+(add-hook 'exwm-update-class-hook
+          (lambda ()
+            (exwm-workspace-rename-buffer exwm-class-name)))
 #+end_src
+
+
+** helpful
+
 * Unsorted Packages
 #+begin_src elisp :tangle packages.el
 

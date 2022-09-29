@@ -10,7 +10,7 @@
 (defun is-workstation ()
   (string-equal (system-name) "archyMcArchstation"))
 
-(setq font-scale-factor (if (is-workstation) 1.2 1.0))
+(setq font-scale-factor (if (is-workstation) 1.1 1.0))
 
 (defun scale-font (size)
   (round (* size font-scale-factor)))
@@ -180,6 +180,15 @@
     (unless org-roam-ui-mode (org-roam-ui-mode 1))
     (browse-url-xdg-open (format "http://localhost:%d" org-roam-ui-port))))
 
+(use-package! delve
+  :after org-roam
+  :bind
+  (("<f12>" . delve))
+  :config
+  (setq delve-dashboard-tags '("Inbox" "Waiting" "Someday" "Reference" "Note" "Journal" "Event" "Task" "Text" "Code"))
+  (add-hook #'delve-mode-hook #'delve-compact-view-mode)
+  (delve-global-minor-mode))
+
 (use-package! org-gcal
   :config
   (setq org-gcal-client-id "CLIENT_ID"
@@ -330,11 +339,6 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
         :desc "Set log message" "m" #'dap-breakpoint-log-message
         :desc "Set hit condition" "h" #'dap-breakpoint-hit-condition)))
 
-(use-package blamer
-    :defer 20
-    :config
-    (global-blamer-mode 1))
-
 (setq doom-theme 'doom-opera)
 
 ;; (add-to-list 'load-path "~/Code/doom-nano-testing")
@@ -345,28 +349,16 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
   :config
   (nano-modeline-mode 1))
 
-(use-package! dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook))
+(require 'all-the-icons)
 
-(setq dashboard-startup-banner-logo-title "(emacs)")
-(setq dashboard-startup-banner 2)
-(setq dashboard-set-navigator t)
-(setq dashboard-center-content t)
-(setq dashboard-items '((bookmarks . 5)
-                        (agenda . 5)))
-(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-(setq dashboard-set-heading-icons t)
-(setq dashboard-set-file-icons t)
-(setq dashboard-set-navigator t)
-(setq dashboard-set-init-info t)
-(setq dashboard-footer-icon (all-the-icons-octicon "dashboard"
-                                                   :height 1.1
-                                                   :v-adjust -0.05
-                                                   :face 'font-lock-keyword-face))
-(setq dashboard-projects-switch-function 'projectile-persp-switch-project)
-(setq doom-fallback-buffer-name "*dashboard*")
+(defvar func-suffixes '("faicon" "fileicon" "octicon" "material"))
+
+;; loop over func-suffixes and generate all-the-icons-functions
+(dolist (suffix func-suffixes)
+  (let ((func-name (intern (concat "with-" suffix)))
+        (call-name (intern (concat "all-the-icons-" suffix))))
+    (eval `(defun ,func-name (icon str &optional height v-adjust)
+      (s-concat (,call-name icon :v-adjust (or v-adjust 0) :height (or height 0)) " " str)))))
 
 (defun with-mode-icon (mode str &optional height nospace face)
   (let* ((v-adjust (if (eq major-mode 'emacs-lisp-mode) 0.0 0.05))
@@ -488,3 +480,18 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
 (require 'exwm)
 (require 'exwm-config)
 (exwm-config-example)
+
+(require 'exwm-randr)
+(setq exwm-randr-workspace-output-plist '(1 "DP-1"))
+(add-hook 'exwm-randr-screen-change-hook
+          (lambda ()
+            (start-process-shell-command
+             "xrandr" nil "xrandr --output DP-1 --left-of HDMI-1 --auto")))
+(exwm-randr-enable)
+
+(require 'exwm-systemtray)
+(exwm-systemtray-enable)
+
+(add-hook 'exwm-update-class-hook
+          (lambda ()
+            (exwm-workspace-rename-buffer exwm-class-name)))
