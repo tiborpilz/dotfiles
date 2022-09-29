@@ -24,7 +24,7 @@
 
 (package! tao-theme)
 
-(package! lambda-line :recipe (:host github :repo "lambda-emacs/lambda-line"))
+(package! nano-modeline)
 
 (package! pretty-hydra)
 

@@ -450,16 +450,6 @@ To set up code-highlighting in markdown code blocks, we need multiple major mode
 
 ** Tools
 *** Copilot
-For now I have my copilot completions on tab, but without this helper function,
-I could not use tab for regular indenting anymore.
-#+begin_src elisp
-(defun tab-complete-copilot ()
-  (interactive)
-  (or (copilot-accept-completion)
-      (company-indent-or-complete-common nil)))
-#+end_src
-
-
 Currently, this plugin only works with an older version of node (16) installed,
 which is handled via nvm. Since I'm using this concept on multiple machines, it
 makes sense to get the nvm version's path programatically.
@@ -472,7 +462,7 @@ In the future I could implement installing node 16 if it's missing.
 
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
-  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
+  :bind (("TAB" . 'copilot-accept-completion-by-word)
          :map company-active-map
          ("<backtab>" . 'copilot-accept-completion)
          :map company-mode-map
@@ -665,40 +655,17 @@ Very appealing, minimalistic themes.
 #+end_src
 
 ** Modeline
-*** Lambda Line
-[[https://github.com/Lambda-Emacs/lambda-line][Lambda Line]] is a replacement for the Doom Emacs modeline. Although I am pretty
-happy with Doom Emacs' modeline, I'm currently trying to have a more streamlined
-ui in my editor, which is perfect usecase. Just like with the Lambda Themes,
-this is heavily inspired by the excellent Nano theme.
+*** Nano Modeline
 
 #+begin_src elisp :tangle packages.el
-(package! lambda-line :recipe (:host github :repo "lambda-emacs/lambda-line"))
+(package! nano-modeline)
 #+end_src
 
 #+begin_src elisp
-(setq lambda-line-icon-time t) ;; requires all-the-icons
-(setq lambda-line-position 'top) ;; Set position of status-line
-(setq lambda-line-abbrev t) ;; abbreviate major modes
-(setq lambda-line-hspace "  ")  ;; add some cushion
-(setq lambda-line-prefix t) ;; use a prefix symbol
-(setq lambda-line-prefix-padding 0) ;; no extra space for prefix
-(setq lambda-line-status-invert nil)  ;; no invert colors
-(setq lambda-line-gui-ro-symbol  " ⨂") ;; symbols
-(setq lambda-line-gui-mod-symbol " ⬤")
-(setq lambda-line-gui-rw-symbol  " ◯")
-(setq lambda-line-space-top +0.5)  ;; padding on top and bottom of line
-(setq lambda-line-space-bottom +0.5)
-(setq lambda-line-symbol-position 0.0) ;; adjust the vertical placement of symbol
-;; activate lambda-line
-(lambda-line-mode)
-;; set divider line in footer
-(when (eq lambda-line-position 'top)
-  (setq-default mode-line-format (list "%_"))
-  (setq mode-line-format (list "%_")))
+(use-package! nano-modeline
+  :config
+  (nano-modeline-mode 1))
 #+end_src
-
-#+RESULTS:
-| %_ |
 
 ** Hydra
 *** Pretty Hydra
@@ -1065,7 +1032,7 @@ will rapidly change its width, which is not very pleasant to look at.
 
 ** Treemacs
 
-Treemacs is Treemacs is a file and project explorer similar to NeoTree or vim’s
+Treemacs is a file and project explorer similar to NeoTree or vim’s
 NerdTree, but largely inspired by the Project Explorer in Eclipse.
 It shows the file system outlines of your projects in a simple tree layout
 allowing quick navigation
@@ -1088,6 +1055,20 @@ for alternatives.
 #+begin_src elisp
 (setq doom-modeline-major-mode-color-icon t)
 #+end_src
+
+
+** Custom tweaks
+*** Adding margin to the default frame
+
+This way, the editor does not seem as cramped. Also, I'm removing vertical
+scroll bars, as they serve no purpose and.
+#+begin_src  elisp
+(setq default-frame-alist
+      (append (list
+               '(vertical-scroll-bars . nil)
+               '(internal-border-width . 24))))
+#+end_src
+
 * Utilities
 ** exwm
 Turns out, emacs can be used as a fully featured window manager - using [[https://github.com/ch11ng/exwm][exwm]], short for

@@ -252,17 +252,12 @@
 (use-package! polymode)
 (use-package! poly-markdown)
 
-(defun tab-complete-copilot ()
-  (interactive)
-  (or (copilot-accept-completion)
-      (company-indent-or-complete-common nil)))
-
 (setq copilot-node-executable
       (replace-regexp-in-string "\n" "" (shell-command-to-string ". $HOME/.zshrc; nvm which 16")))
 
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
-  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
+  :bind (("TAB" . 'copilot-accept-completion-by-word)
          :map company-active-map
          ("<backtab>" . 'copilot-accept-completion)
          :map company-mode-map
@@ -346,25 +341,9 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
 ;; (require 'load-nano)
 ;; (setq doom-themes-treemacs-theme "doom-atom")
 
-(setq lambda-line-icon-time t) ;; requires all-the-icons
-(setq lambda-line-position 'top) ;; Set position of status-line
-(setq lambda-line-abbrev t) ;; abbreviate major modes
-(setq lambda-line-hspace "  ")  ;; add some cushion
-(setq lambda-line-prefix t) ;; use a prefix symbol
-(setq lambda-line-prefix-padding 0) ;; no extra space for prefix
-(setq lambda-line-status-invert nil)  ;; no invert colors
-(setq lambda-line-gui-ro-symbol  " ⨂") ;; symbols
-(setq lambda-line-gui-mod-symbol " ⬤")
-(setq lambda-line-gui-rw-symbol  " ◯")
-(setq lambda-line-space-top +0.5)  ;; padding on top and bottom of line
-(setq lambda-line-space-bottom +0.5)
-(setq lambda-line-symbol-position 0.0) ;; adjust the vertical placement of symbol
-;; activate lambda-line
-(lambda-line-mode)
-;; set divider line in footer
-(when (eq lambda-line-position 'top)
-  (setq-default mode-line-format (list "%_"))
-  (setq mode-line-format (list "%_")))
+(use-package! nano-modeline
+  :config
+  (nano-modeline-mode 1))
 
 (defun with-mode-icon (mode str &optional height nospace face)
   (let* ((v-adjust (if (eq major-mode 'emacs-lisp-mode) 0.0 0.05))
@@ -479,6 +458,11 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
 (setq ivy-posframe-width 80)
 
 (setq doom-modeline-major-mode-color-icon t)
+
+(setq default-frame-alist
+      (append (list
+               '(vertical-scroll-bars . nil)
+               '(internal-border-width . 24))))
 
 ;; (require 'exwm)
 ;; (require 'exwm-config)
