@@ -20,6 +20,12 @@
 
 (package! grayscale-theme)
 
+(package! lambda-themes :recipe (:host github :repo "lambda-emacs/lambda-themes"))
+
+(package! tao-theme)
+
+(package! lambda-line :recipe (:host github :repo "lambda-emacs/lambda-line"))
+
 (package! pretty-hydra)
 
 (package! which-key-posframe)
@@ -27,6 +33,8 @@
 (package! all-the-icons-ivy-rich)
 
 ;; (package! treemacs-all-the-icons)
+
+(package! exwm)
 
 (package! dap-mode)
 
