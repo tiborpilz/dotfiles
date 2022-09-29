@@ -445,17 +445,18 @@ plays nicely with direnv.
 To set up code-highlighting in markdown code blocks, we need multiple major modes in one buffer. The package polymode promises to allow that:
 #+begin_src elisp
 (use-package! polymode)
-(use-package! poly-markdown) #+end_src
+(use-package! poly-markdown)
+#+end_src
 
 ** Tools
 *** Copilot
 For now I have my copilot completions on tab, but without this helper function,
 I could not use tab for regular indenting anymore.
 #+begin_src elisp
-;; (defun tab-complete-copilot ()
-;;   (interactive)
-;;   (or (copilot-accept-completion)
-;;       (company-indent-or-complete-common nil)))
+(defun tab-complete-copilot ()
+  (interactive)
+  (or (copilot-accept-completion)
+      (company-indent-or-complete-common nil)))
 #+end_src
 
 
@@ -466,16 +467,16 @@ makes sense to get the nvm version's path programatically.
 In the future I could implement installing node 16 if it's missing.
 
 #+begin_src elisp
-;; (setq copilot-node-executable
-;;       (replace-regexp-in-string "\n" "" (shell-command-to-string ". $HOME/.zshrc; nvm which 16")))
+(setq copilot-node-executable
+      (replace-regexp-in-string "\n" "" (shell-command-to-string ". $HOME/.zshrc; nvm which 16")))
 
-;; (use-package! copilot
-;;   :hook (prog-mode . copilot-mode)
-;;   :bind (("C-TAB" . 'copilot-accept-completion-by-word)
-;;          :map company-active-map
-;;          ("<backtab>" . 'copilot-accept-completion)
-;;          :map company-mode-map
-;;          ("<backtab>" . 'copilot-accept-completion)))
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
+         :map company-active-map
+         ("<backtab>" . 'copilot-accept-completion)
+         :map company-mode-map
+         ("<backtab>" . 'copilot-accept-completion)))
 #+end_src
 
 *** Debugging
@@ -656,11 +657,6 @@ High and low contrast light and dark themes, very reminiscent of Nano.
 (package! lambda-themes :recipe (:host github :repo "lambda-emacs/lambda-themes"))
 #+end_src
 
-#+begin_src elisp
-(setq lambda-theme-keyword-italic t)
-(load-theme 'lambda-light)
-#+end_src
-
 **** Tao Themes
 Very appealing, minimalistic themes.
 
@@ -698,7 +694,7 @@ this is heavily inspired by the excellent Nano theme.
 ;; set divider line in footer
 (when (eq lambda-line-position 'top)
   (setq-default mode-line-format (list "%_"))
-  (setq mode-line-format (list "%_"))))
+  (setq mode-line-format (list "%_")))
 #+end_src
 
 #+RESULTS:
@@ -733,7 +729,7 @@ Since faicon, fileicon, octicon and material are very similar - the only
 difference between them is the suffix for both the name and the wrapper
 all-the-icons function - I'll generate those functions dynamically.
 
-#+begin_src elisp
++begin_src elisp
 (require 'all-the-icons)
 
 (defvar func-suffixes '("faicon" "fileicon" "octicon" "material"))
