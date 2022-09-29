@@ -5,13 +5,40 @@ Set Name and mail adress
 (setq user-full-name "Tibor Pilz"
       user-mail-address "tibor@pilz.berlin")
 #+end_src
-** Font selection
 
-I'm using FiraCode Nerd Font. TODO: Enable fonts for multiple systems
+** Add checks for different machines
+Although I would like to keep the differences between my development
+environments as low as possible - also to counteract configuration drift, there
+are some settings that need to be specific to some of my machines - e.g. the
+font-size. So, I define some basic functions to check which machine is curently
+running this config, and adjust certain settings accordingly.
+
 #+begin_src elisp
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
-      doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
-      doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
+(defun is-mac ()
+  (string-equal system-type "darwin"))
+
+(defun is-linux ()
+  (string-equal system-type "gnu/linux"))
+
+(defun is-workstation ()
+  (string-equal (system-name) "archyMcArchstation"))
+#+end_src
+
+** Font selection
+Instead of setting the fonts twice, I'll define a scaling factor depending on
+the macine I'm running on, and then use that to set the font size.
+#+begin_src elisp
+(setq font-scale-factor (if (is-workstation) 1.2 1.0))
+
+(defun scale-font (size)
+  (round (* size font-scale-factor)))
+#+end_src
+
+I'm a big fan of ligatures, and I've been using FiraCode for as long as I can remember.
+#+begin_src elisp
+(setq doom-font (font-spec :family "FiraCode Nerd Font" :size (scale-font 16))
+      doom-big-font (font-spec :family "FiraCode Nerd Font" :size (scale-font 24))
+      doom-variable-pitch-font (font-spec :family "Open Sans" :size (scale-font 16))
       doom-serif-font (font-spec :family "FreeSerif" :weight 'light))
 #+end_src
 
@@ -603,6 +630,15 @@ and Vim plugin.
 (package! grayscale-theme)
 #+end_src
 
+*** Nano
+Nano is a minimalistic theme for emacs, and it is absolutely gorgeous. Although
+it lacks the features I need, I was always a fan of the look. Now, it's possible
+to enjoy the best of both worlds by theming Doom to look like Nano.
+#+begin_src elisp
+;; (add-to-list 'load-path "~/Code/doom-nano-testing")
+;; (require 'load-nano)
+;; (setq doom-themes-treemacs-theme "doom-atom")
+#+end_src
 ** Hydra
 *** Pretty Hydra
 

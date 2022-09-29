@@ -1,9 +1,23 @@
 (setq user-full-name "Tibor Pilz"
       user-mail-address "tibor@pilz.berlin")
 
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
-      doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
-      doom-variable-pitch-font (font-spec :family "Open Sans" :size 16)
+(defun is-mac ()
+  (string-equal system-type "darwin"))
+
+(defun is-linux ()
+  (string-equal system-type "gnu/linux"))
+
+(defun is-workstation ()
+  (string-equal (system-name) "archyMcArchstation"))
+
+(setq font-scale-factor (if (is-workstation) 1.2 1.0))
+
+(defun scale-font (size)
+  (round (* size font-scale-factor)))
+
+(setq doom-font (font-spec :family "FiraCode Nerd Font" :size (scale-font 16))
+      doom-big-font (font-spec :family "FiraCode Nerd Font" :size (scale-font 24))
+      doom-variable-pitch-font (font-spec :family "Open Sans" :size (scale-font 16))
       doom-serif-font (font-spec :family "FreeSerif" :weight 'light))
 
 (setq org-directory "~/org/")
@@ -329,6 +343,10 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
     (global-blamer-mode 1))
 
 (setq doom-theme 'doom-opera)
+
+;; (add-to-list 'load-path "~/Code/doom-nano-testing")
+;; (require 'load-nano)
+;; (setq doom-themes-treemacs-theme "doom-atom")
 
 (require 'all-the-icons)
 
