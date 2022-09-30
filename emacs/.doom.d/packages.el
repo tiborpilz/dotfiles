@@ -16,15 +16,6 @@
 
 (package! poetry)
 
-(package! company :disable t)
-(package! corfu)
-(package! cape)
-(package! corfu-doc
-  :recipe (:host github :repo "galeo/corfu-doc"))
-(package! kind-icon)
-(package! orderless)
-;; (package! pcmpl-args)
-
 (package! doom-themes)
 
 (package! grayscale-theme)
