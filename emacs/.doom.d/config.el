@@ -89,7 +89,7 @@
         (:cache . "no")
         (:noeweb . "no")
         (:hlines . "no")
-        (:tanble . "no")
+        (:tangle . "no")
         (:comments . "link")))
 
 (cl-defmacro lsp-org-babel-enable (lang)
@@ -339,12 +339,6 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
         :desc "Set log message" "m" #'dap-breakpoint-log-message
         :desc "Set hit condition" "h" #'dap-breakpoint-hit-condition)))
 
-(use-package corfu-doc
-  :config
-  (setq corfu-doc-delay 0.2
-        corfu-doc-max-width 80
-        corfu-doc-max-height 40))
-
 (use-package corfu
   :config
   (defun ++corfu-quit ()
@@ -352,24 +346,23 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
     (call-interactively 'corfu-quit)
     (evil-normal-state +1))
   (setq corfu-cycle t
-        corfu-auto t
+        corfu-auto nil
         corfu-auto-prefix 1
-        corfu-auto-delay 0.01
+        corfu-auto-delay 0.5
         corfu-seperator ?\s
         corfu-quit-at-boundary 'seperator
         corfu-quit-no-match t
-        corfu-preview-current nil
+        corfu-preview-current t
         corfu-echo-documentation nil
-        corfu-scroll-margin 10)
+        corfu-scroll-margin nil)
   (map! :map global-map
         :nvi "C-SPC" #'completion-at-point)
   (map! :map corfu-map
         "C-j" #'corfu-next
         "C-k" #'corfu-previous
-        "C-l" #'corfu-insert
-        "C-;" #'corfu-insert
-        "TAB" #'corfu-insert
-        "<tab>" #'corfu-insert
+        "C-n" #'corfu-next
+        "C-p" #'corfu-previous
+        "enter" #'corfu-insert
         :nvi "<escape>" #'++corfu-quit
         :nvi "ESC" #'++corfu-quit)
   (global-corfu-mode +1)
@@ -382,9 +375,23 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
       (corfu-terminal-mode +1)
       (corfu-doc-termnal-mode +1))))
 
+(use-package corfu-doc
+  :after corfu
+  :hook (corfu-mode . corfu-doc-mode)
+  :general (:keymaps 'corfu-map
+            ;; This is a manual toggle for the documentation popup.
+            [remap corfu-show-documentation] #'corfu-doc-toggle ; Remap the default doc command
+            ;; Scroll in the documentation window
+            "M-n" #'corfu-doc-scroll-up
+            "M-p" #'corfu-doc-scroll-down)
+  :custom
+  (corfu-doc-delay 0.5)
+  (corfu-doc-max-width 80)
+  (corfu-doc-max-height 40))
+
 (use-package kind-icon
   :ensure t
-  :after corfu
+  :after corfU
   :custom
   (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
   :config
@@ -394,7 +401,7 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
   :init
   (setq completion-styles '(orderless partial-completion basic)
         completion-category-defaults nil
-        completion-category-overrides nil))
+        completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package! lsp-mode
   :custom
@@ -449,15 +456,29 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
 ;;                                     (or (frame-parent corfu-doc--frame)
 ;;                                         exwm-workspace--current))))
 
+;; (use-package vertico
+;;   :straight (:files (:defaults "extensions/*"))
+;;   :init
+;;   (vertico-mode)
+
+;; (use-package vertico-directory
+;;   :after vertico
+;;   :ensure nil
+;;   :bind (:map vertico-map
+;;               ("RET" . vertico-directory-enter)
+;;               ("DEL" . vertico-directory-delete-char)
+;;               ("M-dEL"' vertico-directory-delete-word))
+;;   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
 (setq doom-theme 'doom-opera)
 
 ;; (add-to-list 'load-path "~/Code/doom-nano-testing")
 ;; (require 'load-nano)
 ;; (setq doom-themes-treemacs-theme "doom-atom")
 
-(use-package! nano-modeline
-  :config
-  (nano-modeline-mode 1))
+;; (use-package! nano-modeline
+;;   :config
+;;   (nano-modeline-mode 1))
 
 (require 'all-the-icons)
 
@@ -587,21 +608,4 @@ for what debugger to use. If the prefix ARG is set, prompt anyway."
                '(vertical-scroll-bars . nil)
                '(internal-border-width . 24))))
 
-(require 'exwm)
 (require 'exwm-config)
-(exwm-config-example)
-
-(require 'exwm-randr)
-(setq exwm-randr-workspace-output-plist '(1 "DP-1"))
-(add-hook 'exwm-randr-screen-change-hook
-          (lambda ()
-            (start-process-shell-command
-             "xrandr" nil "xrandr --output DP-1 --left-of HDMI-1 --auto")))
-(exwm-randr-enable)
-
-(require 'exwm-systemtray)
-(exwm-systemtray-enable)
-
-(add-hook 'exwm-update-class-hook
-          (lambda ()
-            (exwm-workspace-rename-buffer exwm-class-name)))

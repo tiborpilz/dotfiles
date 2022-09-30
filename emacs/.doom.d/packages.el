@@ -22,6 +22,7 @@
 (package! corfu-doc
   :recipe (:host github :repo "galeo/corfu-doc"))
 (package! kind-icon)
+;; (package! pcmpl-args)
 
 (package! doom-themes)
 
@@ -42,6 +43,7 @@
 ;; (package! treemacs-all-the-icons)
 
 (package! exwm)
+(package! xelb)
 
 (package! dap-mode)
 

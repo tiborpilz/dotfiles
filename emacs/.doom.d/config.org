@@ -154,7 +154,7 @@ See https://org-babel.readthedocs.io/en/latest/header-args/
         (:cache . "no")
         (:noeweb . "no")
         (:hlines . "no")
-        (:tanble . "no")
+        (:tangle . "no")
         (:comments . "link")))
 #+end_src
 *** LSP in org-babel src blocks
@@ -629,17 +629,12 @@ I want to use corfu instead of company. This means I have to set up some stuff m
 (package! corfu-doc
   :recipe (:host github :repo "galeo/corfu-doc"))
 (package! kind-icon)
+;; (package! pcmpl-args)
 #+END_SRC
 
 ***** Configure Corfu
 
 #+begin_src elisp
-(use-package corfu-doc
-  :config
-  (setq corfu-doc-delay 0.2
-        corfu-doc-max-width 80
-        corfu-doc-max-height 40))
-
 (use-package corfu
   :config
   (defun ++corfu-quit ()
@@ -647,24 +642,23 @@ I want to use corfu instead of company. This means I have to set up some stuff m
     (call-interactively 'corfu-quit)
     (evil-normal-state +1))
   (setq corfu-cycle t
-        corfu-auto t
+        corfu-auto nil
         corfu-auto-prefix 1
-        corfu-auto-delay 0.01
+        corfu-auto-delay 0.5
         corfu-seperator ?\s
         corfu-quit-at-boundary 'seperator
         corfu-quit-no-match t
-        corfu-preview-current nil
+        corfu-preview-current t
         corfu-echo-documentation nil
-        corfu-scroll-margin 10)
+        corfu-scroll-margin nil)
   (map! :map global-map
         :nvi "C-SPC" #'completion-at-point)
   (map! :map corfu-map
         "C-j" #'corfu-next
         "C-k" #'corfu-previous
-        "C-l" #'corfu-insert
-        "C-;" #'corfu-insert
-        "TAB" #'corfu-insert
-        "<tab>" #'corfu-insert
+        "C-n" #'corfu-next
+        "C-p" #'corfu-previous
+        "enter" #'corfu-insert
         :nvi "<escape>" #'++corfu-quit
         :nvi "ESC" #'++corfu-quit)
   (global-corfu-mode +1)
@@ -678,6 +672,46 @@ I want to use corfu instead of company. This means I have to set up some stuff m
       (corfu-doc-termnal-mode +1))))
 #+END_SRC
 
+Also use corfu for completions in shell or eshell
+
+# #+begin_src elisp
+# (use-packag !pcmpl-args)
+
+# (add-hook 'eshell-mode-hook
+#           (lambda ()
+#             (setq-local corfu-auto nil)
+#             (corfu-mode)))
+
+# (defun corfu-s-shell (&rest _)
+#     "Send completion candidate when inside comint/eshell."
+#     (cond
+#      ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
+#       (eshell-send-input))
+#      ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
+#       (comint-send-input))))
+
+# (advice-add #'corfu-insert :after #'corfu-send-shell)
+# #+end_src
+
+***** Configure Corfu-doc
+
+#+BEGIN_SRC elisp
+(use-package corfu-doc
+  :after corfu
+  :hook (corfu-mode . corfu-doc-mode)
+  :general (:keymaps 'corfu-map
+            ;; This is a manual toggle for the documentation popup.
+            [remap corfu-show-documentation] #'corfu-doc-toggle ; Remap the default doc command
+            ;; Scroll in the documentation window
+            "M-n" #'corfu-doc-scroll-up
+            "M-p" #'corfu-doc-scroll-down)
+  :custom
+  (corfu-doc-delay 0.5)
+  (corfu-doc-max-width 80)
+  (corfu-doc-max-height 40))
+
+#+END_SRC
+
 ***** Configure Kind-Cion
 
 Kind-icon provides configurable icon or text-based completion prefixes based on
@@ -686,7 +720,7 @@ the ~:company-kind~ property that many completion backends use, just like corfu.
 #+BEGIN_SRC elisp
 (use-package kind-icon
   :ensure t
-  :after corfu
+  :after corfU
   :custom
   (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
   :config
@@ -705,7 +739,7 @@ from a front-end that provides a completion UI.
   :init
   (setq completion-styles '(orderless partial-completion basic)
         completion-category-defaults nil
-        completion-category-overrides nil))
+        completion-category-overrides '((file (styles partial-completion)))))
 #+END_SRC
 
 #+begin_src  elisp
@@ -787,6 +821,26 @@ childframes created by corfu-doc. To fix analogously, use the following code:
 
 There are more possible configurations, but I'm not shure whether they are
 necessary.  X
+**** Vertico
+
+Vertico has a few extensions we can use apart from the base configuration from
+Doom.
+
+#+begin_src elisp
+;; (use-package vertico
+;;   :straight (:files (:defaults "extensions/*"))
+;;   :init
+;;   (vertico-mode)
+
+;; (use-package vertico-directory
+;;   :after vertico
+;;   :ensure nil
+;;   :bind (:map vertico-map
+;;               ("RET" . vertico-directory-enter)
+;;               ("DEL" . vertico-directory-delete-char)
+;;               ("M-dEL"' vertico-directory-delete-word))
+;;   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+#+end_src
 * UI
 ** Theming
 *** Doom Themes
@@ -837,9 +891,9 @@ Very appealing, minimalistic themes.
 #+end_src
 
 #+begin_src elisp
-(use-package! nano-modeline
-  :config
-  (nano-modeline-mode 1))
+;; (use-package! nano-modeline
+;;   :config
+;;   (nano-modeline-mode 1))
 #+end_src
 
 # ** Dashboard
@@ -1276,72 +1330,32 @@ scroll bars, as they serve no purpose and.
                '(vertical-scroll-bars . nil)
                '(internal-border-width . 24))))
 #+end_src
-
-* Utilities
-** exwm
+* EXWM
 Turns out, emacs can be used as a fully featured window manager - using [[https://github.com/ch11ng/exwm][exwm]], short for
 Emacs X Window Manager.
 
-*** Installation
+** Installation
+
 #+begin_src elisp :tangle packages.el
 (package! exwm)
-#+end_src
-
-For now, I'm running the example config.
-
-#+begin_src elisp
-(require 'exwm)
-(require 'exwm-config)
-(exwm-config-example)
+(package! xelb)
 #+end_src
 
 I will also need a desktop entry to start the emacs wm from my display manager
 
-#+begin_src txt :tangle /usr/share/xsessions/emacs.desktop
+#+begin_src toml :tangle /usr/share/xsessions/emacs.desktop
 [Desktop Entry]
 Name=Emacs
-Exec=emacs
+Exec=emacs -f exwm-enable
 Type=Application
 #+end_src
 
-*** Configuration
-
-I'm using the default keybindings for now, but I will probably change them to be
-more vim-like.
-
-One thing to note is that not all commands will reach the X windows, since they
-are caught by EXWM and noth passed through to the program. These keys are stored
-in ~exwm-input-prefix-keys~. To adjust the global commands, EXWM will need to be restarted.
-
-Multi-Monitor-Setup
-
-Using more than one screen necessitates the usage of exwm-randr.
-
+** Configuration
 #+begin_src elisp
-(require 'exwm-randr)
-(setq exwm-randr-workspace-output-plist '(1 "DP-1"))
-(add-hook 'exwm-randr-screen-change-hook
-          (lambda ()
-            (start-process-shell-command
-             "xrandr" nil "xrandr --output DP-1 --left-of HDMI-1 --auto")))
-(exwm-randr-enable)
+(require 'exwm-config)
 #+end_src
 
-Enable a system tray
-
-#+begin_src elisp
-(require 'exwm-systemtray)
-(exwm-systemtray-enable)
-#+end_src
-
-Usually, the buffer names are not very useful, so I'm renaming each buffer to the respective class name.
-#+begin_src elisp
-(add-hook 'exwm-update-class-hook
-          (lambda ()
-            (exwm-workspace-rename-buffer exwm-class-name)))
-#+end_src
-
-** helpful
+#+RESULTS:
 
 * Unsorted Packages
 #+begin_src elisp :tangle packages.el
