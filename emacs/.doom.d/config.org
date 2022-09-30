@@ -629,6 +629,7 @@ I want to use corfu instead of company. This means I have to set up some stuff m
 (package! corfu-doc
   :recipe (:host github :repo "galeo/corfu-doc"))
 (package! kind-icon)
+(package! orderless)
 ;; (package! pcmpl-args)
 #+END_SRC
 
@@ -720,7 +721,7 @@ the ~:company-kind~ property that many completion backends use, just like corfu.
 #+BEGIN_SRC elisp
 (use-package kind-icon
   :ensure t
-  :after corfU
+  :after corfu
   :custom
   (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
   :config
@@ -748,6 +749,7 @@ from a front-end that provides a completion UI.
   (lsp-completion-provider :none) ;; we use Corfu!
   :init
   (defun my/lsp-mode-setup-completion ()
+    (message "completion")
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
           '(orderless))) ;; Configure orderless
   :hook
@@ -771,56 +773,6 @@ from a front-end that provides a completion UI.
         cape-dabbrev-check-other-buffers 'some))
 #+end_src
 
-***** Configure Corfu (And COrfu-Doc) for EXWM
-
-If you use Corfu in the minibuffer below an X11 window, the Corfu childframe is
-displayed beneath the X11 window, rendering candidates invisible. In order to
-keep all candidates visible in this scenario use the following code:
-
-#+begin_src elisp
-;; (advice-add #'corfu--make-frame :around
-;;             (defun +corfu--make-frame-a (oldfun &rest args)
-;;               (cl-letf (((symbol-function #'frame-parent)
-;;                          (lambda (frame)
-;;                            (or (frame-parameter frame 'parent-frame)
-;;                                exwm-workspace--current))))
-;;                 (apply oldfun args))
-;;               (when exwm--connection
-;;                 (set-frame-parameter corfu--frame 'parent-frame nil))))
-
-;; (advice-add #'corfu--popup-redirect-focus :override
-;;             (defun +corfu--popup-redirect-focus-a ()
-;;               (redirect-frame-focus corfu--frame
-;;                                     (or (frame-parent corfu--frame)
-;;                                         exwm-workspace--current))))
-
-#+end_src
-
-If you additionally use corfu-doc, then the same situation above also applies to
-childframes created by corfu-doc. To fix analogously, use the following code:
-
-#+begin_src  elisp
-
-;; (advice-add #'corfu-doc--make-frame :around
-;;             (defun +corfu-doc--make-frame-a (oldfun &rest args)
-;;               (cl-letf (((symbol-function #'frame-parent)
-;;                          (lambda (frame)
-;;                            (or (frame-parameter frame 'parent-frame)
-;;                                exwm-workspace--current))))
-;;                 (apply oldfun args))
-;;               (when exwm--connection
-;;                 (set-frame-parameter corfu-doc--frame 'parent-frame nil))))
-
-;; (advice-add #'corfu-doc--redirect-focus :override
-;;             (defun +corfu-doc--redirect-focus ()
-;;               (redirect-frame-focus corfu-doc--frame
-;;                                     (or (frame-parent corfu-doc--frame)
-;;                                         exwm-workspace--current))))
-
-#+end_src
-
-There are more possible configurations, but I'm not shure whether they are
-necessary.  X
 **** Vertico
 
 Vertico has a few extensions we can use apart from the base configuration from
@@ -841,6 +793,9 @@ Doom.
 ;;               ("M-dEL"' vertico-directory-delete-word))
 ;;   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 #+end_src
+
+#+RESULTS:
+
 * UI
 ** Theming
 *** Doom Themes
@@ -1330,32 +1285,6 @@ scroll bars, as they serve no purpose and.
                '(vertical-scroll-bars . nil)
                '(internal-border-width . 24))))
 #+end_src
-* EXWM
-Turns out, emacs can be used as a fully featured window manager - using [[https://github.com/ch11ng/exwm][exwm]], short for
-Emacs X Window Manager.
-
-** Installation
-
-#+begin_src elisp :tangle packages.el
-(package! exwm)
-(package! xelb)
-#+end_src
-
-I will also need a desktop entry to start the emacs wm from my display manager
-
-#+begin_src toml :tangle /usr/share/xsessions/emacs.desktop
-[Desktop Entry]
-Name=Emacs
-Exec=emacs -f exwm-enable
-Type=Application
-#+end_src
-
-** Configuration
-#+begin_src elisp
-(require 'exwm-config)
-#+end_src
-
-#+RESULTS:
 
 * Unsorted Packages
 #+begin_src elisp :tangle packages.el
